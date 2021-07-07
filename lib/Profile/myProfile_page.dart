@@ -119,7 +119,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             ],
           ),
         ),
-        Padding(padding: EdgeInsets.all(5.0)),
+        Padding(padding: EdgeInsets.all(4.0)),
         // Expanded(
         //   child: ListView(
         //     padding: EdgeInsets.all(15.0),
