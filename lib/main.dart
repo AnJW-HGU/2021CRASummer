@@ -12,7 +12,7 @@ final themeColor4 = HexColor("#DAF0FF");
 
 final blurColor = Colors.black.withOpacity(0.25);
 
-final grayColor1 = HexColor("5C5C5C");
+final grayColor1 = HexColor("5C5C5C"); // 767676도 이거 쓰면 됨.
 final grayColor2 = HexColor("ADADAD");
 
 void main() {
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: CategoryPage(),
+      home: CategoryHomePage(),
     );
   }
 }
