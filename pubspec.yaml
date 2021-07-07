@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  flutter_screenutil: ^5.0.0+2
   get: ^4.1.4
   hexcolor: ^2.0.4
   flutter:
@@ -65,7 +66,7 @@ flutter:
   fonts:
     - family: Barun
       fonts:
-        - asset: font/NanumBarunGothic.ttf
+        - asset: assets/font/NanumBarunGothic.ttf
 
   # fonts:
   #   - family: Schyler
