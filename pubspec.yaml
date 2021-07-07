@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter_screenutil: ^5.0.0+2
   get: ^4.1.4
+  google_sign_in: ^5.0.4
   hexcolor: ^2.0.4
   flutter:
     sdk: flutter
