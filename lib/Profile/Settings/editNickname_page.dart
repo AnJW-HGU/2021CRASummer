@@ -16,6 +16,9 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
         designSize: Size(411.4, 683.4),
         builder: () {
           return Scaffold(
+            appBar: AppBar(
+              title: Text("닉네임 설정"),
+            ),
           );
         }
     );
