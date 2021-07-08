@@ -4,9 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'dart:ui';
 
+import 'package:studytogether/main.dart';
+
 import 'package:studytogether/Profile/myProfile_page.dart';
 import 'package:studytogether/Login/login_page.dart';
-import 'package:studytogether/main.dart';
+
+import 'board_page.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
@@ -79,7 +82,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        
+                        Get.to(BoardPage());
                       },
                       child: Container( // 숨김리스트 아닌 카테고리
                         width: 350.w,
