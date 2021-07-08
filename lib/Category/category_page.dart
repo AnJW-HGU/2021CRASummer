@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:studytogether/main.dart';
 
+import 'noti_page.dart';
 import 'package:studytogether/Profile/myProfile_page.dart';
 import 'package:studytogether/Login/login_page.dart';
 
@@ -57,7 +58,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       icon: Icon(Icons.notifications_rounded),
                       iconSize: 27.w,
                       onPressed: () {
-
+                        Get.to(NotiPage());
                       },
                     ),
 
@@ -74,17 +75,19 @@ class _CategoryPageState extends State<CategoryPage> {
               ],
             ),
 
-            body: Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: Column(
-                  children: [
-                    _buildCategory("전체"),
-                    Padding(padding: EdgeInsets.only(top: 10.0),),
-                    _buildCategory("전공기초"),
-                    Padding(padding: EdgeInsets.only(top: 10.0),),
-                    _buildCategory("그 외"),
-                  ],
+            body: SafeArea(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Column(
+                    children: [
+                      _buildCategory("전체"),
+                      Padding(padding: EdgeInsets.only(top: 10.0),),
+                      _buildCategory("전공기초"),
+                      Padding(padding: EdgeInsets.only(top: 10.0),),
+                      _buildCategory("그 외"),
+                    ],
+                  ),
                 ),
               ),
             ),
