@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:studytogether/main.dart';
+import 'dart:ui';
+import 'package:get/get.dart';
+
 
 class PointPage extends StatefulWidget {
 
@@ -17,17 +20,21 @@ class _PointPageState extends State<PointPage> {
           return Scaffold(
             backgroundColor: themeColor1,
             appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                color: themeColor1,
+                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 21.w),
+              ),
               backgroundColor: Colors.white,
               title: Text(
-                "포인트", style: TextStyle(color: grayColor1, fontSize: 17),),
-              iconTheme: IconThemeData(
-                color: themeColor1,
-              ),
+                "포인트", style: TextStyle(fontFamily: "Barun", color: grayColor1, fontSize: 16.w),),
               centerTitle: true,
               elevation: 0.0,
               actions: <Widget>[
                 IconButton( // 랭킹
-                    icon: Icon(Icons.ac_unit_rounded, size: 21,),
+                    icon: Icon(Icons.public_rounded, size: 21.w, color: themeColor1),
                     onPressed: () {
                     }
                 ),
@@ -44,7 +51,7 @@ class _PointPageState extends State<PointPage> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(top: 30, bottom: 30),
+          padding: EdgeInsets.only(top: 30.w, bottom: 30.w),
           height: 150.0,
           decoration: BoxDecoration(
             boxShadow: [
@@ -64,11 +71,12 @@ class _PointPageState extends State<PointPage> {
               Row(
                 children: <Widget>[
                   Icon(Icons.circle, color: themeColor3,),
-                  Padding(padding: EdgeInsets.only(left: 15)),
+                  Padding(padding: EdgeInsets.only(left: 15.w)),
                   Text(
                     point.toString(),
                     style: TextStyle(
-                        fontSize: 30,
+                        fontFamily: "Barun",
+                        fontSize: 30.w,
                         color: grayColor1,
                         shadows: [Shadow(
                           color: blurColor,
@@ -91,15 +99,15 @@ class _PointPageState extends State<PointPage> {
                 // mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(30),
+                    padding: EdgeInsets.all(30.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("포인트에 대한 규칙 또는 방법?", style: TextStyle(color: Colors.white),),
+                        Text("포인트에 대한 규칙 또는 방법?", style: TextStyle(fontFamily: "Barun", color: Colors.white),),
                         Padding(
-                          padding: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(5.w),
                         ),
-                        Text("얻을 수 있는 방법", style: TextStyle(color: Colors.white),)
+                        Text("얻을 수 있는 방법", style: TextStyle(fontFamily: "Barun", color: Colors.white),)
                       ],
                     ),
                   ),
