@@ -77,47 +77,53 @@ class _CategoryPageState extends State<CategoryPage> {
             body: Center(
               child: Padding(
                 padding: EdgeInsets.only(top: 30),
-
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(BoardPage());
-                      },
-                      child: Container( // 숨김리스트 아닌 카테고리
-                        width: 350.w,
-                        height: 50.h,
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(left: 30.w),
-                        child: Text(
-                          "전체",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: "Barun",
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                            color: themeColor1, // 카테고리 블럭 배경색
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: blurColor,
-                                blurRadius: 4,
-                                offset: Offset(0.0, 2.0),
-                              )
-                            ]
-                        ),
-                      ),
-                    ),
-
+                    _buildCategory("전체"),
+                    Padding(padding: EdgeInsets.only(top: 10.0),),
+                    _buildCategory("전공기초"),
+                    Padding(padding: EdgeInsets.only(top: 10.0),),
+                    _buildCategory("그 외"),
                   ],
                 ),
               ),
             ),
           );
         }
+    );
+  }
+
+  Widget _buildCategory(inTitle) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(BoardPage(), arguments: inTitle, transition: Transition.cupertino);
+      },
+      child: Container( // 숨김리스트 아닌 카테고리
+        width: 355.w,
+        height: 50.h,
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(left: 30.w),
+        child: Text(
+          inTitle,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Barun",
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        decoration: BoxDecoration(
+            color: themeColor1, // 카테고리 블럭 배경색
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: blurColor,
+                blurRadius: 4,
+                offset: Offset(0.0, 2.0),
+              )
+            ]
+        ),
+      ),
     );
   }
 }
