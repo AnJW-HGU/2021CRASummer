@@ -15,6 +15,11 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  String _nickName = "자유로운 도비";
+  int _point = 3000;
+  int _questionNum = 2;
+  int _answerNum = 5;
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -33,7 +38,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               IconButton(
                   icon: Icon(Icons.settings_rounded, size: 21.w,),
                   onPressed: () {
-                    Get.to(SettingPage());
+                    Get.to(SettingPage(), arguments: _nickName);
                   }
               ),
             ],
@@ -47,11 +52,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _profilePageBody() {
-    String _nickName = "자유로운 도비";
-    String _point = "3000";
-    String _questionNum = "2";
-    String _answerNum = "5";
-
     return Column(
       children: [
         Container(
@@ -100,7 +100,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                           children: <Widget>[
                             Text("포인트", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
                             Padding(padding: EdgeInsets.all(5.0.w)),
-                            Text(_point, style: TextStyle(
+                            Text(_point.toString(), style: TextStyle(
                               fontFamily: "Barun",
                               fontSize: 20.w,
                               color: Colors.white,
@@ -116,7 +116,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             children: <Widget>[
                              Text("질문", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
                               Padding(padding: EdgeInsets.all(5.0.w)),
-                             Text(_questionNum, style: TextStyle(
+                             Text(_questionNum.toString(), style: TextStyle(
                             fontFamily: "Barun",
                             fontSize: 20.w,
                             color: Colors.white,
@@ -132,7 +132,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         children: <Widget>[
                           Text("답변", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
                           Padding(padding: EdgeInsets.all(5.0.w)),
-                          Text(_answerNum, style: TextStyle(
+                          Text(_answerNum.toString(), style: TextStyle(
                             fontFamily: "Barun",
                             fontSize: 20.w,
                             color: Colors.white,
