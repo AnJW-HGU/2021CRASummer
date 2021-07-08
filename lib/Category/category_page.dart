@@ -29,46 +29,62 @@ class _CategoryPageState extends State<CategoryPage> {
             backgroundColor: themeColor1, // 배경색
 
             appBar: AppBar(
-              backgroundColor: themeColor1, //앱바색
-              elevation: 0.0, // 앱바 그림자 없게하기
+              backgroundColor: themeColor1, // 앱바색
+              elevation: 0.0, // 앱바 그림자 없게 하기
+              titleSpacing: 20.w,
               title: Text(
-                  "Study Together", // 타이틀
+                  "스터디 투게더", // 타이틀
                 style: TextStyle(
                   fontFamily: "Barun",
-                  fontSize: 25.sp,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              
+
               // 타이틀 오른쪽 아이콘들
               actions: <Widget>[
                 Row(
                   children: [
                     // 로그인 버튼
-                    IconButton(
-                        icon: Icon(Icons.login_rounded),
-                        iconSize: 27.w,
-                        onPressed: () {
-                          Get.to(LoginPage());
-                        }
+                    Container(
+                      width: 40,
+                      child: IconButton(
+                          icon: Icon(Icons.login_rounded),
+                          tooltip: "Login Button",
+                          iconSize: 27.w,
+                          onPressed: () {
+                            Get.to(LoginPage());
+                          }
+                      ),
                     ),
 
                     // 알림 버튼
-                    IconButton(
-                      icon: Icon(Icons.notifications_rounded),
-                      iconSize: 27.w,
-                      onPressed: () {
-                        Get.to(NotiPage());
-                      },
+                    Container(
+                      width: 40,
+                      child: IconButton(
+                        icon: Icon(Icons.notifications_rounded),
+                        tooltip: "Notification Button",
+                        iconSize: 27.w,
+                        onPressed: () {
+                          Get.to(NotiPage());
+                        },
+                      ),
                     ),
 
                     // 프로필 버튼
-                    IconButton(
-                        icon: Icon(Icons.account_circle_rounded),
-                        iconSize: 27.w,
-                        onPressed: () {
-                          Get.to(MyProfilePage());
-                        }
+                    Padding(
+                      padding: EdgeInsets.only(right: 15.w),
+                      child: Container(
+                        width: 40,
+                        child: IconButton(
+                            icon: Icon(Icons.account_circle_rounded),
+                            tooltip: "Profile Button",
+                            iconSize: 27.w,
+                            onPressed: () {
+                              Get.to(MyProfilePage());
+                            }
+                        ),
+                      ),
                     ),
                   ],
                 )
