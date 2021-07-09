@@ -20,6 +20,11 @@ class _AddPostPageState extends State<AddPostPage> {
       designSize: Size(411.4, 683.4),
       builder: () {
         return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "질문 등록"
+            )
+          ),
           body: SafeArea(
             child: Center(
               child: Text(

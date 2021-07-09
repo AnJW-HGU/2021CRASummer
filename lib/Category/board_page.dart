@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 import 'dart:ui';
+import 'dart:math';
 
 import 'package:studytogether/main.dart';
 
@@ -21,7 +23,34 @@ class BoardPage extends StatefulWidget {
 
 class _BoardPageState extends State<BoardPage> {
   String boardTitle = Get.arguments; // 카테고리 페이지로부터 타이틀 받음
-
+  
+  var subList;
+  var titleList;
+  var contentList;
+  var random;
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  
+  // 초기에 값을 랜덤으로 넣어줌
+  @override
+  void initState() {
+    super.initState();
+    random = Random();
+    refreshList();
+  }
+  
+  // async wait를 쓰기 위해서는 Future 타입을 이용함
+  Future<Null> refreshList() async{
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 0)); // thread sleep 같은 역할을 함
+    // 새로운 정보를 그려내는 곳
+    setState(() {
+      subList = List.generate(random.nextInt(100), (i) => "과목 $i");
+      titleList = List.generate(random.nextInt(100), (i) => "질문 제목 $i");
+      contentList = List.generate(random.nextInt(100), (i) => "질문에 관한 내용 $i");
+    });
+    return null;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -91,42 +120,71 @@ class _BoardPageState extends State<BoardPage> {
               ],
             ),
             body: SafeArea(
-              child: Center(
-                child: Column(
-                  children: [
+                child: Center(
+                  child: Column(
+                    children: [
 
-                    // 검색 버튼
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(SearchPage());
-                          },
+                      // 검색 버튼
+                      Padding(
+                          padding: EdgeInsets.only(top: 10, bottom: 20),
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(SearchPage());
+                            },
 
+                            child: Container(
+                              width: 350.w,
+                              height: 35,
+                              alignment: Alignment.centerRight,
+
+                              padding: EdgeInsets.only(right: 10.w),
+                              child: Icon(
+                                Icons.search_rounded,
+                                color: Colors.white,
+                              ),
+
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.25),
+                                  border: Border.all(color: Colors.white.withOpacity(0.75)),
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                            ),
+                          )
+                      ),
+
+                      // 게시글
+                      Expanded(
                           child: Container(
-                            width: 350.w,
-                            height: 35.h,
-                            alignment: Alignment.centerRight,
-
-                            padding: EdgeInsets.only(right: 10.w),
-                            child: Icon(
-                              Icons.search_rounded,
-                              color: Colors.white,
+                            padding: EdgeInsets.only(top: 30, left: 30.w, right: 30.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // 게시판 흰색 부분에 들어갈 것
+                                // 타이틀 - 게시글
+                                Text(
+                                  "게시글",
+                                  style: TextStyle(
+                                    fontFamily: "Barun",
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
 
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.25),
-                              border: Border.all(color: Colors.white.withOpacity(0.75)),
-                              borderRadius: BorderRadius.circular(10)
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25),
+                                  topRight: Radius.circular(25),
+                                )
                             ),
-                          ),
-                        )
-                    ),
-
-                  ],
+                          )
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
 
             // 글쓰기 버튼
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -178,4 +236,5 @@ class _BoardPageState extends State<BoardPage> {
         }
     );
   }
+
 }

@@ -119,7 +119,7 @@ class _CategoryPageState extends State<CategoryPage> {
       },
       child: Container( // 숨김리스트 아닌 카테고리
         width: 355.w,
-        height: 50.h,
+        height: 50,
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.only(left: 30.w),
         child: Text(
