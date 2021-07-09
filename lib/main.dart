@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'package:studytogether/Category/category_page.dart';
-import 'package:studytogether/Login/login_page.dart';
 
 final themeColor1 = HexColor("#0080FF");
 final themeColor2 = HexColor("#03A6FF");
@@ -18,7 +17,7 @@ final grayColor2 = HexColor("ADADAD");
 
 void main() {
   runApp(
-    MyApp()
+      MyApp()
   );
 }
 
@@ -29,8 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: LoginPage(),
+      home: CategoryHomePage(),
     );
   }
 }
-
