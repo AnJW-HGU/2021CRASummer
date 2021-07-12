@@ -6,6 +6,8 @@ import 'dart:ui';
 
 import 'package:studytogether/main.dart';
 
+import 'subSearch_page.dart';
+
 class AddPostPage extends StatefulWidget {
   const AddPostPage({Key? key}) : super(key: key);
 
@@ -99,6 +101,7 @@ class _AddPostPageState extends State<AddPostPage> {
                       alignment: Alignment.centerLeft,
                       child: OutlinedButton.icon(
                         onPressed: () {
+                          Get.to(SubSearchPage());
                         },
                         icon: Icon(
                           Icons.add_rounded,
