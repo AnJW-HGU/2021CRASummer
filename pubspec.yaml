@@ -69,6 +69,10 @@ flutter:
       fonts:
         - asset: assets/font/NanumBarunGothic.ttf
 
+  assets:
+    - assets/Login.png
+
+
   # fonts:
   #   - family: Schyler
   #     fonts:

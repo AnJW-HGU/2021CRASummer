@@ -17,7 +17,7 @@ final grayColor2 = HexColor("ADADAD");
 
 void main() {
   runApp(
-    MyApp()
+      MyApp()
   );
 }
 
@@ -32,4 +32,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
