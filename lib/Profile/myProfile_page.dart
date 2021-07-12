@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:studytogether/main.dart';
 import 'package:studytogether/Profile//point_page.dart';
+import 'package:studytogether/Profile/Settings/setting_page.dart';
 
 
 class MyProfilePage extends StatefulWidget {
@@ -14,6 +15,11 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  String _nickName = "자유로운 도비";
+  int _point = 3000;
+  int _questionNum = 2;
+  int _answerNum = 5;
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -23,14 +29,16 @@ class _MyProfilePageState extends State<MyProfilePage> {
           appBar: AppBar(
             iconTheme: IconThemeData(
               color: Colors.white,
+              size: 21.w,
             ),
-            title: Text('프로필', style: TextStyle(color: Colors.white, fontSize: 25),),
+            title: Text('프로필', style: TextStyle(fontFamily: "Barun", color: Colors.white, fontSize: 25.w),),
             backgroundColor: themeColor1,
             elevation: 0.0,
             actions: <Widget>[
               IconButton(
-                  icon: Icon(Icons.settings_rounded, size: 21,),
+                  icon: Icon(Icons.settings_rounded, size: 21.w,),
                   onPressed: () {
+                    Get.to(SettingPage(), arguments: _nickName);
                   }
               ),
             ],
@@ -44,15 +52,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _profilePageBody() {
-    String _nickName = "자유로운 도비";
-    String _point = "3000";
-    String _questionNum = "2";
-    String _answerNum = "5";
-
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
+          padding: EdgeInsets.only(top: 10.w, bottom: 10.w),
           height: 200.0,
           decoration: BoxDecoration(
             boxShadow: [
@@ -75,65 +78,79 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   backgroundColor: Colors.white,
                 ),
               ),
-              Padding(padding: EdgeInsets.all(4)),
+              Padding(padding: EdgeInsets.all(4.w)),
               Text(_nickName, style: TextStyle(
-                  fontSize: 15,
+                  fontFamily: "Barun",
+                  fontSize: 15.w,
                   color: Colors.white,
                   shadows: [Shadow(
                     color: blurColor,
                     offset: Offset(0,4.0),
                     blurRadius: 4,
                   )]),),
-              Padding(padding: EdgeInsets.all(5.0)),
+              Padding(padding: EdgeInsets.all(5.0.w)),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(padding: EdgeInsets.only(right: 20, left: 20)),
-                  Text("포인트", style: TextStyle(fontSize: 13, color: themeColor3),),
                   TextButton(onPressed: () {
                     Get.to(PointPage());
                   },
-                      child: Text(_point, style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                      ),)),
-                  Text("질문", style: TextStyle(fontSize: 13, color: themeColor3),),
-                  TextButton(onPressed: () {
+                      child: Container(
+                        child: Row(
+                          children: <Widget>[
+                            Text("포인트", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                            Padding(padding: EdgeInsets.all(5.0.w)),
+                            Text(_point.toString(), style: TextStyle(
+                              fontFamily: "Barun",
+                              fontSize: 20.w,
+                              color: Colors.white,
+                            ),),
+                          ],
+                        ),
+                      ),
+                  ),
+                    TextButton(onPressed: () {
+                    },
+                        child: Container(
+                          child: Row(
+                            children: <Widget>[
+                             Text("질문", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                              Padding(padding: EdgeInsets.all(5.0.w)),
+                             Text(_questionNum.toString(), style: TextStyle(
+                            fontFamily: "Barun",
+                            fontSize: 20.w,
+                            color: Colors.white,
+                            ),),
+                          ],
+                        ),
+                      ),
+                    ),
+                  TextButton(onPressed: (){
                   },
-                      child: Text(_questionNum, style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                      ),)),
-                  Text("답변", style: TextStyle(fontSize: 13, color: themeColor3),),
-                  TextButton(onPressed: () {
+                    child: Container(
+                      child: Row(
+                        children: <Widget>[
+                          Text("답변", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                          Padding(padding: EdgeInsets.all(5.0.w)),
+                          Text(_answerNum.toString(), style: TextStyle(
+                            fontFamily: "Barun",
+                            fontSize: 20.w,
+                            color: Colors.white,
+                          ),),
+                        ],
+                      )
+                    ),
+                  ),
+                  TextButton(onPressed: (){
                   },
-                      child: Text(_answerNum, style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                      ),)),
-                  TextButton(onPressed: () {},
-                    child: Text("스터디", style: TextStyle(fontSize: 13, color: themeColor3),),
-                  )
-                ],
-              )
+                  child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                    ),
+                 ],
+              ),
             ],
           ),
-        ),
-        Padding(padding: EdgeInsets.all(4.0)),
-        // Expanded(
-        //   child: ListView(
-        //     padding: EdgeInsets.all(15.0),
-        //     children: <Widget>[
-        //       _listTile(Icons.circle, '포인트', PointPage()),
-        //       _listTile(Icons.circle, '공지사항', UpdateInfoPage()),
-        //       _listTile(Icons.circle, '설정', SettingsPage()),
-        //       _listTile(Icons.circle, '문의하기', QnAPage()),
-        //       _listTile(Icons.circle, '후원하기', SupportPage()),
-        //     ],
-        //   ),
-        // ),
-
-      ],
+        )
+      ]
     );
   }
 }
