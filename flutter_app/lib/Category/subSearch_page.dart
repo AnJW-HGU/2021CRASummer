@@ -44,7 +44,10 @@ class _SubSearchPageState extends State<SubSearchPage> {
               height: 32,
               child: TextField(
                 controller: _subSearch,
-
+                textInputAction: TextInputAction.go,
+                onSubmitted: (value) {
+                  print("${_subSearch.text}");
+                },
                 // 과목 검색하기
                 decoration: InputDecoration(
                   // border 설정
