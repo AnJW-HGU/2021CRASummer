@@ -33,6 +33,8 @@ class _SubSearchPageState extends State<SubSearchPage> {
     return ScreenUtilInit(
       designSize: Size(411.4, 683.4),
       builder: () {
+
+
         return Scaffold(
           backgroundColor: Colors.white,
 
