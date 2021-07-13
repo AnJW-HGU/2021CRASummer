@@ -44,14 +44,14 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _signUpPageBody() {
     //배경 넣기
     return Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/Login.png'),
-            fit: BoxFit.cover,
-          ),
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/Login.png'),
+          fit: BoxFit.cover,
         ),
+      ),
       child: SafeArea(
         //중간 정렬
         child: Center(
