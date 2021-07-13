@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:studytogether/Category/category_page.dart';
 import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
@@ -12,6 +13,10 @@ class SetNicknamePage extends StatefulWidget {
 }
 
 class _SetNicknamePageState extends State<SetNicknamePage> {
+  bool _isChecked1 = false; //이용약관
+  bool _isChecked2 = false; //개인정보 처리
+  bool agree = false; //둘 다 동의했는지
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -71,24 +76,65 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         ),
                         //선 긋기
                         Padding(
-                          padding: EdgeInsets.only(top: 20, left: 10.w, right: 10.w, bottom: 20),
+                          padding: EdgeInsets.only(top: 30, left: 10.w, right: 10.w, bottom: 10),
                           child: Divider(color: themeColor3, thickness: 1.0,),
                         ),
+
+
                         //이용약관, 개인정보처리방침
-
-
-
+                        Container(
+                          padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: const Text('이용약관', style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.lightBlue,
+                                fontFamily: "Barun",
+                            ),),
+                            value: _isChecked1,
+                            onChanged: (value) {
+                              setState(() {
+                                _isChecked1 = value!;
+                              });
+                            },
+                            activeColor: themeColor2,
+                            checkColor: Colors.white,
+                            isThreeLine: false,
+                            selected: _isChecked1,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: const Text('개인정보 처리방침', style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.lightBlue,
+                              fontFamily: "Barun",
+                            ),),
+                            value: _isChecked2,
+                            onChanged: (value) {
+                              setState(() {
+                                _isChecked2 = value!;
+                              });
+                            },
+                            activeColor: themeColor2,
+                            checkColor: Colors.white,
+                            isThreeLine: false,
+                            selected: _isChecked2,
+                          ),
+                        ),
                         //선 긋기
                         Padding(
-                          padding: EdgeInsets.only(top: 20, left: 10.w, right: 10.w, bottom: 20),
+                          padding: EdgeInsets.only(top: 10, left: 10.w, right: 10.w, bottom: 30),
                           child: Divider(color: themeColor3, thickness: 1.0,),
                         ),
-                        //확인 버튼
                         MaterialButton(
                           minWidth: double.infinity,
                           height: 45,
-                          //버튼이 눌리면 동작
-                          onPressed: () {},
+                          onPressed: _isChecked1 ? (_isChecked2 ? whenTap : null) : null,
                           color: themeColor1,
                           elevation: 5,
                           shape: RoundedRectangleBorder(
@@ -101,9 +147,12 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                               shadows: [Shadow(
                                 color: blurColor,
                                 offset: Offset(0,2.0),
-                                blurRadius: 4,
-                              )]
-                          ),),
+                                blurRadius: 2,
+                              )],
+                            ),),
+                          //버튼 비활성화 색
+                          //disabledElevation: 5,
+                          disabledColor: grayColor2,
                         ),
                       ],
                     ),
@@ -114,5 +163,10 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
        ),
     );
   }
+
+  void whenTap(){
+    Get.offAll(CategoryPage());
+  }
+
 
 }
