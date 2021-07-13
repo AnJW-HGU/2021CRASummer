@@ -45,6 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Server settings
+# Server setting related
 package-lock.json
 /node_modules
+
+# Privacy file
+/configuration/
