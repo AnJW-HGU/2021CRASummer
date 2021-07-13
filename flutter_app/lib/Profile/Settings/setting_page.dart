@@ -17,7 +17,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  String _setting_nickName = Get.arguments;
+  String _nickName = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _SettingPageState extends State<SettingPage> {
                 icon: Icon(Icons.arrow_back_ios_new_rounded, size: 21.w,),
               ),
               backgroundColor: themeColor1,
-              title: Text('설정', style: TextStyle(fontFamily: "Barun", color: Colors.white, fontSize: 16.w),),
+              title: Text('설정', style: TextStyle(fontFamily: "Barun", color: Colors.white, fontSize: 16.sp),),
               centerTitle: true,
             ),
             body: _settingPageBody()
@@ -47,19 +47,19 @@ class _SettingPageState extends State<SettingPage> {
   Widget _listTile_nickName(context, Next){
     return ListTile(
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
-      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.w, letterSpacing: 1),),
+      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
       tileColor: Colors.white,
       onTap: () {
-        Get.to(Next);
+        Get.to(Next, arguments: _nickName);
       },
-      trailing: Text(_setting_nickName, style: TextStyle(fontFamily: "Barun", color: grayColor1,),),
+      trailing: Text(_nickName, style: TextStyle(fontFamily: "Barun", color: grayColor1,),),
     );
   }
 
   Widget _listTile_appVersion(context) {
     return ListTile(
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
-      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.w, letterSpacing: 1),),
+      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
       tileColor: Colors.white,
       onTap: () {
       },
@@ -70,7 +70,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget _listTile(context, Next){
     return ListTile(
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
-      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.w, letterSpacing: 1),),
+      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
       tileColor: Colors.white,
       onTap: () {
         Get.to(Next);
@@ -86,7 +86,7 @@ class _SettingPageState extends State<SettingPage> {
     return ListTile(
       tileColor: Colors.white,
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
-      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.w, letterSpacing: 1),),
+      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
       trailing: Icon(
           Icons.arrow_forward_ios_rounded,
           size: 18.w

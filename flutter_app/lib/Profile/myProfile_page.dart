@@ -15,7 +15,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-  String _nickName = "자유로운 도비";
+  String _nickName = "자유로운도비영혼";
   int _point = 3000;
   int _questionNum = 2;
   int _answerNum = 5;
@@ -31,7 +31,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               color: Colors.white,
               size: 21.w,
             ),
-            title: Text('프로필', style: TextStyle(fontFamily: "Barun", color: Colors.white, fontSize: 25.w),),
+            title: Text('프로필', style: TextStyle(fontFamily: "Barun", color: Colors.white, fontSize: 25.sp),),
             backgroundColor: themeColor1,
             elevation: 0.0,
             actions: <Widget>[
@@ -55,7 +55,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(top: 10.w, bottom: 10.w),
+          padding: EdgeInsets.only(top: 10, bottom: 10),
           height: 200.0,
           decoration: BoxDecoration(
             boxShadow: [
@@ -81,7 +81,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               Padding(padding: EdgeInsets.all(4.w)),
               Text(_nickName, style: TextStyle(
                   fontFamily: "Barun",
-                  fontSize: 15.w,
+                  fontSize: 15.sp,
                   color: Colors.white,
                   shadows: [Shadow(
                     color: blurColor,
@@ -98,11 +98,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       child: Container(
                         child: Row(
                           children: <Widget>[
-                            Text("포인트", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                            Text("포인트", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                             Padding(padding: EdgeInsets.all(5.0.w)),
                             Text(_point.toString(), style: TextStyle(
                               fontFamily: "Barun",
-                              fontSize: 20.w,
+                              fontSize: 20.sp,
                               color: Colors.white,
                             ),),
                           ],
@@ -114,11 +114,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         child: Container(
                           child: Row(
                             children: <Widget>[
-                             Text("질문", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                             Text("질문", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                               Padding(padding: EdgeInsets.all(5.0.w)),
                              Text(_questionNum.toString(), style: TextStyle(
                             fontFamily: "Barun",
-                            fontSize: 20.w,
+                            fontSize: 20.sp,
                             color: Colors.white,
                             ),),
                           ],
@@ -130,11 +130,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     child: Container(
                       child: Row(
                         children: <Widget>[
-                          Text("답변", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                          Text("답변", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                           Padding(padding: EdgeInsets.all(5.0.w)),
                           Text(_answerNum.toString(), style: TextStyle(
                             fontFamily: "Barun",
-                            fontSize: 20.w,
+                            fontSize: 20.sp,
                             color: Colors.white,
                           ),),
                         ],
@@ -143,7 +143,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   ),
                   TextButton(onPressed: (){
                   },
-                  child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.w, color: themeColor3),),
+                  child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                     ),
                  ],
               ),
