@@ -17,7 +17,11 @@ class _SponPageState extends State<SponPage> {
         builder: () {
           return Scaffold(
             appBar: AppBar(
-              title: Text("후원하기"),
+              title: Text(
+                  "후원하기",
+                  style: TextStyle(
+                  fontSize: 15.sp
+              ),),
             ),
           );
         }

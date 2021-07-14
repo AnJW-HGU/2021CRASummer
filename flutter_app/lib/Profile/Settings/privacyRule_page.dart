@@ -17,7 +17,11 @@ class _PrivacyRulePageState extends State<PrivacyRulePage> {
         builder: () {
           return Scaffold(
             appBar: AppBar(
-              title: Text("개인정보 처리방침"),
+              title: Text(
+                  "개인정보 처리방침",
+                style: TextStyle(
+                    fontSize: 15.sp
+                ),),
             ),
           );
         }

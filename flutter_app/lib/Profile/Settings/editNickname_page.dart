@@ -16,6 +16,13 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
   final int maxLength = 8;
   String textValue = "";
 
+  @override
+  void dispose() {
+    // 위젯이 dispose 또는 dismiss 될 때 컨트롤러를 clean up!
+    _newnickName.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +38,18 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
                   Get.back();
                 },
                 color: Colors.white,
-                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 21.w,),
+                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
               ),
               elevation: 0.0,
               backgroundColor: themeColor1,
-              title: Text('닉네임 변경', style: TextStyle(fontFamily: "Barun", color: Colors.white, fontSize: 16.sp),),
+              title: Text(
+                '닉네임 변경',
+                style: TextStyle(
+                    fontFamily: "Barun",
+                    color: Colors.white,
+                    fontSize: 15.sp
+                ),
+              ),
               centerTitle: true,
             ),
             body: Center(child: _editNicknamePageBody(),),
@@ -48,6 +62,7 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
     return Column(
         children: <Widget>[
           Padding(padding: EdgeInsets.only(top: 70)),
+          // 닉네임 입력 칸
           Container(
             alignment: Alignment.center,
             width: 200.w,
@@ -85,6 +100,7 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
             style: TextStyle(fontFamily: "Barun", color: Colors.white.withOpacity(0.75), fontSize: 13.sp),
           ),
           Padding(padding: EdgeInsets.only(top: 30),),
+          // 변경완료 버튼
           MaterialButton(
             minWidth: 100,
             shape: RoundedRectangleBorder(

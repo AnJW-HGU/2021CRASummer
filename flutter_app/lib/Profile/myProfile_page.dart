@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:studytogether/main.dart';
 import 'package:studytogether/Profile//point_page.dart';
 import 'package:studytogether/Profile/Settings/setting_page.dart';
+import 'package:studytogether/Profile/myA_page.dart';
+import 'package:studytogether/Profile/myQ_page.dart';
 
 
 class MyProfilePage extends StatefulWidget {
@@ -15,7 +17,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-  String _nickName = "자유로운도비영혼";
+  String _nickName = "자유로운도비영혼"; // 서버에서 받아온 닉네임
   int _point = 3000;
   int _questionNum = 2;
   int _answerNum = 5;
@@ -27,11 +29,21 @@ class _MyProfilePageState extends State<MyProfilePage> {
       builder: () {
         return Scaffold(
           appBar: AppBar(
-            iconTheme: IconThemeData(
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
               color: Colors.white,
-              size: 21.w,
+              icon: Icon(Icons.arrow_back_ios_new_rounded, size: 21.w,),
             ),
-            title: Text('프로필', style: TextStyle(fontFamily: "Barun", color: Colors.white, fontSize: 25.sp),),
+            title: Text(
+              '프로필',
+              style: TextStyle(
+                  fontFamily: "Barun",
+                  color: Colors.white,
+                  fontSize: 25.sp
+              ),
+            ),
             backgroundColor: themeColor1,
             elevation: 0.0,
             actions: <Widget>[
@@ -54,7 +66,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   Widget _profilePageBody() {
     return Column(
       children: [
-        Container(
+        Container( // 상단 파란색 컨테이너
           padding: EdgeInsets.only(top: 10, bottom: 10),
           height: 200.0,
           decoration: BoxDecoration(
@@ -70,6 +82,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
           ),
           child: Column(
             children: <Widget>[
+              // 프로필 사진
               CircleAvatar(
                 radius: 35,
                 backgroundColor: themeColor3,
@@ -79,6 +92,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 ),
               ),
               Padding(padding: EdgeInsets.all(4.w)),
+              // 닉네임
               Text(_nickName, style: TextStyle(
                   fontFamily: "Barun",
                   fontSize: 15.sp,
@@ -92,58 +106,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(onPressed: () {
-                    Get.to(PointPage());
-                  },
-                      child: Container(
-                        child: Row(
-                          children: <Widget>[
-                            Text("포인트", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
-                            Padding(padding: EdgeInsets.all(5.0.w)),
-                            Text(_point.toString(), style: TextStyle(
-                              fontFamily: "Barun",
-                              fontSize: 20.sp,
-                              color: Colors.white,
-                            ),),
-                          ],
-                        ),
-                      ),
-                  ),
-                    TextButton(onPressed: () {
-                    },
-                        child: Container(
-                          child: Row(
-                            children: <Widget>[
-                             Text("질문", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
-                              Padding(padding: EdgeInsets.all(5.0.w)),
-                             Text(_questionNum.toString(), style: TextStyle(
-                            fontFamily: "Barun",
-                            fontSize: 20.sp,
-                            color: Colors.white,
-                            ),),
-                          ],
-                        ),
-                      ),
-                    ),
+                  _textButton("포인트", _point, PointPage()),
+                  _textButton("질문", _questionNum, MyAPage()),
+                  _textButton("답변", _answerNum, MyQPage()),
                   TextButton(onPressed: (){
                   },
-                    child: Container(
-                      child: Row(
-                        children: <Widget>[
-                          Text("답변", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
-                          Padding(padding: EdgeInsets.all(5.0.w)),
-                          Text(_answerNum.toString(), style: TextStyle(
-                            fontFamily: "Barun",
-                            fontSize: 20.sp,
-                            color: Colors.white,
-                          ),),
-                        ],
-                      )
-                    ),
-                  ),
-                  TextButton(onPressed: (){
-                  },
-                  child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
+                    child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                     ),
                  ],
               ),
@@ -151,6 +119,26 @@ class _MyProfilePageState extends State<MyProfilePage> {
           ),
         )
       ]
+    );
+  }
+  Widget _textButton(context, num, Next) {
+    return TextButton(
+      onPressed: () {
+        Get.to(Next);
+      },
+      child: Container(
+          child: Row(
+            children: <Widget>[
+              Text(context, style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
+              Padding(padding: EdgeInsets.all(5.0.w)),
+              Text(num.toString(), style: TextStyle(
+                fontFamily: "Barun",
+                fontSize: 20.sp,
+                color: Colors.white,
+              ),),
+            ],
+          )
+      ),
     );
   }
 }

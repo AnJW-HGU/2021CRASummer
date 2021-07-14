@@ -17,7 +17,11 @@ class _InfoPageState extends State<InfoPage> {
         builder: () {
           return Scaffold(
             appBar: AppBar(
-              title: Text("공지사항"),
+              title: Text(
+                "공지사항",
+                style: TextStyle(
+                    fontSize: 15.sp
+                ),),
             ),
           );
         }

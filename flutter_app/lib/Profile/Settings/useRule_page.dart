@@ -17,7 +17,11 @@ class _UseRulePageState extends State<UseRulePage> {
         builder: () {
           return Scaffold(
             appBar: AppBar(
-              title: Text("이용약관"),
+              title: Text(
+                "이용약관",
+                style: TextStyle(
+                  fontSize: 15.sp
+              ),),
             ),
           );
         }

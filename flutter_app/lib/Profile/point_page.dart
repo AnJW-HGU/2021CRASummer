@@ -25,11 +25,17 @@ class _PointPageState extends State<PointPage> {
                   Get.back();
                 },
                 color: themeColor1,
-                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 21.w),
+                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w),
               ),
               backgroundColor: Colors.white,
               title: Text(
-                "포인트", style: TextStyle(fontFamily: "Barun", color: grayColor1, fontSize: 16.w),),
+                "포인트",
+                style: TextStyle(
+                    fontFamily: "Barun",
+                    color: grayColor1,
+                    fontSize: 15.sp
+                ),
+              ),
               centerTitle: true,
               elevation: 0.0,
               actions: <Widget>[
