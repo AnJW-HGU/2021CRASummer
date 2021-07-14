@@ -14,6 +14,8 @@ import 'package:studytogether/Profile/myProfile_page.dart';
 import 'search_page.dart';
 import 'addPost_page.dart';
 
+import 'post_page.dart';
+
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
 
@@ -31,7 +33,7 @@ class _BoardPageState extends State<BoardPage> {
     "무언가", "끼룩", "도비", "토익",
     "과목", "과목", "과목", "과목",
     "과목", "과목", "과목", "과목",
-  ];
+  ].obs;
 
   // 질문 제목 리스트
   final List<String> _titleList = <String>[
@@ -40,7 +42,7 @@ class _BoardPageState extends State<BoardPage> {
     "질문 제목9", "질문 제목10", "질문 제목11", "질문 제목12",
     "질문 제목13", "질문 제목14", "질문 제목15", "질문 제목16",
     "질문 제목17", "질문 제목18", "질문 제목19", "질문 제목20",
-  ];
+  ].obs;
 
   // 질문 내용 리스트
   final List<String> _contentList = <String> [
@@ -49,12 +51,17 @@ class _BoardPageState extends State<BoardPage> {
     "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
     "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
     "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-  ];
+  ].obs;
 
-  final _refreshKey = GlobalKey<RefreshIndicatorState>();
+  var _maxPost = 20; // 게시글 총 개수
+
+  // final _refreshKey = GlobalKey<RefreshIndicatorState>();
   var _scroll = ScrollController().obs;
 
-  var data = <int>[].obs;
+  var _subData = <String>[].obs;
+  var _titleData = <String>[].obs;
+  var _contentData = <String>[].obs;
+
   var isLoading = false.obs;
   var hasMore = false.obs;
 
@@ -77,17 +84,20 @@ class _BoardPageState extends State<BoardPage> {
 
     await Future.delayed(Duration(seconds: 2));
 
-    int offset = data.length;
-    var appendData = List<int>.generate(10, (index) => index+1+offset);
-    data.addAll(appendData);
+    int offset = _subData.length;
+    _subData.addAll(_subList.sublist(offset, offset+10));
+    _titleData.addAll(_titleList.sublist(offset, offset+10));
+    _contentData.addAll(_contentList.sublist(offset, offset+10));
 
     isLoading.value = false;
-    hasMore.value = data.length < 30;
+    hasMore.value = _subData.length < _maxPost;
   }
 
   _reload() async {
     isLoading.value = true;
-    data.clear();
+    _subData.clear();
+    _titleData.clear();
+    _contentData.clear();
 
     await Future.delayed(Duration(seconds: 2));
 
@@ -209,6 +219,8 @@ class _BoardPageState extends State<BoardPage> {
                           ),
                         ),
 
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+
                         Expanded(
                           child: _makePost(),
                         )
@@ -223,7 +235,7 @@ class _BoardPageState extends State<BoardPage> {
                           topRight: Radius.circular(25),
                         )
                     ),
-                  )
+                  ),
                 ),
 
               // 글쓰기 버튼
@@ -281,21 +293,25 @@ class _BoardPageState extends State<BoardPage> {
     return Container(
       child: Obx(()
       => Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(0.0),
         child: ListView.separated(
           controller: _scroll.value,
           itemBuilder: (_, index) {
-            print(hasMore.value);
+            print(hasMore.value); // 데이터 더 있는지 콘솔창에 출력 (확인용)
 
-            if (index < data.length) {
-              var datum = data[index];
-              return Container(
-                padding: EdgeInsets.all(10.0),
-                child: ListTile(
-                  leading: Icon(Icons.android_outlined),
-                  title: Text('$datum 번째 데이터'),
-                  trailing: Icon(Icons.arrow_forward_outlined),
-                )
+            if (index < _subData.length) {
+              var subDatum = _subData[index];
+              var titleDatum = _titleData[index];
+              var contentDatum = _contentData[index];
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Get.to(PostPage(), arguments: "$subDatum");
+                },
+                child: Container(
+                  padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
+                  child: _makePostTile("$subDatum", "$titleDatum", "$contentDatum"),
+                ),
               );
             }
 
@@ -311,13 +327,13 @@ class _BoardPageState extends State<BoardPage> {
                 child: Column(
                   children: [
                     Text(
-                      "데이터의 마지막 입니다"
+                      "게시글의 마지막 입니다"
                     ),
                     IconButton(
                       onPressed: () {
                         _reload();
                       },
-                      icon: Icon(Icons.refresh_outlined),
+                      icon: Icon(Icons.arrow_upward_rounded),
                     ),
                   ],
                 ),
@@ -325,48 +341,50 @@ class _BoardPageState extends State<BoardPage> {
             );
           },
           separatorBuilder: (_, index) => Divider(),
-          itemCount: data.length + 1,
+          itemCount: _subData.length + 1,
         ),
       ),),
     );
   }
 
-  // Widget _makePost() {
-  //   return Container(
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.baseline,
-  //       textBaseline: TextBaseline.alphabetic,
-  //       children: [
-  //         Text(
-  //           "과목이름",
-  //           style: TextStyle(
-  //             color: themeColor1,
-  //             fontFamily: "Barun",
-  //             fontSize: 15.sp,
-  //             fontWeight: FontWeight.w400,
-  //           ),
-  //         ),
-  //         Text(
-  //           "질문제목",
-  //           style: TextStyle(
-  //             fontFamily: "Barun",
-  //             fontSize: 15.sp,
-  //             fontWeight: FontWeight.w500,
-  //           ),
-  //         ),
-  //         Text(
-  //           "질문에 관한 내용은 이곳에",
-  //           style: TextStyle(
-  //             color: grayColor2,
-  //             fontFamily: "Barun",
-  //             fontSize: 14.sp,
-  //             fontWeight: FontWeight.w300,
-  //           ),
-  //         ),
-  //       ],
-  //     )
-  //   );
-  // }
+  Widget _makePostTile(sub, title, content) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          Text(
+            sub,
+            style: TextStyle(
+              color: themeColor1,
+              fontFamily: "Barun",
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(bottom: 5)),
+          Text(
+            title,
+            style: TextStyle(
+              fontFamily: "Barun",
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(bottom: 5)),
+          Text(
+            content,
+            style: TextStyle(
+              color: grayColor2,
+              fontFamily: "Barun",
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 // class InfiniteScrollView extends GetView<InfiniteScrollController> {
