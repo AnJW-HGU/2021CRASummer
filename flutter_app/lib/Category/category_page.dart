@@ -146,3 +146,10 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 }
+
+// class AppBinding extends Bindings {
+//   @override
+//   void dependencies() {
+//     Get.put(InfiniteScrollController());
+//   }
+// }
