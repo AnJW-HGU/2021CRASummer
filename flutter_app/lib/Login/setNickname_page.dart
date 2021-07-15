@@ -17,6 +17,7 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
   bool _isChecked1 = false; //이용약관
   bool _isChecked2 = false; //개인정보 처리
   bool agree = false; //둘 다 동의했는지
+  bool checked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +54,19 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
+                    //닉네임 받기
                     TextField(
                       textAlign: TextAlign.center,
+                      //닉네임 문자 제한
                       maxLength: 8,
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
                       cursorHeight: 20,
                       decoration: InputDecoration(
+                        /*counterStyle: TextStyle(
+                          color: Colors.white.withOpacity(0.75),
+                        ),
+                        counterText: "",*/
                         contentPadding: EdgeInsets.symmetric(vertical: 10),
                         hintText: '닉네임은 최대 8글자까지 가능합니다',
                         hintStyle: TextStyle(
@@ -76,17 +84,17 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         ),
                         counterStyle: TextStyle(
                           color: themeColor2,
-
                         ),
                       ),
-                      //닉네임 문자 제한
                     ),
+
                     //선 긋기
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 10.w, right: 10.w, bottom: 10),
                       child: Divider(color: themeColor3, thickness: 1.0,),
                     ),
-                    //이용약관, 개인정보처리방침
+
+                    //이용약관
                     Container(
                       padding: EdgeInsets.only(left: 10.w, right: 10.w),
                       child: CheckboxListTile(
@@ -109,6 +117,8 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         selected: _isChecked1,
                       ),
                     ),
+
+                    //개인정보처리방침
                     Container(
                       padding: EdgeInsets.only(left: 10.w, right: 10.w),
                       child: CheckboxListTile(
@@ -121,9 +131,48 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         ),),
                         value: _isChecked2,
                         onChanged: (value) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return AlertDialog(
+                                    title: Text("CheckBox"),
+                                    actions: <Widget>[
+                                      Row(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Checkbox(
+                                                value: checked,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    checked = value!;
+                                                  });
+                                                },
+                                              ),
+                                              Text('동의합니다'),
+                                            ],
+                                          ),
+                                          MaterialButton(
+                                            onPressed: () {
+                                              _isChecked2 = checked;
+                                              Get.back();
+                                            },
+                                            child: Text("확인"),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          );
                           setState(() {
-                            _isChecked2 = value!;
+                            _isChecked2 = checked;
                           });
+
                         },
                         activeColor: themeColor2,
                         checkColor: Colors.white,
@@ -131,15 +180,18 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         selected: _isChecked2,
                       ),
                     ),
+
                     //선 긋기
                     Padding(
                       padding: EdgeInsets.only(top: 10, left: 10.w, right: 10.w, bottom: 30),
                       child: Divider(color: themeColor3, thickness: 1.0,),
                     ),
+
+                    //확인 버튼
                     MaterialButton(
                       minWidth: double.infinity,
                       height: 45,
-                      onPressed: _isChecked1 ? (_isChecked2 ? whenTap : null) : null,
+                      onPressed: () {},//_isChecked1 ? (_isChecked2 ? whenTap : null) : null,
                       color: themeColor1,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
@@ -169,9 +221,8 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
     );
   }
 
+  //확인 버튼이 눌렸을 때
   void whenTap(){
     Get.offAll(CategoryPage());
   }
-
-
 }

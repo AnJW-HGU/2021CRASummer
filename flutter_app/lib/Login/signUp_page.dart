@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:studytogether/Login/googleLogin_page.dart';
 import 'package:studytogether/Login/login_page.dart';
 import 'package:studytogether/Login/setNickname_page.dart';
 import 'package:studytogether/main.dart';
@@ -93,7 +94,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-                    Get.to(SetNicknamePage());
+                    Get.to(GoogleLoginPage());
+                    //Get.to(SetNicknamePage());
                   },
                   //버튼 안에 text
                   label: Text("   Sign Up with Google     ", style: TextStyle(
