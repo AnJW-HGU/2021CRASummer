@@ -10,6 +10,7 @@ import 'noti_page.dart';
 import 'package:studytogether/Profile/myProfile_page.dart';
 import 'package:studytogether/Login/login_page.dart';
 
+import 'myBoard_page.dart';
 import 'board_page.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -20,6 +21,25 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  var _userId; // 유저 아이디
+
+  final _scroll = ScrollController();
+
+  // 학부 리스트
+  final List<String> _majorList = <String> [
+    "GLS", "창의융합교육원", "국제어문", "언론정보문화", "커뮤니케이션",
+    "경영경제", "법", "상담심리사회복지", "생명과학", "ICT창업", "AI융합교육원",
+    "전산전자", "산업정보디자인", "기계제어", "공간환경시스템", "콘텐츠융합디자인",
+    "산업교육",
+  ];
+
+  // 교양 리스트
+  final List<String> _electiveList = <String> [
+    "신앙/세계관", "인성/리더십", "외국어", "기초학문",
+    "소통/융복합", "예체능", "그 외",
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -97,11 +117,57 @@ class _CategoryPageState extends State<CategoryPage> {
                   padding: EdgeInsets.only(top: 30),
                   child: Column(
                     children: [
+
+                      // 나만의 게시판 버튼
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(MyBoardPage(), arguments: "나만의 게시판", transition: Transition.cupertino);
+                        },
+                        child: Container( // 숨김리스트 아닌 카테고리
+                          width: 355.w,
+                          height: 50,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: 30.w),
+                          child: Text(
+                            "나만의 게시판",
+                            style: TextStyle(
+                              color: themeColor1,
+                              fontFamily: "Barun",
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // 카테고리 블럭 배경색
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: blurColor,
+                                blurRadius: 4,
+                                offset: Offset(0.0, 2.0),
+                              )
+                            ]
+                          ),
+                        ),
+                      ),
+
+                      // 구분선
+                      Divider(
+                        color: Colors.white,
+                        height: 30,
+                        thickness: 1,
+                        indent: 50.w,
+                        endIndent: 50.w,
+                      ),
+
+                      // 파란색 게시판들
                       _buildCategory("전체"),
+                      Padding(padding: EdgeInsets.only(top: 10.0),),
+                      _buildExpansionCategory("학부", _majorList),
                       Padding(padding: EdgeInsets.only(top: 10.0),),
                       _buildCategory("전공기초"),
                       Padding(padding: EdgeInsets.only(top: 10.0),),
-                      _buildCategory("그 외"),
+                      _buildCategory("취업/진로"),
                     ],
                   ),
                 ),
@@ -112,12 +178,13 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
+  // 숨김리스트 아닌 카테고리
   Widget _buildCategory(inTitle) {
     return GestureDetector(
       onTap: () {
         Get.to(BoardPage(), arguments: inTitle, transition: Transition.cupertino);
       },
-      child: Container( // 숨김리스트 아닌 카테고리
+      child: Container(
         width: 355.w,
         height: 50,
         alignment: Alignment.centerLeft,
@@ -142,6 +209,71 @@ class _CategoryPageState extends State<CategoryPage> {
               )
             ]
         ),
+      ),
+    );
+  }
+
+  // 숨김리스트 카테고리
+  Widget _buildExpansionCategory(inTitle, listData) {
+    return Container(
+      width: 355.w,
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(left: 30.w),
+      
+      child: ExpansionTile(
+        title: Text(
+          inTitle,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Barun",
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+
+        initiallyExpanded: false,
+        // 숨김에 들어갈 것들
+        children: [
+          _buildExpansionTile(listData),
+        ],
+      ),
+
+      decoration: BoxDecoration(
+          color: themeColor1, // 카테고리 블럭 배경색
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: blurColor,
+              blurRadius: 4,
+              offset: Offset(0.0, 2.0),
+            )
+          ]
+      ),
+    );
+  }
+
+  Widget _buildExpansionTile(listData) {
+    return Expanded(
+      child: ListView.separated(
+        shrinkWrap: true,
+        controller: _scroll,
+        scrollDirection: Axis.vertical,
+        // padding: EdgeInsets.only(top:10),
+        itemCount: listData.length,
+        itemBuilder: (_, index) {
+          return Container(
+            child: Text(
+              "${listData[index]}",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "Barun",
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (_, index) => Divider(),
       ),
     );
   }
