@@ -10,21 +10,27 @@ class SponPage extends StatefulWidget {
 }
 
 class _SponPageState extends State<SponPage> {
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: Size(411.4, 683.4),
-        builder: () {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                  "후원하기",
-                  style: TextStyle(
-                  fontSize: 15.sp
-              ),),
+      designSize: Size(411.4, 683.4),
+      builder: () {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              color: themeColor1,
+              icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
             ),
-          );
-        }
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            elevation: 0,
+          ),
+        );
+      }
     );
   }
 }

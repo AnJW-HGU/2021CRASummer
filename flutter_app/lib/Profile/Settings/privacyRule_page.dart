@@ -17,11 +17,23 @@ class _PrivacyRulePageState extends State<PrivacyRulePage> {
         builder: () {
           return Scaffold(
             appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                color: themeColor1,
+                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
+              ),
+              backgroundColor: Colors.white,
+              centerTitle: true,
               title: Text(
-                  "개인정보 처리방침",
+                "개인정보처리방침",
                 style: TextStyle(
-                    fontSize: 15.sp
-                ),),
+                  fontSize: 15.sp,
+                  fontFamily: "Barun",
+                  color: grayColor1,
+                ),
+              ),
             ),
           );
         }

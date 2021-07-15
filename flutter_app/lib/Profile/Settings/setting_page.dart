@@ -17,8 +17,8 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  String _nickName = Get.arguments;
-  bool isSwitched = false;
+  String _nickName = Get.arguments; // 닉네임
+  bool isSwitched = false; // 푸시알림 on/off
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +35,7 @@ class _SettingPageState extends State<SettingPage> {
                 color: Colors.white,
                 icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
               ),
+
               backgroundColor: themeColor1,
               title: Text(
                 '설정',
@@ -44,6 +45,7 @@ class _SettingPageState extends State<SettingPage> {
                     fontSize: 15.sp
                 ),
               ),
+
               centerTitle: true,
             ),
             body: _settingPageBody()
@@ -51,6 +53,7 @@ class _SettingPageState extends State<SettingPage> {
         }
     );
   }
+
   // 닉네임 리스트
   Widget _listTile_nickName(context, Next){
     return ListTile(
@@ -75,6 +78,7 @@ class _SettingPageState extends State<SettingPage> {
       trailing: Text("1.0.0", style: TextStyle(fontFamily: "Barun", color: grayColor1,),),
     );
   }
+
   // 알람설정 리스트
   Widget _listTile_alarm(context){
     return ListTile(

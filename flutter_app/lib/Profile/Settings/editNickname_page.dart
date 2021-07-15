@@ -11,14 +11,13 @@ class EditNicknamePage extends StatefulWidget {
 }
 
 class _EditNicknamePageState extends State<EditNicknamePage> {
-  String _nickName = Get.arguments;
   final _newnickName = TextEditingController(text: Get.arguments);
   final int maxLength = 8;
-  String textValue = "";
+  String textValue = Get.arguments;
 
   @override
+  // 위젯이 dispose 또는 dismiss 될 때 컨트롤러를 clean up!
   void dispose() {
-    // 위젯이 dispose 또는 dismiss 될 때 컨트롤러를 clean up!
     _newnickName.dispose();
     super.dispose();
   }
@@ -34,7 +33,6 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
-                  print("${_newnickName.text}");
                   Get.back();
                 },
                 color: Colors.white,
@@ -87,6 +85,11 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
                 ),
               ),
               maxLength: maxLength,
+              onChanged: (value) {
+                setState(() {
+                  textValue = value;
+                });
+              },
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 15),),
@@ -110,7 +113,8 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
             elevation: 5,
             child: Text("변경 완료", style: TextStyle(fontFamily: "Barun", color: themeColor1, fontSize: 15.sp),),
             onPressed: () {
-              Get.back(result: _newnickName.text);
+              print("${_newnickName.text}");
+              Get.back();
             }
           ),
         ],

@@ -4,6 +4,8 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 
+import 'rank_page.dart';
+
 
 class PointPage extends StatefulWidget {
 
@@ -42,6 +44,7 @@ class _PointPageState extends State<PointPage> {
                 IconButton( // 랭킹
                     icon: Icon(Icons.public_rounded, size: 21.w, color: themeColor1),
                     onPressed: () {
+                      Get.to(RankPage());
                     }
                 ),
               ],
