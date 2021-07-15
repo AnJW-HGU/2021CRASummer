@@ -47,11 +47,28 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "24",
                         "startColumns": "4",
-                        "startOffsets": "2814",
+                        "startOffsets": "3237",
                         "endColumns": "100",
-                        "endOffsets": "2910"
+                        "endOffsets": "3333"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\82104\\.gradle\\caches\\transforms-2\\files-2.1\\160a788508b1035896be80451e5f76d6\\browser-1.2.0\\res\\values-ka\\values-ka.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,161,264,374",
+                        "endColumns": "105,102,109,103",
+                        "endOffsets": "156,259,369,473"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2814,2920,3023,3133",
+                        "endColumns": "105,102,109,103",
+                        "endOffsets": "2915,3018,3128,3232"
                     }
                 }
             ]

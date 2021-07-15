@@ -18,5 +18,9 @@
     <string msgid="5201977337835724196" name="common_open_on_phone">"Телефонда ашу"</string>
     <string msgid="3441753203274453993" name="common_signin_button_text">"Кіру"</string>
     <string msgid="669893613918351210" name="common_signin_button_text_long">"Google арқылы кіру"</string>
+    <string msgid="8230469354668895088" name="copy_toast_msg">"Сілтеме буферге көшірілді."</string>
+    <string msgid="2615365786337886368" name="fallback_menu_item_copy_link">"Сілтемені көшіру"</string>
+    <string msgid="8984733760067120953" name="fallback_menu_item_open_in_browser">"Браузерден ашу"</string>
+    <string msgid="271185644269364308" name="fallback_menu_item_share_link">"Сілтемені бөлісу"</string>
     <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

@@ -4,6 +4,23 @@
             "outputFile": "C:\\cra_studytogether\\2021CRASummer\\flutter_app\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-kn\\values-kn.xml",
             "map": [
                 {
+                    "source": "C:\\Users\\82104\\.gradle\\caches\\transforms-2\\files-2.1\\160a788508b1035896be80451e5f76d6\\browser-1.2.0\\res\\values-kn\\values-kn.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,169,269,385",
+                        "endColumns": "113,99,115,99",
+                        "endOffsets": "164,264,380,480"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2825,2939,3039,3155",
+                        "endColumns": "113,99,115,99",
+                        "endOffsets": "2934,3034,3150,3250"
+                    }
+                },
+                {
                     "source": "C:\\Users\\82104\\.gradle\\caches\\transforms-2\\files-2.1\\84800ed3f27cf147042783aa2604cab3\\jetified-play-services-basement-16.0.1\\res\\values-kn\\values.xml",
                     "from": {
                         "startLines": "4",
@@ -30,11 +47,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "24",
                         "startColumns": "4",
-                        "startOffsets": "2825",
+                        "startOffsets": "3255",
                         "endColumns": "100",
-                        "endOffsets": "2921"
+                        "endOffsets": "3351"
                     }
                 },
                 {

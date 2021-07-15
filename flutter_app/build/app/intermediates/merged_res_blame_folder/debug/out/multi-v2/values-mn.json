@@ -30,11 +30,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "24",
                         "startColumns": "4",
-                        "startOffsets": "2809",
+                        "startOffsets": "3230",
                         "endColumns": "100",
-                        "endOffsets": "2905"
+                        "endOffsets": "3326"
                     }
                 },
                 {
@@ -52,6 +52,23 @@
                         "startOffsets": "1271",
                         "endColumns": "208",
                         "endOffsets": "1475"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\82104\\.gradle\\caches\\transforms-2\\files-2.1\\160a788508b1035896be80451e5f76d6\\browser-1.2.0\\res\\values-mn\\values-mn.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,160,264,369",
+                        "endColumns": "104,103,104,106",
+                        "endOffsets": "155,259,364,471"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2809,2914,3018,3123",
+                        "endColumns": "104,103,104,106",
+                        "endOffsets": "2909,3013,3118,3225"
                     }
                 }
             ]

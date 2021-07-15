@@ -13,11 +13,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "24",
                         "startColumns": "4",
-                        "startOffsets": "2541",
+                        "startOffsets": "2916",
                         "endColumns": "100",
-                        "endOffsets": "2637"
+                        "endOffsets": "3012"
                     }
                 },
                 {
@@ -35,6 +35,23 @@
                         "startOffsets": "1158",
                         "endColumns": "179",
                         "endOffsets": "1333"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\82104\\.gradle\\caches\\transforms-2\\files-2.1\\160a788508b1035896be80451e5f76d6\\browser-1.2.0\\res\\values-ko\\values-ko.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,141,234,337",
+                        "endColumns": "85,92,102,92",
+                        "endOffsets": "136,229,332,425"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2541,2627,2720,2823",
+                        "endColumns": "85,92,102,92",
+                        "endOffsets": "2622,2715,2818,2911"
                     }
                 },
                 {

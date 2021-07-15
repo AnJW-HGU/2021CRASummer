@@ -1,0 +1,19 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml:1:1-61
+INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml:1:1-61
+INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml:1:1-61
+	package
+		ADDED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml:1:11-58
+		INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml
+		INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml:1:1-61
+uses-sdk
+INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml
+INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml
+		ADDED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml
+		INJECTED from C:\src\flutter_windows_2.2.2-stable\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_custom_tabs-1.0.2\android\src\main\AndroidManifest.xml

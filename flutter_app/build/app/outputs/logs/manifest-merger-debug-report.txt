@@ -5,16 +5,20 @@ INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\mai
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml:1:1-42:12
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml:1:1-42:12
 MERGED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml:1:1-42:12
+MERGED from [:flutter_custom_tabs] C:\cra_studytogether\2021CRASummer\flutter_app\build\flutter_custom_tabs\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:hexcolor] C:\cra_studytogether\2021CRASummer\flutter_app\build\hexcolor\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:video_player] C:\cra_studytogether\2021CRASummer\flutter_app\build\video_player\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:webview_flutter] C:\cra_studytogether\2021CRASummer\flutter_app\build\webview_flutter\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-14:12
 MERGED from [:google_sign_in] C:\cra_studytogether\2021CRASummer\flutter_app\build\google_sign_in\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:wakelock] C:\cra_studytogether\2021CRASummer\flutter_app\build\wakelock\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [com.github.droibit.customtabslauncher:launcher:1.5.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\0d5189218d9b84ee4b4a269e92b0b44e\jetified-launcher-1.5.0\AndroidManifest.xml:2:1-17:12
 MERGED from [com.google.android.exoplayer:exoplayer-hls:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b2ea5e05fb4fb851184e9b0af980bf49\jetified-exoplayer-hls-2.14.1\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.exoplayer:exoplayer-dash:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\f09b8ddd78b021f724ecbb270644c7ef\jetified-exoplayer-dash-2.14.1\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\d9c8ace75a2893fac3be87cf34cd39b5\jetified-exoplayer-smoothstreaming-2.14.1\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.exoplayer:exoplayer-core:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\60b85d32c76f6174d43e445a6aa2cefb\jetified-exoplayer-core-2.14.1\AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.webkit:webkit:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\cbbb6921b2521959953b0c781fe5c304\webkit-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.browser:browser:1.2.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\160a788508b1035896be80451e5f76d6\browser-1.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.gms:play-services-auth:16.0.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\ce93b072626ac35eec0b028031d943ec\jetified-play-services-auth-16.0.1\AndroidManifest.xml:17:1-39:12
 MERGED from [com.google.android.gms:play-services-auth-api-phone:16.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\3b7cdc969f11c7475fe3e855e19a7b79\jetified-play-services-auth-api-phone-16.0.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.gms:play-services-auth-base:16.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\11de09a43a6341c97d23850a939fd2df\jetified-play-services-auth-base-16.0.0\AndroidManifest.xml:2:1-7:12
@@ -42,13 +46,13 @@ MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\82104\.gradle
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\cad25976877a6ae855ef6821534f58a1\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.exoplayer:exoplayer-extractor:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b712161584c0f03d21bcedf0af2bd366\jetified-exoplayer-extractor-2.14.1\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.exoplayer:exoplayer-common:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\9c869d6c39afd30e0ee6a960de621a9b\jetified-exoplayer-common-2.14.1\AndroidManifest.xml:17:1-26:12
-MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\5f606c30f064eed94124828de37fadc0\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\96aee308bccd03bc62c306516c23a410\versionedparcelable-1.1.0\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b962778313a0e23f9ca3dbafc012c1af\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\5f606c30f064eed94124828de37fadc0\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\15792e6083b2b5b5a7ffa285d47daa24\lifecycle-viewmodel-2.1.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\15ddec56bd001fb2d4fc04a7d71346e8\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b6c34301107cd06a29fdce8c3ef58e3a\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\f15d67ff15ac844b69200ea1a0376a7a\print-1.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b962778313a0e23f9ca3dbafc012c1af\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\c39070be4a8b092ae5970162a829e305\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\debug\AndroidManifest.xml:1:1-7:12
@@ -69,6 +73,8 @@ INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\deb
 		ADDED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml:1:11-69
 application
 ADDED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml:3:4-41:19
+MERGED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-12:19
+MERGED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-12:19
 MERGED from [com.google.android.gms:play-services-auth:16.0.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\ce93b072626ac35eec0b028031d943ec\jetified-play-services-auth-16.0.1\AndroidManifest.xml:22:5-37:19
 MERGED from [com.google.android.gms:play-services-auth:16.0.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\ce93b072626ac35eec0b028031d943ec\jetified-play-services-auth-16.0.1\AndroidManifest.xml:22:5-37:19
 MERGED from [com.google.android.gms:play-services-base:16.0.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\223bb7812b35891456f100eb3d2377d1\jetified-play-services-base-16.0.1\AndroidManifest.xml:22:5-27:19
@@ -133,16 +139,22 @@ uses-sdk
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\main\AndroidManifest.xml
+MERGED from [:flutter_custom_tabs] C:\cra_studytogether\2021CRASummer\flutter_app\build\flutter_custom_tabs\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_custom_tabs] C:\cra_studytogether\2021CRASummer\flutter_app\build\flutter_custom_tabs\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:hexcolor] C:\cra_studytogether\2021CRASummer\flutter_app\build\hexcolor\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:hexcolor] C:\cra_studytogether\2021CRASummer\flutter_app\build\hexcolor\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:video_player] C:\cra_studytogether\2021CRASummer\flutter_app\build\video_player\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:video_player] C:\cra_studytogether\2021CRASummer\flutter_app\build\video_player\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:webview_flutter] C:\cra_studytogether\2021CRASummer\flutter_app\build\webview_flutter\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:webview_flutter] C:\cra_studytogether\2021CRASummer\flutter_app\build\webview_flutter\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:google_sign_in] C:\cra_studytogether\2021CRASummer\flutter_app\build\google_sign_in\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:google_sign_in] C:\cra_studytogether\2021CRASummer\flutter_app\build\google_sign_in\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:wakelock] C:\cra_studytogether\2021CRASummer\flutter_app\build\wakelock\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:wakelock] C:\cra_studytogether\2021CRASummer\flutter_app\build\wakelock\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [com.github.droibit.customtabslauncher:launcher:1.5.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\0d5189218d9b84ee4b4a269e92b0b44e\jetified-launcher-1.5.0\AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.droibit.customtabslauncher:launcher:1.5.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\0d5189218d9b84ee4b4a269e92b0b44e\jetified-launcher-1.5.0\AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.android.exoplayer:exoplayer-hls:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b2ea5e05fb4fb851184e9b0af980bf49\jetified-exoplayer-hls-2.14.1\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.exoplayer:exoplayer-hls:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b2ea5e05fb4fb851184e9b0af980bf49\jetified-exoplayer-hls-2.14.1\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.exoplayer:exoplayer-dash:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\f09b8ddd78b021f724ecbb270644c7ef\jetified-exoplayer-dash-2.14.1\AndroidManifest.xml:20:5-22:41
@@ -153,6 +165,8 @@ MERGED from [com.google.android.exoplayer:exoplayer-core:2.14.1] C:\Users\82104\
 MERGED from [com.google.android.exoplayer:exoplayer-core:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\60b85d32c76f6174d43e445a6aa2cefb\jetified-exoplayer-core-2.14.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.webkit:webkit:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\cbbb6921b2521959953b0c781fe5c304\webkit-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.webkit:webkit:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\cbbb6921b2521959953b0c781fe5c304\webkit-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.browser:browser:1.2.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\160a788508b1035896be80451e5f76d6\browser-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.browser:browser:1.2.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\160a788508b1035896be80451e5f76d6\browser-1.2.0\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.gms:play-services-auth:16.0.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\ce93b072626ac35eec0b028031d943ec\jetified-play-services-auth-16.0.1\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-auth:16.0.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\ce93b072626ac35eec0b028031d943ec\jetified-play-services-auth-16.0.1\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-auth-api-phone:16.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\3b7cdc969f11c7475fe3e855e19a7b79\jetified-play-services-auth-api-phone-16.0.0\AndroidManifest.xml:5:5-44
@@ -207,10 +221,12 @@ MERGED from [com.google.android.exoplayer:exoplayer-extractor:2.14.1] C:\Users\8
 MERGED from [com.google.android.exoplayer:exoplayer-extractor:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b712161584c0f03d21bcedf0af2bd366\jetified-exoplayer-extractor-2.14.1\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.exoplayer:exoplayer-common:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\9c869d6c39afd30e0ee6a960de621a9b\jetified-exoplayer-common-2.14.1\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.exoplayer:exoplayer-common:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\9c869d6c39afd30e0ee6a960de621a9b\jetified-exoplayer-common-2.14.1\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\5f606c30f064eed94124828de37fadc0\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\5f606c30f064eed94124828de37fadc0\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\96aee308bccd03bc62c306516c23a410\versionedparcelable-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\96aee308bccd03bc62c306516c23a410\versionedparcelable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b962778313a0e23f9ca3dbafc012c1af\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b962778313a0e23f9ca3dbafc012c1af\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\5f606c30f064eed94124828de37fadc0\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\5f606c30f064eed94124828de37fadc0\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\15792e6083b2b5b5a7ffa285d47daa24\lifecycle-viewmodel-2.1.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\15792e6083b2b5b5a7ffa285d47daa24\lifecycle-viewmodel-2.1.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\15ddec56bd001fb2d4fc04a7d71346e8\documentfile-1.0.0\AndroidManifest.xml:20:5-44
@@ -219,8 +235,6 @@ MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\User
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b6c34301107cd06a29fdce8c3ef58e3a\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\f15d67ff15ac844b69200ea1a0376a7a\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\f15d67ff15ac844b69200ea1a0376a7a\print-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b962778313a0e23f9ca3dbafc012c1af\interpolator-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\b962778313a0e23f9ca3dbafc012c1af\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\c39070be4a8b092ae5970162a829e305\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\c39070be4a8b092ae5970162a829e305\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 INJECTED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\debug\AndroidManifest.xml
@@ -237,6 +251,22 @@ MERGED from [:google_sign_in] C:\cra_studytogether\2021CRASummer\flutter_app\bui
 MERGED from [:google_sign_in] C:\cra_studytogether\2021CRASummer\flutter_app\build\google_sign_in\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-67
 	android:name
 		ADDED from C:\cra_studytogether\2021CRASummer\flutter_app\android\app\src\debug\AndroidManifest.xml:6:22-64
+activity#io.flutter.plugins.urllauncher.WebViewActivity
+ADDED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
+	android:exported
+		ADDED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
+	android:theme
+		ADDED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
+	android:name
+		ADDED from [:url_launcher] C:\cra_studytogether\2021CRASummer\flutter_app\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
+queries
+ADDED from [com.github.droibit.customtabslauncher:launcher:1.5.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\0d5189218d9b84ee4b4a269e92b0b44e\jetified-launcher-1.5.0\AndroidManifest.xml:11:5-15:15
+intent#action:name:android.support.customtabs.action.CustomTabsService
+ADDED from [com.github.droibit.customtabslauncher:launcher:1.5.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\0d5189218d9b84ee4b4a269e92b0b44e\jetified-launcher-1.5.0\AndroidManifest.xml:12:9-14:18
+action#android.support.customtabs.action.CustomTabsService
+ADDED from [com.github.droibit.customtabslauncher:launcher:1.5.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\0d5189218d9b84ee4b4a269e92b0b44e\jetified-launcher-1.5.0\AndroidManifest.xml:13:13-90
+	android:name
+		ADDED from [com.github.droibit.customtabslauncher:launcher:1.5.0] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\0d5189218d9b84ee4b4a269e92b0b44e\jetified-launcher-1.5.0\AndroidManifest.xml:13:21-87
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from [com.google.android.exoplayer:exoplayer-core:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\60b85d32c76f6174d43e445a6aa2cefb\jetified-exoplayer-core-2.14.1\AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.exoplayer:exoplayer-common:2.14.1] C:\Users\82104\.gradle\caches\transforms-2\files-2.1\9c869d6c39afd30e0ee6a960de621a9b\jetified-exoplayer-common-2.14.1\AndroidManifest.xml:24:5-79

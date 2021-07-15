@@ -18,5 +18,9 @@
     <string msgid="5201977337835724196" name="common_open_on_phone">"فتح على الهاتف"</string>
     <string msgid="3441753203274453993" name="common_signin_button_text">"تسجل الدخول"</string>
     <string msgid="669893613918351210" name="common_signin_button_text_long">"‏تسجيل الدخول عبر Google"</string>
+    <string msgid="8230469354668895088" name="copy_toast_msg">"تم نسخ الرابط إلى الحافظة."</string>
+    <string msgid="2615365786337886368" name="fallback_menu_item_copy_link">"نسخ الرابط"</string>
+    <string msgid="8984733760067120953" name="fallback_menu_item_open_in_browser">"فتح في المتصفح"</string>
+    <string msgid="271185644269364308" name="fallback_menu_item_share_link">"مشاركة الرابط"</string>
     <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

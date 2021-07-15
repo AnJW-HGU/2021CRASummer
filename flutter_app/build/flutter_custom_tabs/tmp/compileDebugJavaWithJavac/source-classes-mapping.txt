@@ -1,0 +1,4 @@
+com/github/droibit/flutter/plugins/customtabs/CustomTabsFactory.java
+ com.github.droibit.flutter.plugins.customtabs.CustomTabsFactory
+com/github/droibit/flutter/plugins/customtabs/CustomTabsPlugin.java
+ com.github.droibit.flutter.plugins.customtabs.CustomTabsPlugin

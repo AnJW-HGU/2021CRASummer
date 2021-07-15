@@ -1,4 +1,4 @@
-import 'dart:convert';
+/*import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +8,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:studytogether/Login/setNickname_page.dart';
 import 'package:studytogether/Login/signUp_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../main.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,8 @@ class GoogleLoginPage extends StatefulWidget {
 }
 
 class _GoogleLoginPageState extends State<GoogleLoginPage> {
+  var isloading = true;
+  var html_data = "";
 
   @override
   Widget build(BuildContext context) {
@@ -46,22 +49,25 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
   }
 
   Future<String> fetch() async{
-    var res = await http.get(Uri.parse('http://128.199.139.159.nip.io:3000/auth/google'));
+    var res = await http.get(Uri.parse('http://128.199.139.159.nip.io:3000/auth'));
     print(res.body);
-    return res.body;
+    return await res.body.toString();
   }
 
 
   Widget _GoogleLoginPageBody() {
-    var isloading = true;
-    var html_data = "";
 
-    fetch().then((value) => {
+
+    fetch().then((String value) => {
       html_data = value,
       isloading = false,
+
+      print(html_data),
+      print(isloading),
+
     });
 
-    if (isloading) {
+    if (isloading == true) {
       return Container(
         child: Column(
           children: [
@@ -70,17 +76,16 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
         ),
       );
     }
+
     else {
       return Container(
         child: SafeArea(
-          child: Html(
-            data: html_data
+          child: WebView(
+            initialUrl: html_data,
+            javascriptMode: JavascriptMode.unrestricted,
           ),
         ),
       );
     }
-
   }
-}
-
-
+}*/

@@ -18,5 +18,9 @@
     <string msgid="5201977337835724196" name="common_open_on_phone">"Maak oop op foon"</string>
     <string msgid="3441753203274453993" name="common_signin_button_text">"Meld aan"</string>
     <string msgid="669893613918351210" name="common_signin_button_text_long">"Meld aan met Google"</string>
+    <string msgid="8230469354668895088" name="copy_toast_msg">"Skakel is na knipbord gekopieer"</string>
+    <string msgid="2615365786337886368" name="fallback_menu_item_copy_link">"Kopieer skakel"</string>
+    <string msgid="8984733760067120953" name="fallback_menu_item_open_in_browser">"Maak in blaaier oop"</string>
+    <string msgid="271185644269364308" name="fallback_menu_item_share_link">"Deel skakel"</string>
     <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

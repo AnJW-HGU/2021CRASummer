@@ -13,11 +13,28 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "24",
                         "startColumns": "4",
-                        "startOffsets": "2875",
+                        "startOffsets": "3301",
                         "endColumns": "100",
-                        "endOffsets": "2971"
+                        "endOffsets": "3397"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\82104\\.gradle\\caches\\transforms-2\\files-2.1\\160a788508b1035896be80451e5f76d6\\browser-1.2.0\\res\\values-gl\\values-gl.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,162,264,376",
+                        "endColumns": "106,101,111,104",
+                        "endOffsets": "157,259,371,476"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2875,2982,3084,3196",
+                        "endColumns": "106,101,111,104",
+                        "endOffsets": "2977,3079,3191,3296"
                     }
                 },
                 {
