@@ -17,7 +17,23 @@ class _UseRulePageState extends State<UseRulePage> {
         builder: () {
           return Scaffold(
             appBar: AppBar(
-              title: Text("이용약관"),
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                color: themeColor1,
+                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
+              ),
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Text(
+                "이용약관",
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  fontFamily: "Barun",
+                  color: grayColor1,
+                ),
+              ),
             ),
           );
         }
