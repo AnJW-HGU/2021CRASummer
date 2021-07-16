@@ -110,6 +110,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
+
+                    /*
                     fetch().then((String value) => {
                       html_data = value,
                       isloading = false,
@@ -123,16 +125,15 @@ class _SignUpPageState extends State<SignUpPage> {
                           'email',
                           html_data,
                         ],
-                      );
+                      );*/
 
 
                       //new Html(
                        // data: ,
                       //);
                       //_launchURL(context);
-                    }
                     //Get.to(GoogleLoginPage());
-                    //Get.to(SetNicknamePage());
+                    Get.to(SetNicknamePage());
                   },
                   //버튼 안에 text
                   label: Text("   Sign Up with Google     ", style: TextStyle(

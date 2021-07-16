@@ -131,6 +131,12 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         ),),
                         value: _isChecked2,
                         onChanged: (value) {
+                          Get.defaultDialog(
+                            title: '약관동의',
+                            middleText: '약관에 동의 한다면 확인',
+                            confirm: 
+                          );
+                          /*
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -144,19 +150,18 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                                           Row(
                                             children: [
                                               Checkbox(
-                                                value: checked,
                                                 onChanged: (value) {
                                                   setState(() {
                                                     checked = value!;
                                                   });
                                                 },
+                                                value: checked,
                                               ),
                                               Text('동의합니다'),
                                             ],
                                           ),
                                           MaterialButton(
                                             onPressed: () {
-                                              _isChecked2 = checked;
                                               Get.back();
                                             },
                                             child: Text("확인"),
@@ -169,8 +174,9 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                               );
                             },
                           );
+                          */
                           setState(() {
-                            _isChecked2 = checked;
+                            _isChecked2 = value!;
                           });
 
                         },
