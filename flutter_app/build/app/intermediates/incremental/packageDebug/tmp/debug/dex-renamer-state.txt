@@ -1,4 +1,0 @@
-#Fri Jul 16 10:51:44 KST 2021
-base.0=C\:\\cra_studytogether\\2021CRASummer\\flutter_app\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
