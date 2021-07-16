@@ -1,0 +1,2 @@
+com/ggichure/github/hexcolor/BuildConfig.java
+ com.ggichure.github.hexcolor.BuildConfig
