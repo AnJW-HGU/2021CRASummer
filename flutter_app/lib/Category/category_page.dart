@@ -112,9 +112,9 @@ class _CategoryPageState extends State<CategoryPage> {
             ),
 
             body: SafeArea(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 30),
+              child: Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
 
@@ -138,15 +138,15 @@ class _CategoryPageState extends State<CategoryPage> {
                             ),
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white, // 카테고리 블럭 배경색
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: blurColor,
-                                blurRadius: 4,
-                                offset: Offset(0.0, 2.0),
-                              )
-                            ]
+                              color: Colors.white, // 카테고리 블럭 배경색
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: blurColor,
+                                  blurRadius: 4,
+                                  offset: Offset(0.0, 2.0),
+                                )
+                              ]
                           ),
                         ),
                       ),
@@ -166,6 +166,8 @@ class _CategoryPageState extends State<CategoryPage> {
                       _buildExpansionCategory("학부", _majorList),
                       Padding(padding: EdgeInsets.only(top: 10.0),),
                       _buildCategory("전공기초"),
+                      Padding(padding: EdgeInsets.only(top: 10.0),),
+                      _buildExpansionCategory("교양", _electiveList),
                       Padding(padding: EdgeInsets.only(top: 10.0),),
                       _buildCategory("취업/진로"),
                     ],
@@ -219,23 +221,30 @@ class _CategoryPageState extends State<CategoryPage> {
       width: 355.w,
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.only(left: 30.w),
-      
-      child: ExpansionTile(
-        title: Text(
-          inTitle,
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: "Barun",
-            fontSize: 20.sp,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
 
-        initiallyExpanded: false,
-        // 숨김에 들어갈 것들
-        children: [
-          _buildExpansionTile(listData),
-        ],
+      child: ListTileTheme(
+        dense: true,  // ExpansionTile의 default padding을 없애는 것
+
+        child: ExpansionTile(
+          tilePadding: EdgeInsets.all(0),
+          title: Text(
+            inTitle,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: "Barun",
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+
+          // 오른쪽 아이콘!
+
+          initiallyExpanded: false,
+          // 숨김에 들어갈 것들
+          children: [
+            for (int i=0; i<listData.length; i++) _buildExpansionTile(listData[i]),
+          ],
+        ),
       ),
 
       decoration: BoxDecoration(
@@ -252,28 +261,16 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  Widget _buildExpansionTile(listData) {
-    return Expanded(
-      child: ListView.separated(
-        shrinkWrap: true,
-        controller: _scroll,
-        scrollDirection: Axis.vertical,
-        // padding: EdgeInsets.only(top:10),
-        itemCount: listData.length,
-        itemBuilder: (_, index) {
-          return Container(
-            child: Text(
-              "${listData[index]}",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: "Barun",
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          );
-        },
-        separatorBuilder: (_, index) => Divider(),
+  Widget _buildExpansionTile(inTitle) {
+    return Container(
+      child: Text(
+        inTitle,
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Barun",
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }
