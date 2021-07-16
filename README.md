@@ -1,4 +1,4 @@
-# studytogether
+# Study Together
 
 2021 CRA Summer Project
 
