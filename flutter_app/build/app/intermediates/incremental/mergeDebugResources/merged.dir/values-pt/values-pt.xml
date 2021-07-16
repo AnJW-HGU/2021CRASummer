@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string msgid="8230469354668895088" name="copy_toast_msg">"Link copiado para a área de transferência"</string>
+    <string msgid="2615365786337886368" name="fallback_menu_item_copy_link">"Copiar link"</string>
+    <string msgid="8984733760067120953" name="fallback_menu_item_open_in_browser">"Abrir no navegador"</string>
+    <string msgid="271185644269364308" name="fallback_menu_item_share_link">"Compartilhar link"</string>
+    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
+</resources>
