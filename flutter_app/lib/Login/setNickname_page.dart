@@ -134,7 +134,7 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                           Get.defaultDialog(
                             title: '약관동의',
                             middleText: '약관에 동의 한다면 확인',
-                            confirm: 
+                            //confirm: 
                           );
                           /*
                           showDialog(
