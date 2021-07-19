@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'dart:ui';
+import 'package:flutter/animation.dart';
 
 import 'package:studytogether/main.dart';
 
@@ -38,6 +39,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
     "신앙/세계관", "인성/리더십", "외국어", "기초학문",
     "소통/융복합", "예체능", "그 외",
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -216,17 +218,15 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
 
   // 숨김리스트 카테고리
   Widget _buildExpansionCategory(inTitle, listData) {
-    // late final AnimationController _animation;
-    //
-    // @override
-    // void initState() {
-    //   _animation = AnimationController(
-    //     duration: const Duration(seconds: 2),
-    //     vsync: this,
-    //   );
-    //   super.initState();
-    //   _animation.forward(from: 0.0,);
-    // }
+
+    AnimationController _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _animationController.forward(from:0.0);
+
+    // Animation<double> _animation = CurvedAnimation(
+    //   parent: _animationController, curve: Curves.linear);
 
     return Container(
       width: 355.w,
@@ -248,17 +248,17 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
           ),
 
           // 오른쪽 아이콘!
-          trailing: Icon(
-            Icons.arrow_drop_down_rounded,
-            color: themeColor3,
-          ),
-          // trailing: RotationTransition(
-          //   turns: Tween(begin: 0.0, end: 1.0).animate(_animation),
-          //   child: Icon(
-          //     Icons.arrow_drop_down_rounded,
-          //     color: themeColor3,
-          //   ),
+          // trailing: Icon(
+          //   Icons.arrow_drop_down_rounded,
+          //   color: themeColor3,
           // ),
+          trailing: RotationTransition(
+            turns: Tween(begin: 0.0, end: 0.5).animate(_animationController),
+            child: Icon(
+              Icons.arrow_drop_up_rounded,
+              color: themeColor3,
+            ),
+          ),
 
           // 처음에 펼쳐져있냐 아니냐
           initiallyExpanded: false,
