@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:studytogether/Category/category_page.dart';
 import 'package:studytogether/Login/signUp_page.dart';
@@ -130,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                         InkWell(
                           //누르면 회원가입 페이지로
                           onTap: () {
-                            Get.to(SignUpPage());
+                            Get.to(() => SignUpPage());
                           },
                           child: Text("Sign up", style: TextStyle(
                               fontSize: 15.sp,
