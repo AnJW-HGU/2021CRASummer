@@ -138,7 +138,7 @@ class _SettingPageState extends State<SettingPage> {
           _listTile("공지사항", InfoPage()),
           _listTile("문의하기", AskPage()),
           _listTile_appVersion("앱 버전"),
-          _listTile("후원하기", SponPage()),
+          _listTile("개발자 페이지", SponPage()),
           Padding(padding: EdgeInsets.all(2.0)),
           _listTile("이용약관", UseRulePage()),
           _listTile("개인정보 처리방침", PrivacyRulePage()),

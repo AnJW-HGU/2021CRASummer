@@ -25,7 +25,7 @@ class _MyAPageState extends State<MyAPage> {
               icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
             ),
             title: Text(
-              "질문 수",
+              "답변 수",
               style: TextStyle(
                   fontFamily: "Barun",
                   fontSize: 15.sp,
