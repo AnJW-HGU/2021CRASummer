@@ -20,7 +20,7 @@ class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMixin {
   var _userId; // 유저 아이디
 
   final _scroll = ScrollController();
@@ -38,7 +38,6 @@ class _CategoryPageState extends State<CategoryPage> {
     "신앙/세계관", "인성/리더십", "외국어", "기초학문",
     "소통/융복합", "예체능", "그 외",
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -217,14 +216,25 @@ class _CategoryPageState extends State<CategoryPage> {
 
   // 숨김리스트 카테고리
   Widget _buildExpansionCategory(inTitle, listData) {
+    // late final AnimationController _animation;
+    //
+    // @override
+    // void initState() {
+    //   _animation = AnimationController(
+    //     duration: const Duration(seconds: 2),
+    //     vsync: this,
+    //   );
+    //   super.initState();
+    //   _animation.forward(from: 0.0,);
+    // }
+
     return Container(
       width: 355.w,
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(left: 30.w),
+      padding: EdgeInsets.only(left: 30.w, right: 10.w),
 
       child: ListTileTheme(
         dense: true,  // ExpansionTile의 default padding을 없애는 것
-
         child: ExpansionTile(
           tilePadding: EdgeInsets.all(0),
           title: Text(
@@ -238,11 +248,38 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
 
           // 오른쪽 아이콘!
+          trailing: Icon(
+            Icons.arrow_drop_down_rounded,
+            color: themeColor3,
+          ),
+          // trailing: RotationTransition(
+          //   turns: Tween(begin: 0.0, end: 1.0).animate(_animation),
+          //   child: Icon(
+          //     Icons.arrow_drop_down_rounded,
+          //     color: themeColor3,
+          //   ),
+          // ),
 
+          // 처음에 펼쳐져있냐 아니냐
           initiallyExpanded: false,
+
           // 숨김에 들어갈 것들
           children: [
-            for (int i=0; i<listData.length; i++) _buildExpansionTile(listData[i]),
+            for (int i=0; i<listData.length; i++)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Divider(
+                  //   color: themeColor3,
+                  //   // indent: 40.w,
+                  //   // endIndent: 40.w,
+                  // ),
+                  _buildExpansionTile(listData[i]),
+                ],
+              ),
+            Padding(
+              padding: EdgeInsets.all(5),
+            )
           ],
         ),
       ),
@@ -262,14 +299,22 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   Widget _buildExpansionTile(inTitle) {
-    return Container(
-      child: Text(
-        inTitle,
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: "Barun",
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w400,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Get.to(BoardPage(), arguments: inTitle, transition: Transition.cupertino);
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 12, bottom: 12, left: 20.w, right: 20.w),
+        child: Text(
+          inTitle,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Barun",
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ),
     );
