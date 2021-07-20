@@ -45,6 +45,7 @@ class _SubSearchPageState extends State<SubSearchPage> {
             title: Container(
               height: 32,
               child: TextField(
+                textAlignVertical: TextAlignVertical.bottom,
                 controller: _subSearch,
                 textInputAction: TextInputAction.go,
                 onSubmitted: (value) {
@@ -69,6 +70,7 @@ class _SubSearchPageState extends State<SubSearchPage> {
                   // prefixIcon: Icon(Icons.search_rounded, color: themeColor1,),
                   suffixIcon: IconButton(
                     onPressed: _subSearch.clear,
+                    padding: EdgeInsets.all(0.0),
                     icon: Icon(Icons.clear, color: themeColor1,),
                   ),
 
