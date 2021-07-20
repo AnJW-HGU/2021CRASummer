@@ -13,25 +13,25 @@ class _MyQPageState extends State<MyQPage> {
   final List<String> _subList = <String>[
     "성경의 이해", "데이타구조", "분 류", "분류우",
     "분류", "분류에오", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
+    // "분류", "분류에오", "분 류", "분류우",
+    // "분류", "분류에오", "분 류", "분류우",
+    // "분류", "분류에오", "분 류", "분류우",
   ].obs;
 
   final List<String> _titleList = <String>[
     "질문 제목1", "질문 제목2", "질문 제목3", "질문 제목4",
     "질문 제목5", "질문 제목6", "질문 제목7", "질문 제목8",
-    "질문 제목9", "질문 제목10", "질문 제목11", "질문 제목12",
-    "질문 제목13", "질문 제목14", "질문 제목15", "질문 제목16",
-    "질문 제목17", "질문 제목18", "질문 제목19", "질문 제목20",
+    // "질문 제목9", "질문 제목10", "질문 제목11", "질문 제목12",
+    // "질문 제목13", "질문 제목14", "질문 제목15", "질문 제목16",
+    // "질문 제목17", "질문 제목18", "질문 제목19", "질문 제목20",
   ].obs;
 
   final List<String> _contentList = <String>[
     "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
     "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-    "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-    "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-    "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
+    // "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
+    // "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
+    // "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
   ].obs;
 
   var maxInfo = 20;
@@ -64,12 +64,20 @@ class _MyQPageState extends State<MyQPage> {
     await Future.delayed(Duration(seconds: 2));
 
     int offset = _subData.length;
-    _subData.addAll(_subList.sublist(offset, offset+10));
-    _titleData.addAll(_titleList.sublist(offset, offset+10));
-    _contentData.addAll(_contentList.sublist(offset, offset+10));
+    if(_subList.length<10){
+      _subData.addAll(_subList.sublist(offset));
+      _titleData.addAll(_titleList.sublist(offset));
+      _contentData.addAll(_contentList.sublist(offset));
+      isLoading.value = false;
+      hasMore.value = false;
+    }else {
+      _subData.addAll(_subList.sublist(offset, offset + 10));
+      _titleData.addAll(_titleList.sublist(offset, offset + 10));
+      _contentData.addAll(_contentList.sublist(offset, offset + 10));
 
-    isLoading.value = false;
-    hasMore.value = _subData.length < maxInfo;
+      isLoading.value = false;
+      hasMore.value = _subData.length < maxInfo;
+    }
   }
 
   reload() async {

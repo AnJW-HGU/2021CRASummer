@@ -69,12 +69,21 @@ class _NotiPageState extends State<NotiPage> {
     await Future.delayed(Duration(seconds: 2));
 
     int offset = _subData.length;
-    _subData.addAll(_subList.sublist(offset, offset+10));
-    // _titleData.addAll(_titleList.sublist(offset, offset+10));
-    _contentData.addAll(_contentList.sublist(offset, offset+10));
+    if(_subList.length<10){
+      _subData.addAll(_subList.sublist(offset));
+      // _titleData.addAll(_titleList.sublist(offset));
+      _contentData.addAll(_contentList.sublist(offset));
 
-    isLoading.value = false;
-    hasMore.value = _subData.length < maxInfo;
+      isLoading.value = false;
+      hasMore.value = false;
+    }else {
+      _subData.addAll(_subList.sublist(offset, offset + 10));
+      // _titleData.addAll(_titleList.sublist(offset, offset+10));
+      _contentData.addAll(_contentList.sublist(offset, offset + 10));
+
+      isLoading.value = false;
+      hasMore.value = _subData.length < maxInfo;
+    }
   }
 
   reload() async {

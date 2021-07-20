@@ -11,28 +11,29 @@ class InfoPage extends StatefulWidget {
 
 
 class _InfoPageState extends State<InfoPage> {
+
   final List<String> _subList = <String>[
     "분류", "분류에오", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
+     // "분류", "분류에오", "분 류", "분류우",
+    // "분류", "분류에오", "분 류", "분류우",
+    // "분류", "분류에오", "분 류", "분류우",
+    // "분류", "분류에오", "분 류", "분류우",
   ].obs;
 
   final List<String> _titleList = <String>[
     "제목1", "제목2", "제목3", "제목4",
-    "제목5", "제목6", "제목7", "제목8",
-    "제목9", "제목10", "제목11", "제목12",
-    "제목13", "제목14", "제목15", "제목16",
-    "제목17", "제목18", "제목19", "제목20",
+    // "제목5", "제목6", "제목7", "제목8",
+    // "제목9", "제목10", "제목11", "제목12",
+    // "제목13", "제목14", "제목15", "제목16",
+    // "제목17", "제목18", "제목19", "제목20",
   ].obs;
 
   final List<String> _contentList = <String>[
     "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
+    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
+    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
+    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
+    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
   ].obs;
 
   var maxInfo = 20;
@@ -65,12 +66,22 @@ class _InfoPageState extends State<InfoPage> {
     await Future.delayed(Duration(seconds: 2));
 
     int offset = _subData.length;
-    _subData.addAll(_subList.sublist(offset, offset+10));
-    _titleData.addAll(_titleList.sublist(offset, offset+10));
-    _contentData.addAll(_contentList.sublist(offset, offset+10));
 
-    isLoading.value = false;
-    hasMore.value = _subData.length < maxInfo;
+    if(_subList.length<10){
+      _subData.addAll(_subList.sublist(offset));
+      _titleData.addAll(_titleList.sublist(offset));
+      _contentData.addAll(_contentList.sublist(offset));
+
+      isLoading.value = false;
+      hasMore.value = false;
+    }else {
+      _subData.addAll(_subList.sublist(offset, offset + 10));
+      _titleData.addAll(_titleList.sublist(offset, offset + 10));
+      _contentData.addAll(_contentList.sublist(offset, offset + 10));
+
+      isLoading.value = false;
+      hasMore.value = _subData.length < maxInfo;
+    }
   }
 
   reload() async {
