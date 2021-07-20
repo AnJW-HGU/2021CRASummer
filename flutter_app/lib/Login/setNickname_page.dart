@@ -6,6 +6,7 @@ import 'package:studytogether/Category/category_page.dart';
 import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
+import 'package:studytogether/splash_page.dart';
 
 
 class SetNicknamePage extends StatefulWidget {
@@ -32,10 +33,12 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
     );
   }
 
+  //body
   Widget _setNicknamePageBody() {
     return Container(
       width: double.infinity,
       height: double.infinity,
+      //배경
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/Login.png'),
@@ -43,10 +46,8 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
         ),
       ),
       child: SafeArea(
-        //중간 정렬
         child: Center(
           child: Container(
-            //위치 조정
             padding: EdgeInsets.only(top: 150.h, left: 80.w, right: 80.w),
             child: Column(
               children: [
@@ -217,7 +218,6 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         )],
                       ),),
                       //버튼 비활성화 색
-                      //disabledElevation: 5,
                       disabledColor: grayColor2,
                     ),
                   ],
@@ -230,6 +230,12 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
     );
   }
 
+  //확인 버튼이 눌렸을 때
+  void whenTap(){
+    Get.offAll(SplashPage());
+  }
+
+  //이용약관 내용
   Widget getContent1() {
     return Container(
         padding: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 10.h,),
@@ -311,7 +317,7 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
     );
   }
 
-  //개인정보 처리방침
+  //개인정보 처리방침 내용
   Widget getContent2() {
     return Container(
       padding: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 10.h,),
@@ -366,7 +372,6 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                 "■ 개인정보 자동수집 장치의 설치, 운영 및 거부에 관한 사항\n"
                 "서비스 이용 시 자동 생성되는 개인정보를 수집하는 장치를 운영하지 않습니다.\n\n"
 
-
                 "■ 개인정보 보호책임자 또는 담당자의 이름 및 연락처\n"
                 "고객의 개인정보를 보호하고 개인정보와 관련한 불만을 처리하기 위하여 아래와 같이 관련 부서 및 개인정보관리책임자를 지정하고 있습니다. "
                 "개인정보와 관련하여 민원이나 문의가 있으시면, 연락주시기 바랍니다. 성심성의껏 응대하겠습니다.\n"
@@ -388,10 +393,5 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
         ),
       ),
     );
-  }
-
-  //확인 버튼이 눌렸을 때
-  void whenTap(){
-    Get.offAll(CategoryPage());
   }
 }

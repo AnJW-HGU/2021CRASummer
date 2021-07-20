@@ -10,6 +10,7 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:studytogether/splash_page.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -85,12 +86,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-                    var isLogined = fetch();
+                    Get.offAll(() => SplashPage());
+                    /*var isLogined = fetch();
                     if(isLogined == true){
-                      Get.offAll(CategoryPage());
+                      Get.offAll(() => CategoryPage());
                     } else if(isLogined == false) {
                       print("false");
                     }
+
+                     */
                   },
                   //버튼 안에 text
                   label: Text("    Log in with Google     ", style: TextStyle(
