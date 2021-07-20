@@ -4,6 +4,8 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 
+import 'rank_page.dart';
+
 
 class PointPage extends StatefulWidget {
 
@@ -25,17 +27,24 @@ class _PointPageState extends State<PointPage> {
                   Get.back();
                 },
                 color: themeColor1,
-                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 21.w),
+                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w),
               ),
               backgroundColor: Colors.white,
               title: Text(
-                "포인트", style: TextStyle(fontFamily: "Barun", color: grayColor1, fontSize: 16.w),),
+                "포인트",
+                style: TextStyle(
+                    fontFamily: "Barun",
+                    color: grayColor1,
+                    fontSize: 15.sp
+                ),
+              ),
               centerTitle: true,
               elevation: 0.0,
               actions: <Widget>[
                 IconButton( // 랭킹
                     icon: Icon(Icons.public_rounded, size: 21.w, color: themeColor1),
                     onPressed: () {
+                      Get.to(RankPage());
                     }
                 ),
               ],

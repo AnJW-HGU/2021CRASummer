@@ -3,7 +3,8 @@
    <application
         android:label="studytogether"
         android:icon="@mipmap/ic_launcher">
-        <activity
+        android:usesCleartextTraffic="true">
+       <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"

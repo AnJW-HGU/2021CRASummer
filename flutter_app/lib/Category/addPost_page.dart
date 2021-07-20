@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:studytogether/Category/subSearch_page.dart';
 import 'dart:ui';
 
 import 'package:studytogether/main.dart';
@@ -99,6 +100,7 @@ class _AddPostPageState extends State<AddPostPage> {
                       alignment: Alignment.centerLeft,
                       child: OutlinedButton.icon(
                         onPressed: () {
+                          Get.to(SubSearchPage());
                         },
                         icon: Icon(
                           Icons.add_rounded,
