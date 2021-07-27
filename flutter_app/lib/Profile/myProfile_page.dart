@@ -4,10 +4,12 @@ import 'dart:ui';
 import 'package:get/get.dart';
 
 import 'package:studytogether/main.dart';
+
 import 'package:studytogether/Profile//point_page.dart';
 import 'package:studytogether/Profile/Settings/setting_page.dart';
 import 'package:studytogether/Profile/myA_page.dart';
 import 'package:studytogether/Profile/myQ_page.dart';
+import 'Manage/manageMain_page.dart';
 
 
 class MyProfilePage extends StatefulWidget {
@@ -162,6 +164,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   padding: EdgeInsets.only(top: 30.0, bottom: 30.0, right: 40.0.w, left: 40.0.w),
                   // 뱃지함 내부의 뱃지
                   child: GridView.extent(
+                    shrinkWrap: true,
                     maxCrossAxisExtent: 48.0.w,
                     crossAxisSpacing: 20.0,
                     mainAxisSpacing: 13.0.w,
@@ -190,6 +193,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ),
         // 뱃지함 아래 padding 조절(뱃지함 크기 조절)
         Padding(padding: EdgeInsets.only(bottom: 220.0)),
+        TextButton(
+          onPressed: () {
+            Get.to(ManageMainPage());
+          },
+          child: Text("일단 버튼"),
+        ),
       ]
     );
   }
