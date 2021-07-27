@@ -27,6 +27,11 @@ class _AddPostPageState extends State<AddPostPage> {
   final addTitle = TextEditingController();
   final addContent = TextEditingController();
 
+  bool _isSub = true;
+  bool _isTitle = false;
+  bool _isContent = false;
+  bool _isButtonAbled = false;
+
   @override
   void dispose() {
     // 위젯이 dispose 또는 dismiss 될 때 컨트롤러를 clean up!
@@ -69,15 +74,15 @@ class _AddPostPageState extends State<AddPostPage> {
             // 완료 버튼
             actions: [
               TextButton(
-                onPressed: () {
+                onPressed: _isButtonAbled ? () {
                   print("제목 : ${addTitle.text}");
                   print("내용 : ${addContent.text}");
                   Get.back();
-                },
+                } : _isButtonDialog,
                 child: Text(
                   "완료",
                   style: TextStyle(
-                    color: themeColor1,
+                    color: _isButtonAbled ? themeColor1 : grayColor1,
                     fontFamily: "Barun",
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w300,
@@ -127,6 +132,23 @@ class _AddPostPageState extends State<AddPostPage> {
                           // 제목 적는 곳
                           TextField(
                             controller: addTitle,
+                            onChanged: (value) {
+                              if (addTitle.text.length >= 1) {
+                                setState(() {
+                                  _isTitle = true;
+                                });
+                                if (_isSub == true && _isTitle == true && _isContent == true) {
+                                  setState(() {
+                                    _isButtonAbled = true;
+                                  });
+                                }
+                              }else {
+                                setState(() {
+                                  _isTitle = false;
+                                  _isButtonAbled = false;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(),
                               hintText: "제목",
@@ -142,6 +164,23 @@ class _AddPostPageState extends State<AddPostPage> {
                           Container(
                             child: TextField(
                               controller: addContent,
+                              onChanged: (value) {
+                                if (addContent.text.length >= 1) {
+                                  setState(() {
+                                    _isContent = true;
+                                  });
+                                  if (_isSub == true && _isTitle == true && _isContent == true) {
+                                    setState(() {
+                                      _isButtonAbled = true;
+                                    });
+                                  }
+                                }else {
+                                  setState(() {
+                                    _isContent = false;
+                                    _isButtonAbled = false;
+                                  });
+                                }
+                              },
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
                               decoration: InputDecoration(
@@ -203,7 +242,26 @@ class _AddPostPageState extends State<AddPostPage> {
               children: [
                 IconButton(
                   onPressed: () {
-
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "공사 중이에요! :>",
+                          style: TextStyle(
+                            fontFamily: "Barun",
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        backgroundColor: themeColor2,
+                        duration: Duration(seconds: 1),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: BorderRadius.only(
+                        //     topLeft: Radius.circular(10),
+                        //     topRight: Radius.circular(10),
+                        //   )
+                        // ),
+                      ),
+                    );
                   },
                   icon: Icon(
                     Icons.camera_alt_rounded,
@@ -218,5 +276,112 @@ class _AddPostPageState extends State<AddPostPage> {
         );
       },
     );
+  }
+
+  void _isButtonDialog () {
+    if (_isSub != true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "과목이 필요해요!",
+            style: TextStyle(
+              fontFamily: "Barun",
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          backgroundColor: themeColor2,
+          duration: Duration(seconds: 1),
+        ),
+      );
+      // Get.defaultDialog(
+      //   barrierDismissible: true,
+      //   title: "",
+      //   titleStyle: TextStyle(
+      //     fontFamily: "Barun",
+      //     fontSize: 15.sp,
+      //     fontWeight: FontWeight.w400,
+      //   ),
+      //   content: Text(
+      //     "과목을 선택해주세요\n",
+      //     style: TextStyle(
+      //       fontFamily: "Barun",
+      //       fontSize: 17.sp,
+      //       fontWeight: FontWeight.w600,
+      //     ),
+      //   ),
+      // );
+    }
+    else if (_isTitle != true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "제목이 필요해요!",
+            style: TextStyle(
+              fontFamily: "Barun",
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          backgroundColor: themeColor2,
+          duration: Duration(seconds: 1),
+        ),
+      );
+      // Get.defaultDialog(
+      //   barrierDismissible: true,
+      //   title: "",
+      //   titleStyle: TextStyle(
+      //     color: grayColor2,
+      //     fontFamily: "Barun",
+      //     fontSize: 16.sp,
+      //     fontWeight: FontWeight.w400,
+      //   ),
+      //   content: Text(
+      //     "제목을 입력해주세요\n",
+      //     style: TextStyle(
+      //       color: themeColor1,
+      //       fontFamily: "Barun",
+      //       fontSize: 17.sp,
+      //       fontWeight: FontWeight.w500,
+      //     ),
+      //   ),
+      // );
+    }
+    else if (_isContent != true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "내용이 필요해요!",
+            style: TextStyle(
+              fontFamily: "Barun",
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          backgroundColor: themeColor2,
+          duration: Duration(seconds: 1),
+        ),
+      );
+      // Get.defaultDialog(
+      //   barrierDismissible: true,
+      //   title: "",
+      //   titleStyle: TextStyle(
+      //     color: grayColor1,
+      //     fontFamily: "Barun",
+      //     fontSize: 15.sp,
+      //     fontWeight: FontWeight.w400,
+      //   ),
+      //   content: Text(
+      //     "내용을 입력해주세요\n",
+      //     style: TextStyle(
+      //       color: themeColor1,
+      //       fontFamily: "Barun",
+      //       fontSize: 17.sp,
+      //       fontWeight: FontWeight.w500,
+      //     ),
+      //   ),
+      // );
+    }
+
   }
 }

@@ -223,14 +223,19 @@ class _BoardPageState extends State<BoardPage> {
                             ),
 
                             //검색 버튼
-                            IconButton(
-                                icon: Icon(Icons.search, color: themeColor1,),
+                            Container(
+                              padding: EdgeInsets.all(0.0),
+                              child: IconButton(
+                                padding: EdgeInsets.all(0.0),
+                                icon: Icon(Icons.search_rounded, color: themeColor1,),
                                 tooltip: "Search Button",
                                 iconSize: 27.w,
                                 onPressed: () {
-                                  Get.to(SearchPage());
+                                  Get.to(SearchPage(), transition: Transition.cupertino);
                                 }
-                            ),
+                              ),
+                            )
+
                           ],
                         ),
 
