@@ -19,7 +19,23 @@ class _SubSearchPageState extends State<SubSearchPage> {
   final _subSelect = ""; // 선택한 과목
   final _proSelect = ""; // 선택한 과목의 교수님
 
+  String _filterText = "";
   final _subSearch = TextEditingController();
+
+  _SubSearchPageState() {
+    _subSearch.addListener(() {
+      if (_subSearch.text.isEmpty) {
+        setState(() {
+          _filterText = "";
+        });
+      }
+      else {
+        setState(() {
+          _filterText = _subSearch.text;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -47,7 +63,7 @@ class _SubSearchPageState extends State<SubSearchPage> {
               child: TextField(
                 textAlignVertical: TextAlignVertical.bottom,
                 controller: _subSearch,
-                textInputAction: TextInputAction.go,
+                // textInputAction: TextInputAction.go,
                 onSubmitted: (value) {
                   print("${_subSearch.text}");
                 },
