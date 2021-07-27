@@ -1,13 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:studytogether/Login/login_page.dart';
 import 'package:studytogether/Login/setNickname_page.dart';
 import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 
 
 class SignUpPage extends StatefulWidget {
@@ -16,6 +19,9 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  var isloading = true;
+  var html_data = "";
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -28,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
               backgroundColor: Colors.transparent,
               leading: IconButton(
                 onPressed: () {
-                  Get.off(LoginPage());
+                  Get.off(() => LoginPage());
                 },
                 icon: Icon(
                     Icons.arrow_back_ios_sharp, size: 20.w, color: themeColor1),
@@ -42,16 +48,24 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _signUpPageBody() {
-    //배경 넣기
+
+    //백으로 요청 보내기
+    Future<String> fetch() async{
+      var res = await http.get(Uri.parse('http://128.199.139.159.nip.io:3000/auth'));
+      print(res.body);
+      return await res.body.toString();
+    }
+
     return Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/Login.png'),
-            fit: BoxFit.cover,
-          ),
+      width: double.infinity,
+      height: double.infinity,
+      //배경 넣기
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/Login.png'),
+          fit: BoxFit.cover,
         ),
+      ),
       child: SafeArea(
         //중간 정렬
         child: Center(
@@ -93,6 +107,31 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
+
+
+                    /*fetch().then((String value) => {
+                      html_data = value,
+                      isloading = false,
+                      print("확인용: " + html_data),
+                      print("확인용: " + isloading.toString()),
+                    });*/
+
+
+                    /*if (isloading == false) {
+                      GoogleSignIn(
+                        scopes: [
+                          'email',
+                          html_data,
+                        ],
+                      );*/
+                      //new Html(
+                       // data: ,
+                      //);
+
+                      //if (isloading == false) {
+                      //  _launchURL(context);
+                      //};
+
                     Get.to(SetNicknamePage());
                   },
                   //버튼 안에 text
@@ -114,4 +153,44 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
+
+  void _launchURL(BuildContext context) async {
+    try {
+      await launch(
+        html_data,
+        customTabsOption: CustomTabsOption(
+          toolbarColor: Theme.of(context).primaryColor,
+          enableDefaultShare: true,
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+          /*animation: CustomTabsAnimation.slideIn(),
+          // or user defined animation.
+          animation: const CustomTabsAnimation(
+            startEnter: 'slide_up',
+            startExit: 'android:anim/fade_out',
+            endEnter: 'android:anim/fade_in',
+            endExit: 'slide_down',
+          ),*/
+          extraCustomTabs: const <String>[
+            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+            'org.mozilla.firefox',
+            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+            'com.microsoft.emmx',
+          ],
+        ),
+        safariVCOption: SafariViewControllerOption(
+          preferredBarTintColor: Theme.of(context).primaryColor,
+          preferredControlTintColor: Colors.white,
+          barCollapsingEnabled: true,
+          entersReaderIfAvailable: false,
+          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+        ),
+      );
+    } catch (e) {
+      // An exception is thrown if browser app is not installed on Android device.
+      debugPrint(e.toString());
+    }
+  }
+
 }

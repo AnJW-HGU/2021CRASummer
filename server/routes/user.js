@@ -4,10 +4,10 @@ const userController = require('../controllers/user');
 
 
 // nickname
-router.post('users/:author_id/nickname/:nickname', userController.createNickname);
-router.get('users/:author_id/nickname/', userController.getNickname);
-router.put('users/:author_id/nickname/', userController.updateNickname);
-router.delete('users/:author_id/nickname/', userController.deleteNickname);
+router.post('users?id=author_id/nickname/:nickname', userController.createNickname);
+router.get('users?id=author_id/nickname/', userController.getNickname);
+router.put('users?id=author_id/nickname/', userController.updateNickname);
+router.delete('users?id=author_id/nickname/', userController.deleteNickname);
 
 // // in post
 // router.post(); // throw 405 error
@@ -17,8 +17,8 @@ router.delete('users/:author_id/nickname/', userController.deleteNickname);
 
 // points
 router.post(); // throw error
-router.get('users/points?id=author_id', userController.getPoint);
-router.put('users/points?id=author_id/:points_up', userController.updatePoint);
+router.get('users?id=author_id/points', userController.getPoint);
+router.put('users?id=author_id/points/:points_up', userController.updatePoint);
 router.delete(); // throw error
 
 /************this is for test************/
