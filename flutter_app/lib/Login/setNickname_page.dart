@@ -19,6 +19,15 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
   bool _isChecked2 = false; //개인정보 처리
   bool _isNamed = false; //닉네임을 입력했는지
 
+  final _nickName = TextEditingController();
+
+  @override
+  void dispose() {
+    // 위젯이 dispose 또는 dismiss 될 때 컨트롤러를 clean up!
+    _nickName.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -57,6 +66,20 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
 
                     //닉네임 받기
                     TextField(
+                      controller: _nickName,
+                      textInputAction: TextInputAction.go,
+                      onSubmitted: (value) {
+                        if(_nickName.text.length >= 1) {
+                          setState(() {
+                            _isNamed = true;
+                          });
+                        } else{
+                          setState(() {
+                            _isNamed = false;
+                          });
+                        }
+                        print("${_nickName.text}");
+                      },
                       textAlign: TextAlign.center,
                       //닉네임 문자 제한
                       maxLength: 8,
@@ -201,7 +224,7 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                     MaterialButton(
                       minWidth: double.infinity,
                       height: 45,
-                      onPressed: _isChecked1 ? (_isChecked2 ? whenTap : null) : null,
+                      onPressed: _isChecked1 ? (_isChecked2 ? (_isNamed ? whenTap : null) : null) : null,
                       color: themeColor1,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
