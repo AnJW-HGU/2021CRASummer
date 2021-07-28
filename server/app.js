@@ -21,12 +21,11 @@ sequelize
         .authenticate()
         .then(() => { console.log("Connection Success"); })
         .catch((e) => { console.log(e); });
-sequelize.sync({alter:true}); 
+sequelize.sync({force: 'true'}); 
 
 // define router var
 const app = express();
 const router = require('./routes');
-app.use('/', router);
 
 // session store
 //const sessionStore = new mysqlStore({
@@ -48,6 +47,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+app.use('/', router);
 // TODO: initialize express-session to allow us track the logged-in user across sessions.
 
 // use router var

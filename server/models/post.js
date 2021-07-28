@@ -18,15 +18,15 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             primaryKey: true,
             autoIncrement: true,
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         classification_id: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         user_id: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         title: {
@@ -38,40 +38,33 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         comments_count: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
         },
         reports_count: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
-        },
-        written_date: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        revised_date: {
-            type: DataTypes.DATE,
-            allowNull: false,
         },
         deleted_date: {
             type: DataTypes.DATE,
             allowNull: false,
         },
         adopted_status: {
-            type: DataTypes.TINYINT(1),
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         deleted_status: {
-            type: DataTypes.TINYINT(1),
+            type: DataTypes.INTEGER,
             allowNull: false
         },
     },{
-	sequelize,
-	modelName: 'Post',
-        tableName: 'Posts'
+        sequelize,
+        modelName: 'Post',
+        tableName: 'Posts',
+        createdAt: 'written_date',
+        updatedAt: 'revised_date',
     } );
     return Post;
 };
-

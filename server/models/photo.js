@@ -23,26 +23,26 @@ module.exports = (sequelize, DataTypes) => {
     id: {
         primaryKey: true,
         autoIncrement: true,
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     post_id: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         defaultValue: null,
         allowNull: true,
     },
     comment_id: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         defaultValue: null,
         allowNull: true,
     },
     inquiry_id: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         defaultValue: null,
         allowNull: true,
     },
     user_id: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     original_file_name: {
@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
     },
     deleted_status: {
-        type: DataTypes.TINYINT(1),
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
   },{

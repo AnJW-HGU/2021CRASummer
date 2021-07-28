@@ -10,10 +10,10 @@ router.put('/:userId/nickname', userController.updateNickname); // request : { n
 router.delete('/:userId/nickname/', userController.deleteNickname);
 
 // points
-router.post(); // throw error
+// router.post(); // throw error
 router.get('/:userId/points', userController.getPoint);
 router.put('/:userId/points/:points_up', userController.updatePoint);
-router.delete(); // throw error
+// router.delete(); // throw error
 
 /************this is for test************/
 router.post('/', userController.createUser);

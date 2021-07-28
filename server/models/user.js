@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             primaryKey: true,
             autoIncrement: true,
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         google_id: {
@@ -47,17 +47,17 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: null
         },
         posts_count: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0
         },
         comments_count: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0
         },
         reports_count: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0
         },
@@ -71,11 +71,11 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: null
         },
         admin_status:  {
-            type: DataTypes.TINYINT,
+            type: DataTypes.INTEGER,
             defaultValue: 0
         },
         resign_status:  {
-            type: DataTypes.TINYINT,
+            type: DataTypes.INTEGER,
             defaultValue: 0
         },
         singup_date:  {

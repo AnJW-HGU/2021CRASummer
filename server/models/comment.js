@@ -18,15 +18,15 @@ module.exports = (sequelize, DataTypes) => {
     id: {
         primaryKey: true,
         autoIncrement: true,
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     post_id: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     user_id: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     content: {
@@ -34,12 +34,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
     },
     recommends_count: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
     },
     reports_count: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
     },

@@ -9,11 +9,11 @@ router.post('/:classId/:userId/:photoId', postController.createPost); // get tit
 //router.delete();
 
 // posts/<id>
-router.post(); // throw error
+// router.post(); // throw error
 router.get('/:postId', postController.getPost);
 router.put('/:postId', postController.updatePost);
 router.delete('/:postId', postController.deletePost); // get delete status with body
-
+module.exports = router;
 /*
 // posts/<id>/photos
 router.post('/postId/photos');

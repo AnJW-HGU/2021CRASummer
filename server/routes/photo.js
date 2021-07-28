@@ -9,7 +9,9 @@ router.put('/', photoController.updatePhotos);
 router.delete('/', photoController.deletePhotos);
 
 // posts/<id>/photos/<id>
-router.post(); // throw error
+// router.post(); // throw error
 router.get('/:photoId',photoController.getPhoto); 
 router.put('/:photoId',photoController.updatePhoto);
 router.delete('/:photoId',photoController.deletePhoto);
+
+module.exports = router;

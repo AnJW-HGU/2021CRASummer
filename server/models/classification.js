@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
         primaryKey: true,
         autoIncrement: true,
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     domain: {
