@@ -105,7 +105,7 @@ class _AddPostPageState extends State<AddPostPage> {
                       alignment: Alignment.centerLeft,
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          Get.to(SubSearchPage());
+                          Get.to(() => SubSearchPage());
                         },
                         icon: Icon(
                           Icons.add_rounded,

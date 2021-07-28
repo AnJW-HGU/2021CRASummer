@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:studytogether/main.dart';
@@ -15,32 +16,53 @@ class SubSearchPage extends StatefulWidget {
 }
 
 class _SubSearchPageState extends State<SubSearchPage> {
+
   final _userId = ""; // 유저 아이디
   final _subSelect = ""; // 선택한 과목
   final _proSelect = ""; // 선택한 과목의 교수님
 
   String _filterText = "";
-  final _subSearch = TextEditingController();
+  final _subSearchFilter = TextEditingController();
 
-  _SubSearchPageState() {
-    _subSearch.addListener(() {
-      if (_subSearch.text.isEmpty) {
-        setState(() {
-          _filterText = "";
-        });
-      }
-      else {
-        setState(() {
-          _filterText = _subSearch.text;
-        });
-      }
-    });
+  // _SubSearchPageState() {
+  //   _subSearch.addListener(() {
+  //     if (_subSearch.text.isEmpty) {
+  //       setState(() {
+  //         _filterText = "";
+  //       });
+  //     }
+  //     else {
+  //       setState(() {
+  //         _filterText = _subSearch.text;
+  //       });
+  //     }
+  //   });
+  // }
+
+
+  Widget _initSubSearch() {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Text(
+          "과목 검색하는 방법:"
+          "\n예) 데이, 데이타, 데이타 구조",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          height: 10.h,
+          color: grayColor1,
+          fontFamily: "Barun",
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
   }
 
   @override
   void dispose() {
     // 위젯이 dispose 또는 dismiss 될 때 컨트롤러를 clean up!
-    _subSearch.dispose();
+    _subSearchFilter.dispose();
     super.dispose();
   }
 
@@ -61,11 +83,12 @@ class _SubSearchPageState extends State<SubSearchPage> {
             title: Container(
               height: 32,
               child: TextField(
+                keyboardType: TextInputType.text,
                 textAlignVertical: TextAlignVertical.bottom,
-                controller: _subSearch,
                 // textInputAction: TextInputAction.go,
-                onSubmitted: (value) {
-                  print("${_subSearch.text}");
+                controller: _subSearchFilter,
+                onChanged: (text) {
+                  print("${_subSearchFilter.text}");
                 },
                 // 과목 검색하기
                 decoration: InputDecoration(
@@ -85,12 +108,14 @@ class _SubSearchPageState extends State<SubSearchPage> {
 
                   // prefixIcon: Icon(Icons.search_rounded, color: themeColor1,),
                   suffixIcon: IconButton(
-                    onPressed: _subSearch.clear,
+                    onPressed: () {
+                      _subSearchFilter.clear();
+                      },
                     padding: EdgeInsets.all(0.0),
                     icon: Icon(Icons.clear, color: themeColor1,),
                   ),
 
-                  hintText: "과목이름을 검색해주세요.",
+                  hintText: "과목이름을 검색해주세요. ",
                   hintStyle: TextStyle(
                     fontFamily: "Barun",
                     fontSize: 14.sp,
@@ -112,7 +137,14 @@ class _SubSearchPageState extends State<SubSearchPage> {
             ),
           ),
           body: SafeArea(
-            child: Text("hello"),
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: _initSubSearch(),
+              ),
+            )
           ),
         );
       },
