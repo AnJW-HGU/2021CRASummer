@@ -127,7 +127,7 @@ class _ManageMainPageState extends State<ManageMainPage> {
         ),
         Column(
           children: [
-            _card("회원 정보", UserInfoPage()),
+            _card("회원 정보", UsersInfoPage()),
           ],
         )
       ],
