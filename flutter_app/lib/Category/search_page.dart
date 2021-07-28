@@ -57,7 +57,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<List<Post>> _fetchSearch(String name) async {
     List<Post> _posts = [];
-    final response = await http.get(Uri.parse('http://127.0.0.1/search/'+name));
+    final response = await http.get(Uri.parse('http://'));
     final List<Post> parsedResponse = jsonDecode(response.body)
         .map<Post>((json) => Post.fromJSON(json))
         .toList();

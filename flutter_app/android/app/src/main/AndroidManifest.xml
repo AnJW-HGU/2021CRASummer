@@ -1,6 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cra.studytogether.studytogether">
-   <application
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    //예약 알림과, 진동을 통한 알림을 이용하기 위해서 사용해주는 것입니다.
+    ...
+    <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+        </intent-filter>
+    </receiver>
+    //이것은 재부팅시 예약된 알림이 예약된 상태 그대로 유지 될수 있도록 해주는 설정입니다.
+    <application
         android:label="studytogether"
         android:icon="@mipmap/ic_launcher">
         android:usesCleartextTraffic="true">
