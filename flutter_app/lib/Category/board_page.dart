@@ -82,7 +82,7 @@ class _BoardPageState extends State<BoardPage> {
   _getPost() async {
     isLoading.value = true;
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     int offset = _subData.length;
     _subData.addAll(_subList.sublist(offset, offset+10));
@@ -99,7 +99,7 @@ class _BoardPageState extends State<BoardPage> {
     _titleData.clear();
     _contentData.clear();
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     _getPost();
   }
@@ -223,14 +223,19 @@ class _BoardPageState extends State<BoardPage> {
                             ),
 
                             //검색 버튼
-                            IconButton(
-                                icon: Icon(Icons.search, color: themeColor1,),
+                            Container(
+                              padding: EdgeInsets.all(0.0),
+                              child: IconButton(
+                                padding: EdgeInsets.all(0.0),
+                                icon: Icon(Icons.search_rounded, color: themeColor1,),
                                 tooltip: "Search Button",
                                 iconSize: 27.w,
                                 onPressed: () {
-                                  Get.to(SearchPage());
+                                  Get.to(SearchPage(), transition: Transition.cupertino);
                                 }
-                            ),
+                              ),
+                            )
+
                           ],
                         ),
 
