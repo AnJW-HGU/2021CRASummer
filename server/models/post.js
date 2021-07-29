@@ -3,8 +3,12 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Post extends Model {
         static associate(models) {
-	    this.hasMany(models.Comment);
-            this.hasMany(models.Photo);
+	        this.hasMany(models.Comment, {
+                foreignKey: 'post_id'
+            });
+            this.hasMany(models.Photo, {
+                foreignKey: 'post_id'
+            });
             //this.hasOne(models.Inpuiry);              // check reported post in inpuiry
             this.belongsTo(models.Classification, {
                 foreignKey: 'classification_id',
@@ -12,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.User, {
                 foreignKey: 'user_id',
             });
-	}
+	    }
     };
     Post.init({
         id: {
