@@ -21,8 +21,21 @@ class _SubSearchPageState extends State<SubSearchPage> {
   final _subSelect = ""; // 선택한 과목
   final _proSelect = ""; // 선택한 과목의 교수님
 
-  String _filterText = "";
   final _subSearchFilter = TextEditingController();
+
+  List<String> _subList = <String>[
+    "데이타 구조", "데이타 프로그래밍", "데이타 언어", "데2",
+    "데이타", "데이타 강형", "데이타 지원", "데이터 모음",
+    "데이타인데요", "성경", "재이수", "재수",
+  ].obs;
+
+  List<String> _proList = <String>[
+    "강형", "소은", "고은", "현서",
+    "햄찌", "햄햄", "지원", "도비",
+    "교수", "교수?", "교수수", "옥수수",
+  ].obs;
+
+  var _subSearchNum = 0;
 
   // _SubSearchPageState() {
   //   _subSearch.addListener(() {
@@ -44,17 +57,31 @@ class _SubSearchPageState extends State<SubSearchPage> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      child: Text(
-          "과목 검색하는 방법:"
-          "\n예) 데이, 데이타, 데이타 구조",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          height: 10.h,
-          color: grayColor1,
-          fontFamily: "Barun",
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-        ),
+      child: Column(
+        children: [
+          Text(
+            "과목 검색하는 방법:",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              height: 5.h,
+              color: grayColor1,
+              fontFamily: "Barun",
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            "예) 데이, 데이타, 데이타 구조",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              // height: 10.h,
+              color: grayColor1,
+              fontFamily: "Barun",
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -110,12 +137,13 @@ class _SubSearchPageState extends State<SubSearchPage> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       _subSearchFilter.clear();
+                      // FocusScope.of(context).unfocus();
                       },
                     padding: EdgeInsets.all(0.0),
                     icon: Icon(Icons.clear, color: themeColor1,),
                   ),
 
-                  hintText: "과목이름을 검색해주세요. ",
+                  hintText: "강의명 또는 교수명을 입력하세요.",
                   hintStyle: TextStyle(
                     fontFamily: "Barun",
                     fontSize: 14.sp,
