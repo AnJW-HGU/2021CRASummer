@@ -82,7 +82,7 @@ class _BoardPageState extends State<BoardPage> {
   _getPost() async {
     isLoading.value = true;
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     int offset = _subData.length;
     _subData.addAll(_subList.sublist(offset, offset+10));
@@ -99,7 +99,7 @@ class _BoardPageState extends State<BoardPage> {
     _titleData.clear();
     _contentData.clear();
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     _getPost();
   }
