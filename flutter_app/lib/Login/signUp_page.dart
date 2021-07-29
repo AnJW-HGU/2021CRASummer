@@ -2,11 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:studytogether/Login/googleLogin_page.dart';
 import 'package:studytogether/Login/login_page.dart';
 import 'package:studytogether/Login/setNickname_page.dart';
 import 'package:studytogether/main.dart';
@@ -37,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
               backgroundColor: Colors.transparent,
               leading: IconButton(
                 onPressed: () {
-                  Get.off(LoginPage());
+                  Get.off(() => LoginPage());
                 },
                 icon: Icon(
                     Icons.arrow_back_ios_sharp, size: 20.w, color: themeColor1),
@@ -111,28 +108,30 @@ class _SignUpPageState extends State<SignUpPage> {
                   //버튼이 눌리면 동작
                   onPressed: () {
 
-                    /*
-                    fetch().then((String value) => {
+
+                    /*fetch().then((String value) => {
                       html_data = value,
                       isloading = false,
                       print("확인용: " + html_data),
                       print("확인용: " + isloading.toString()),
-                    });
+                    });*/
 
-                    if (isloading == false) {
+
+                    /*if (isloading == false) {
                       GoogleSignIn(
                         scopes: [
                           'email',
                           html_data,
                         ],
                       );*/
-
-
                       //new Html(
                        // data: ,
                       //);
-                      //_launchURL(context);
-                    //Get.to(GoogleLoginPage());
+
+                      //if (isloading == false) {
+                      //  _launchURL(context);
+                      //};
+
                     Get.to(SetNicknamePage());
                   },
                   //버튼 안에 text
@@ -155,7 +154,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  /*
+
   void _launchURL(BuildContext context) async {
     try {
       await launch(
@@ -193,5 +192,5 @@ class _SignUpPageState extends State<SignUpPage> {
       debugPrint(e.toString());
     }
   }
-   */
+
 }

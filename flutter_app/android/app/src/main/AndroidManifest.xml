@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cra.studytogether.studytogether">
-   <application
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <application
         android:label="studytogether"
         android:icon="@mipmap/ic_launcher">
         android:usesCleartextTraffic="true">

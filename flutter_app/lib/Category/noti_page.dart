@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:studytogether/Category/post_page.dart';
 import 'dart:ui';
 
 import 'package:studytogether/main.dart';
@@ -14,29 +18,270 @@ class NotiPage extends StatefulWidget {
 }
 
 class _NotiPageState extends State<NotiPage> {
+
+  // 알림 더미 타이틀
+  List pushTitleList = ['하하', '메메', '히히', '호호', '아아', '우우'];
+  // 알림 그룹 ID 카운트용, 알림이 올때마다 이 값을 1씩 증가 시킨다.
+  int groupedNotificationCounter = 1;
+
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: Size(411.4, 683.4),
-      builder: () {
-        return Scaffold(
-          backgroundColor: themeColor1,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+         backgroundColor: Colors.white,
+         centerTitle: true,
+         title: Text(
+                    "알림",
+                    style: TextStyle(
+                      color: grayColor1,
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
 
-          appBar: AppBar(
-            title: Text(
-                "알림"
-            ),
-          ),
+                  // 뒤로가기 버튼
+         leading: IconButton(
+                    color: themeColor1,
+                    icon: Icon(Icons.arrow_back_ios_new_rounded),
+                    tooltip: "Back Button",
+                    iconSize: 15.w,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+      ),
 
-          body: SafeArea(
-            child: Center(
-              child: Text(
-                "Hi",
-              ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: (){
+                Get.snackbar(
+                    '공학설계입문', '새로운 답변이 달렸습니다.',
+                    snackPosition: SnackPosition.TOP
+                );
+              },
+              child: Text("showGroupedNotifications"),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
+
+  //
+  // // 과목 리스트
+  // final List<String>_subList = <String>[
+  //   "자바 프로그래밍", "성경의 이해", "데이터 구조", "실전프로젝트",
+  //   "공학설계입문", "C 프로그래밍", "파이썬", "타이포그래피",
+  //   "무언가", "끼룩", "도비", "토익",
+  //   "과목", "과목", "과목", "과목",
+  //   "과목", "과목", "과목", "과목",
+  // ].obs;
+  //
+  // // 알림 내용 리스트
+  // final List<String> _notiList = <String> [
+  //   "새로운 답변이 달렸습니다.", "답변이 채택되었습니다.", "답변이 추천되었습니다.", "새로운 답변이 달렸습니다.",
+  //   "새로운 답변이 달렸습니다.", "답변이 채택되었습니다.", "답변이 추천되었습니다.", "새로운 답변이 달렸습니다.",
+  //   "새로운 답변이 달렸습니다.", "답변이 채택되었습니다.", "답변이 추천되었습니다.", "새로운 답변이 달렸습니다.",
+  //   "새로운 답변이 달렸습니다.", "답변이 채택되었습니다.", "답변이 추천되었습니다.", "새로운 답변이 달렸습니다.",
+  //   "새로운 답변이 달렸습니다.", "답변이 채택되었습니다.", "답변이 추천되었습니다.", "새로운 답변이 달렸습니다.",
+  // ].obs;
+  //
+  // var _maxPost = 20; // 게시글 총 개수
+  // var _scroll = ScrollController().obs;
+  //
+  // var _subData = <String>[].obs;
+  // var _notiData = <String>[].obs;
+  //
+  // var isLoading = false.obs;
+  // var hasMore = false.obs;
+  //
+  // @override
+  // void initState() {
+  //   _getPost();
+  //
+  //   this._scroll.value.addListener(() {
+  //     if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
+  //         this.hasMore.value) {
+  //       _getPost();
+  //     }
+  //   });
+  //
+  //   super.initState();
+  // }
+  //
+  // _getPost() async {
+  //   isLoading.value = true;
+  //
+  //   await Future.delayed(Duration(seconds: 2));
+  //
+  //   int offset = _subData.length;
+  //   _subData.addAll(_subList.sublist(offset, offset+10));
+  //   _notiData.addAll(_notiList.sublist(offset, offset+10));
+  //
+  //   isLoading.value = false;
+  //   hasMore.value = _subData.length < _maxPost;
+  // }
+  //
+  // _reload() async {
+  //   isLoading.value = true;
+  //   _subData.clear();
+  //   _notiData.clear();
+  //
+  //   await Future.delayed(Duration(seconds: 2));
+  //
+  //   _getPost();
+  // }
+  //
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ScreenUtilInit(
+  //     designSize: Size(411.4, 683.4),
+  //     builder: () {
+  //       return Scaffold(
+  //         backgroundColor: Colors.white,
+  //
+  //         appBar: AppBar(
+  //           backgroundColor: Colors.white,
+  //           centerTitle: true,
+  //           title: Text(
+  //             "알림",
+  //             style: TextStyle(
+  //               color: grayColor1,
+  //               fontSize: 15.sp,
+  //               fontWeight: FontWeight.w300,
+  //             ),
+  //           ),
+  //
+  //           // 뒤로가기 버튼
+  //           leading: IconButton(
+  //             color: themeColor1,
+  //             icon: Icon(Icons.arrow_back_ios_new_rounded),
+  //             tooltip: "Back Button",
+  //             iconSize: 15.w,
+  //             onPressed: () {
+  //               Get.back();
+  //             },
+  //           ),
+  //         ),
+  //
+  //         body: SafeArea(
+  //           child: Container (
+  //             padding: EdgeInsets.only(top: 20, left: 30.w, right: 30.w),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.stretch,
+  //               children: [
+  //
+  //                 Padding(padding: EdgeInsets.only(bottom: 10)),
+  //
+  //                 Expanded(
+  //                   child: _makePost(),
+  //                 )
+  //               ],
+  //             ),
+  //
+  //             //
+  //             decoration: BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.only(
+  //                   topLeft: Radius.circular(25),
+  //                   topRight: Radius.circular(25),
+  //                 )
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // Widget _makePost() {
+  //   return Container(
+  //     child: Obx(()
+  //     => Padding(
+  //       padding: EdgeInsets.all(0.0),
+  //       child: ListView.separated(
+  //         controller: _scroll.value,
+  //         itemBuilder: (_, index) {
+  //           print(hasMore.value); // 데이터 더 있는지 콘솔창에 출력 (확인용)
+  //
+  //           if (index < _subData.length) {
+  //             var subDatum = _subData[index];
+  //             var notiDatum = _notiData[index];
+  //             return GestureDetector(
+  //               behavior: HitTestBehavior.opaque,
+  //               onTap: () {
+  //                 Get.to(PostPage(), arguments: "$subDatum");
+  //               },
+  //               child: Container(
+  //                 padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
+  //                 child: _makePostTile("$subDatum", "$notiDatum"),
+  //               ),
+  //             );
+  //           }
+  //
+  //           if (hasMore.value || isLoading.value) {
+  //             return Center(
+  //               child: CircularProgressIndicator(),
+  //             );
+  //           }
+  //
+  //           return Container(
+  //             padding: EdgeInsets.all(10.0),
+  //             child: Center(
+  //               child: Column(
+  //                 children: [
+  //                   Text(
+  //                       "마지막 알림입니다"
+  //                   ),
+  //                   IconButton(
+  //                     onPressed: () {
+  //                       _reload();
+  //                     },
+  //                     icon: Icon(Icons.arrow_upward_rounded),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //         separatorBuilder: (_, index) => Divider(),
+  //         itemCount: _subData.length + 1,
+  //       ),
+  //     ),),
+  //   );
+  // }
+  //
+  // Widget _makePostTile(sub, noti) {
+  //   return Container(
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.baseline,
+  //       textBaseline: TextBaseline.alphabetic,
+  //       children: [
+  //         Text(
+  //           sub,
+  //           style: TextStyle(
+  //             color: themeColor1,
+  //             fontFamily: "Barun",
+  //             fontSize: 15.sp,
+  //             fontWeight: FontWeight.w400,
+  //           ),
+  //         ),
+  //         Padding(padding: EdgeInsets.only(bottom: 5)),
+  //         Text(
+  //           noti,
+  //           style: TextStyle(
+  //             color: grayColor1,
+  //             fontFamily: "Barun",
+  //             fontSize: 14.sp,
+  //             fontWeight: FontWeight.w300,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

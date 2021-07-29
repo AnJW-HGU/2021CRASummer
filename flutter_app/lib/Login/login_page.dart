@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:studytogether/Category/category_page.dart';
 import 'package:studytogether/Login/signUp_page.dart';
@@ -11,6 +10,7 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:studytogether/splash_page.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -86,12 +86,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-                    var isLogined = fetch();
+                    Get.offAll(() => SplashPage());
+                    /*var isLogined = fetch();
                     if(isLogined == true){
-                      Get.offAll(CategoryPage());
+                      Get.offAll(() => CategoryPage());
                     } else if(isLogined == false) {
                       print("false");
                     }
+
+                     */
                   },
                   //버튼 안에 text
                   label: Text("    Log in with Google     ", style: TextStyle(
@@ -130,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                         InkWell(
                           //누르면 회원가입 페이지로
                           onTap: () {
-                            Get.to(SignUpPage());
+                            Get.to(() => SignUpPage());
                           },
                           child: Text("Sign up", style: TextStyle(
                               fontSize: 15.sp,

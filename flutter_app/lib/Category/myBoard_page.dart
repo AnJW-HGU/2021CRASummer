@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:studytogether/Category/subSearch_page.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'dart:math';
@@ -26,8 +27,13 @@ class MyBoardPage extends StatefulWidget {
 class _MyBoardPageState extends State<MyBoardPage> {
   String boardTitle = Get.arguments; // 카테고리 페이지로부터 타이틀 받음
 
+  // 선호 과목리스트
+  final List<String> _userSubList = <String>[
+    "성경의 이해", "데이터 구조"
+  ];
+  
   // 과목 리스트
-  final List<String>_subList = <String>[
+  final List<String> _subList = <String>[
     "자바 프로그래밍", "성경의 이해", "데이터 구조", "실전프로젝트",
     "공학설계입문", "C 프로그래밍", "파이썬", "타이포그래피",
     "무언가", "끼룩", "도비", "토익",
@@ -82,7 +88,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
   _getPost() async {
     isLoading.value = true;
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     int offset = _subData.length;
     _subData.addAll(_subList.sublist(offset, offset+10));
@@ -99,7 +105,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
     _titleData.clear();
     _contentData.clear();
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     _getPost();
   }
@@ -205,28 +211,105 @@ class _MyBoardPageState extends State<MyBoardPage> {
             body: SafeArea(
               child: Container (
                 padding: EdgeInsets.only(top: 30, left: 30.w, right: 30.w),
+                //흰색 배경안에 들어갈 것들
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // 게시판 흰색 부분에 들어갈 것
-                    // 타이틀 - 게시글
-                    Text(
-                      "게시글",
-                      style: TextStyle(
-                        fontFamily: "Barun",
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    //과목 리스트
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "과목",
+                          style: TextStyle(
+                            fontFamily: "Barun",
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+
+                        //과목들 생성
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(SubSearchPage());
+                                },
+                                child: Container(
+                                  width: 60.w,
+                                  height: 25,
+                                  child: Icon(
+                                    Icons.add_rounded,
+                                    color: themeColor2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: themeColor2,
+                                      ),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      )
+                                  ),
+                                ),
+                              ),
+
+                              Padding(
+                                padding: EdgeInsets.only(right: 5.w),
+                              ),
+
+                              for (int i=0; i<_userSubList.length; i++)
+                                Row(
+                                  children: [
+                                    _makeSub(_userSubList[i]),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 5.w),
+                                    )
+                                  ],
+                                )
+
+                            ],
+                          ),
+                        )
+                      ],
                     ),
 
-                    Padding(padding: EdgeInsets.only(bottom: 10)),
+                    Padding(padding: EdgeInsets.only(bottom: 20)),
 
+                    //게시글 리스트
                     Expanded(
-                      child: _makePost(),
-                    )
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // 게시판 흰색 부분에 들어갈 것
+                          // 타이틀 - 게시글
+                          Text(
+                            "게시글",
+                            style: TextStyle(
+                              fontFamily: "Barun",
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+
+                          Padding(padding: EdgeInsets.only(bottom: 10)),
+
+                          //게시글 생성
+                          Expanded(
+                            child: _makePost(),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-
                 //
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -286,6 +369,114 @@ class _MyBoardPageState extends State<MyBoardPage> {
             ),
           );
         }
+    );
+  }
+
+  Widget _makeSub(inSubTitle) {
+    return GestureDetector(
+      onTap: () {
+        Get.defaultDialog(
+          barrierDismissible: false,
+          title: "",
+          titleStyle: TextStyle(
+            fontFamily: "Barun",
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w400,
+          ),
+
+          content: Column(
+            children: [
+              Text(
+                inSubTitle+"를(을)",
+                style: TextStyle(
+                  fontFamily: "Barun",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                )
+              ),
+              Text(
+                "삭제하시겠습니까?",
+                  style: TextStyle(
+                    fontFamily: "Barun",
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  )
+              ),
+            ],
+          ),
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  Get.back();
+                });
+              },
+              child: Text(
+                "아니오",
+                style: TextStyle(
+                  color: themeColor1,
+                  fontFamily: "Barun",
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _userSubList.remove(inSubTitle);
+                  Get.back();
+                });
+              },
+              child: Text(
+                  "예",
+                style: TextStyle(
+                  color: themeColor1,
+                  fontFamily: "Barun",
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ]
+        );
+      },
+
+      child: Container(
+        padding: EdgeInsets.only(top:5, bottom: 5, left: 10.w, right: 5.w),
+        child: Row(
+          children: [
+            Text(
+              inSubTitle,
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "Barun",
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+
+            // IconButton으로 만들면 크기가...
+            Icon(
+              Icons.clear_rounded,
+              color: Colors.white,
+              size: 15.w,
+            ),
+          ],
+        ),
+
+        decoration: BoxDecoration(
+            color: themeColor1,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            )
+        ),
+      ),
     );
   }
 
