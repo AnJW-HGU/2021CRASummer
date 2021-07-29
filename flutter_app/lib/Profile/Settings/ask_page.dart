@@ -68,7 +68,6 @@ class _AskPageState extends State<AskPage> {
 
 
   Widget _askPageBody() {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
