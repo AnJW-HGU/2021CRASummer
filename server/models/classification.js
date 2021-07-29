@@ -4,7 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     class Classification extends Model {
         static associate(models) {
             // define association here
-          this.hasMany(models.Post);
+          this.hasMany(models.Post, {
+            foreignKey: 'classification_id',
+          });
             // hasMany(Preferred_subjects);
         }
   };
@@ -38,4 +40,3 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Classification;
 };
-

@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
             this.hasMany(models.Photo);
             //this.hasOne(models.Inpuiry);              // check reported post in inpuiry
             this.belongsTo(models.Classification, {
-                foreignKey: 'classification_id'
+                foreignKey: 'classification_id',
             });
             this.belongsTo(models.User, {
-                foreignKey: 'user_id'
+                foreignKey: 'user_id',
             });
 	}
     };
@@ -20,14 +20,6 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false
-        },
-        classification_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        user_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
         },
         title: {
             type: DataTypes.STRING(100),
@@ -49,15 +41,17 @@ module.exports = (sequelize, DataTypes) => {
         },
         deleted_date: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: true,
         },
         adopted_status: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+            type: DataTypes.TINYINT,
+            allowNull: false,
+            defalutValue: 0
         },
         deleted_status: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+            type: DataTypes.TINYINT,
+            allowNull: true,
+            defalutValue: 0
         },
     },{
         sequelize,

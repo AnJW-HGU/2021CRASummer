@@ -5,16 +5,16 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             this.hasMany(models.Post, {
-                foreignkey: 'user_id'
+                foreignKey: 'user_id'
             });
             this.hasMany(models.Comment, {
-                foreignkey: 'user_id'
+                foreignKey: 'user_id'
             });
             this.hasMany(models.Recomment, {
-                foreignkey: 'user_id'
+                foreignKey: 'user_id'
             });
             this.hasMany(models.Photo, {
-                foreignkey: 'user_id'
+                foreignKey: 'user_id'
             });
         }
     };
@@ -78,10 +78,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0
         },
-        singup_date:  {
-            type: DataTypes.DATE,
-            defaultValue: sequelize.NOW
-        },
         resign_date:  {
             type: DataTypes.DATE,
             defaultValue: null
@@ -90,6 +86,9 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'User',
         tableName: 'Users',
+        createdAt: 'singup_date',
+        updatedAt: false,
     });
   return User;
 };
+
