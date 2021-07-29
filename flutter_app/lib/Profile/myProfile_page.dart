@@ -4,10 +4,12 @@ import 'dart:ui';
 import 'package:get/get.dart';
 
 import 'package:studytogether/main.dart';
+
 import 'package:studytogether/Profile//point_page.dart';
 import 'package:studytogether/Profile/Settings/setting_page.dart';
 import 'package:studytogether/Profile/myA_page.dart';
 import 'package:studytogether/Profile/myQ_page.dart';
+import 'Manage/manageMain_page.dart';
 
 
 class MyProfilePage extends StatefulWidget {
@@ -130,8 +132,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _textButton("포인트", _point, PointPage()),
-                    _textButton("질문", _questionNum, MyAPage()),
-                    _textButton("답변", _answerNum, MyQPage()),
+                    _textButton("질문", _questionNum, MyQPage()),
+                    _textButton("답변", _answerNum, MyAPage()),
                     TextButton(onPressed: (){},
                       child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                     ),
@@ -143,36 +145,59 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ),
         Padding(padding: EdgeInsets.only(top: 30.0),),
         // 뱃지함
-        Container(
-          width: 350.w,
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: blurColor,
-                blurRadius: 4,
-                offset: Offset(0.0, 3.0),
-              ),
-            ],
-            color: themeColor4,
-            borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          child: Padding(
-            padding: EdgeInsets.only(top: 30.0, bottom: 30.0, right: 30.0.w, left: 30.0.w),
-            // 뱃지함 내부의 뱃지
-            child: GridView.extent(
-              maxCrossAxisExtent: 48.0.w,
-              crossAxisSpacing: 30.0,
-              mainAxisSpacing: 15.0.w,
-              childAspectRatio: 1.0,
-              children: List.generate(8, (index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
-                    borderRadius: BorderRadius.all(Radius.circular(5.0))
+        Expanded(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                width: 350.w,
+                decoration: BoxDecoration(
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: blurColor,
+                    //     blurRadius: 4,
+                    //     offset: Offset(0.0, 3.0),
+                    //   ),
+                    // ],
+                    color: themeColor4,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 30.0, bottom: 30.0, right: 40.0.w, left: 40.0.w),
+                  // 뱃지함 내부의 뱃지
+                  child: GridView.extent(
+                    shrinkWrap: true,
+                    maxCrossAxisExtent: 48.0.w,
+                    crossAxisSpacing: 20.0,
+                    mainAxisSpacing: 13.0.w,
+                    childAspectRatio: 1.0,
+                    children: List.generate(8, (index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.5),
+                            borderRadius: BorderRadius.all(Radius.circular(5.0))
+                        ),
+                      );
+                    }),
                   ),
-                );
-              }),
-            ),
-          ),
+                ),
+              ),
+              Positioned(
+                  left: 5.0,
+                  top: -5.0,
+                  child: Icon(
+                    Icons.bookmark_rounded,
+                    size: 33.0.w,
+                    color: themeColor1,
+              ),),
+            ],
+          )
+        ),
+        // 뱃지함 아래 padding 조절(뱃지함 크기 조절)
+        Padding(padding: EdgeInsets.only(bottom: 220.0)),
+        TextButton(
+          onPressed: () {
+            Get.to(ManageMainPage());
+          },
+          child: Text("일단 버튼"),
         ),
       ]
     );

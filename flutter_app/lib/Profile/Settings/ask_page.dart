@@ -10,8 +10,8 @@ class AskPage extends StatefulWidget {
 }
 
 class _AskPageState extends State<AskPage> {
-  final List<String> _valueList = ['네임드 신청', '신고', '건의사항', '버그', '기타'];
-  String _selectedValue = '네임드 신청';
+  final List<String> _valueList = ['종류','네임드 신청', '신고', '건의사항', '버그', '기타'];
+  String _selectedValue = '종류';
   final addTitle = TextEditingController();
   final addContent = TextEditingController();
 
@@ -68,7 +68,6 @@ class _AskPageState extends State<AskPage> {
 
 
   Widget _askPageBody() {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
