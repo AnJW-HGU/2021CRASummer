@@ -12,10 +12,17 @@ router.delete('/:userId/nickname/', userController.deleteNickname);
 // points
 // router.post(); // throw error
 router.get('/:userId/points', userController.getPoint);
-router.put('/:userId/points/', userController.updatePoint);
+router.put('/:userId/points/:points_up', userController.updatePoint);
 // router.delete(); // throw error
 
+/************this is for test************/
+router.post('/', userController.createUser);
+/************test it fisrt************/
 
 module.exports = router;
 
-// ¿¿¿¿ api
+// Áßº¹È®ÀÎ api
+
+// query
+// params 
+// body

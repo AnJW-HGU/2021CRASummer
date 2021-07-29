@@ -1,46 +1,62 @@
-const { User } = require('../models');
+const { User } = require('../models/index');
 
 // nickname
 exports.createNickname = async (req, res) => {
-    User.findAll({
+    User.update({
+        nickname : req.body.nickname
+    },{
         where: { id: req.params.userId }
     }).then(result => {
-        User.create({
-            nickname: req.body.nickname
-        })
+        res.json(result);
     });
-} // incomplete
+} 
 
 exports.getNickname = async (req, res) => {
-    User.findAll({
+    User.findOne({
         where: { id: req.params.userId }
     }).then(result => {
-        res.json(result)
+        console.log(result.dataValues.nickname);
+        res.json(result.dataValues.nickname)
     })
-} // incomplete
+} 
 
 exports.updateNickname = async (req, res) => {
-    // todo : get nickname with body and insert into db
+    User.update({
+        nickname : req.body.nickname
+    },{
+        where: { id: req.params.userId }
+    }).then(result => {
+        res.json(result);
+    });
 }
 
 exports.deleteNickname = async (req, res) => {
-
+    User.update({
+        nickname : null
+    },{
+        where: { id: req.params.userId }
+    }).then(result => {
+        res.json(result);
+    });
 }
 
 // points
 exports.getPoint = async (req, res) => {
-
+    User.findOne({
+        where: { id: req.params.userId }
+    }).then(result => {
+        console.log(result.dataValues.points);
+        res.json(result.dataValues.points)
+    })
 }
 
 exports.updatePoint = async (req, res) => {
-
+    User.update({
+        points : req.body.point
+    },{
+        where: { id: req.params.userId }
+    }).then(result => {
+        res.json(result);
+    });
 }
 
-/************this is for test************/
-exports.createUser = async (req, res) => {
-    var user = User.create({
-        nickname: req.body.nickname
-    })
-    console.log(user.nickname);
-}
-/************this is for test************/
