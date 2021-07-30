@@ -1,11 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:studytogether/Category/subSearch_page.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'dart:ui';
 
 import 'package:studytogether/main.dart';
+import '../Data/Post_data.dart';
+
+
 
 class AddPostPage extends StatefulWidget {
   const AddPostPage({Key? key}) : super(key: key);
@@ -15,14 +22,6 @@ class AddPostPage extends StatefulWidget {
 }
 
 class _AddPostPageState extends State<AddPostPage> {
-  final _userId = ""; // 유저 아이디
-  final _subSelect = ""; // 선택한 과목
-  final _proSelect = ""; // 선택한 과목의 교수님
-
-  final _addTitle = ""; // 글쓰기 제목
-  final _addContent = ""; // 글쓰기 내용
-  final _addImage = ""; // 첨부한 이미지
-  final _addWrittenDate = ""; // 글 작성 시간
 
   final addTitle = TextEditingController();
   final addContent = TextEditingController();
@@ -75,6 +74,8 @@ class _AddPostPageState extends State<AddPostPage> {
             actions: [
               TextButton(
                 onPressed: _isButtonAbled ? () {
+                  Post inPost = new Post("${addTitle.text}", "${addContent.text}");
+                  // inPost._addPost();
                   print("제목 : ${addTitle.text}");
                   print("내용 : ${addContent.text}");
                   Get.back();
