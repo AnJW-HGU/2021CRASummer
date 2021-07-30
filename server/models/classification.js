@@ -39,5 +39,5 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'Classifications',
         timestamps: false
     });
-  return Classification;
+    return Classification;
 };

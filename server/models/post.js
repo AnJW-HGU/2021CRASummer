@@ -48,12 +48,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
         adopted_status: {
-            type: DataTypes.TINYINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defalutValue: 0
         },
         deleted_status: {
-            type: DataTypes.TINYINT,
+            type: DataTypes.INTEGER,
             allowNull: true,
             defalutValue: 0
         },
