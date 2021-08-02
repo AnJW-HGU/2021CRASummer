@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'dart:ui';
 
 import 'package:studytogether/main.dart';
 import '../Data/Post_data.dart';
-
 
 
 class AddPostPage extends StatefulWidget {
@@ -38,6 +38,62 @@ class _AddPostPageState extends State<AddPostPage> {
     addContent.dispose();
     super.dispose();
   }
+
+
+  // Data
+  // main() async {
+  //   String url =
+  //       'https://pae.ipportalegre.pt/testes2/wsjson/api/app/ws-authenticate';
+  //   Map map = {
+  //     'data': {'apikey': '12345678901234567890'},
+  //   };
+  //
+  //   print(await apiRequest(url, map));
+  // }
+
+  Future<String> apiRequest(inTitle, inContent) async {
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse("https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/"));
+    request.headers.set('content-type', 'application/json');
+    request.add (utf8.encode(json.encode({
+      'classification_id': '011220',
+      'user_id': '200404',
+      'image_id': '0',
+      'title': inTitle,
+      'content': inContent
+    })));
+    HttpClientResponse response = await request.close();
+    // todo - you should check the response.statusCode
+    String reply = await response.transform(utf8.decoder).join();
+    httpClient.close();
+    return reply;
+  }
+
+  // void _addPostData(inTitle, inContent) async {
+  //   var headers = {
+  //     'Content-Type': 'application/json'
+  //   };
+  //
+  //   var request = http.Request('POST', Uri.parse('https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/'));
+  //   request.bodyFields = {
+  //     'classification_id': '011220',
+  //     'user_id': '200404',
+  //     'image_id': '0',
+  //     'title': "zz",
+  //     'content': "zz"
+  //   };
+  //
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     print(await response.stream.bytesToString());
+  //   }
+  //   else {
+  //     print(response.reasonPhrase);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +129,10 @@ class _AddPostPageState extends State<AddPostPage> {
             // 완료 버튼
             actions: [
               TextButton(
-                onPressed: _isButtonAbled ? () {
-                  Post inPost = new Post("${addTitle.text}", "${addContent.text}");
+                onPressed: _isButtonAbled ? () async {
+                  print(await apiRequest("${addTitle.text}", "${addContent.text}"));
+                  // _addPostData("${addTitle.text}", "${addContent.text}");
+                  // Post inPost = new Post("${addTitle.text}", "${addContent.text}");
                   // inPost._addPost();
                   print("제목 : ${addTitle.text}");
                   print("내용 : ${addContent.text}");

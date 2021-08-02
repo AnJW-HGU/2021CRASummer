@@ -40,3 +40,29 @@ class Post {
 
 
 }
+
+void _addPostData(inTitle, inContent) async {
+  var headers = {
+    'Content-Type': 'application/json'
+  };
+
+  var request = http.Request('POST', Uri.parse('{{url}}/Create'));
+  request.bodyFields = {
+    'classification_id': '011220',
+    'user_id': '200404',
+    'image_id': '0',
+    'title': inTitle,
+    'content': inContent
+  };
+
+  request.headers.addAll(headers);
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200) {
+    print(await response.stream.bytesToString());
+  }
+  else {
+    print(response.reasonPhrase);
+  }
+}
