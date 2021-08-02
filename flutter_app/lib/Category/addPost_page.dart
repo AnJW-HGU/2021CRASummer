@@ -14,16 +14,16 @@ import 'package:studytogether/main.dart';
 import '../Data/Post_data.dart';
 
 class AddPost {
-  String? postClassifi;
-  String? postUser;
-  String? postImage;
+  int? postClassifi;
+  int? postUser;
+  int? postImage;
   String? postTitle;
   String? postContent;
 
   AddPost (inTitle, inContent) {
-    postClassifi = '011220';
-    postUser = '200404';
-    postImage = '0';
+    postClassifi = 011220;
+    postUser = 200404;
+    postImage = 0;
     postTitle = inTitle;
     postContent = inContent;
   }
@@ -73,7 +73,16 @@ class _AddPostPageState extends State<AddPostPage> {
     print(await apiRequest(url, _addPost));
   }
 
-  Future<String> apiRequest(url, _post) async {
+    apiRequest(url, _post) async {
+    // http.Response response = await http.post(
+    //   url,
+    //   headers: <String, String> {
+    //     'Content-type': 'application/json',
+    //   },
+    //   body: <String, dynamic> {(utf8.encode(jsonEncode(_post)));},
+    // );
+
+    //Http Client로 만들었던 것
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
     request.headers.set('content-type', 'application/json');
