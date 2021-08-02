@@ -13,6 +13,31 @@ import 'dart:ui';
 import 'package:studytogether/main.dart';
 import '../Data/Post_data.dart';
 
+class AddPost {
+  String? postClassifi;
+  String? postUser;
+  String? postImage;
+  String? postTitle;
+  String? postContent;
+
+  AddPost (inTitle, inContent) {
+    postClassifi = '011220';
+    postUser = '200404';
+    postImage = '0';
+    postTitle = inTitle;
+    postContent = inContent;
+  }
+
+  //jsonEncode 함수 있어서 메소드를 부를 필요는 없음
+  Map<String, dynamic> toJson() =>
+      {
+        'classification_id': postClassifi,
+        'user_id': postUser,
+        'image_id': postImage,
+        'title': postTitle,
+        'content': postContent
+      };
+}
 
 class AddPostPage extends StatefulWidget {
   const AddPostPage({Key? key}) : super(key: key);
@@ -41,31 +66,24 @@ class _AddPostPageState extends State<AddPostPage> {
 
 
   // Data
-  // main() async {
-  //   String url =
-  //       'https://pae.ipportalegre.pt/testes2/wsjson/api/app/ws-authenticate';
-  //   Map map = {
-  //     'data': {'apikey': '12345678901234567890'},
-  //   };
-  //
-  //   print(await apiRequest(url, map));
-  // }
+  void _addPost(inTitle, inContent) async {
+    String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/";
+    AddPost _addPost = AddPost(inTitle, inContent);
 
-  Future<String> apiRequest(inTitle, inContent) async {
+    print(await apiRequest(url, _addPost));
+  }
+
+  Future<String> apiRequest(url, _post) async {
     HttpClient httpClient = new HttpClient();
-    HttpClientRequest request = await httpClient.postUrl(Uri.parse("https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/"));
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
     request.headers.set('content-type', 'application/json');
-    request.add (utf8.encode(json.encode({
-      'classification_id': '011220',
-      'user_id': '200404',
-      'image_id': '0',
-      'title': inTitle,
-      'content': inContent
-    })));
+    request.add (utf8.encode(jsonEncode(_post)));
     HttpClientResponse response = await request.close();
+
     // todo - you should check the response.statusCode
-    String reply = await response.transform(utf8.decoder).join();
-    httpClient.close();
+    // String reply = await response.transform(utf8.decoder).join();
+    String reply = "작성되었습니다.";
+    httpClient.close(); // 이때 요청함
     return reply;
   }
 
@@ -130,7 +148,7 @@ class _AddPostPageState extends State<AddPostPage> {
             actions: [
               TextButton(
                 onPressed: _isButtonAbled ? () async {
-                  print(await apiRequest("${addTitle.text}", "${addContent.text}"));
+                  _addPost("${addTitle.text}", "${addContent.text}");
                   // _addPostData("${addTitle.text}", "${addContent.text}");
                   // Post inPost = new Post("${addTitle.text}", "${addContent.text}");
                   // inPost._addPost();
