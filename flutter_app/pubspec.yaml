@@ -21,6 +21,8 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  progress_dialog: ^1.2.4
+  modal_progress_hud_nsn: ^0.1.0-nullsafety-0
   flutter_screenutil: ^5.0.0+2
   flutter_pagewise: ^2.0.1
   get: ^4.1.4
