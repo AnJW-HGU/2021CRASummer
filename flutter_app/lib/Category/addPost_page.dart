@@ -66,33 +66,34 @@ class _AddPostPageState extends State<AddPostPage> {
 
 
   // Data
-  void _addPost(inTitle, inContent) async {
+  _addPost(inTitle, inContent) async {
     String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/";
     AddPost _addPost = AddPost(inTitle, inContent);
 
-    print(await apiRequest(url, _addPost));
+    return (await apiRequest(url, _addPost));
   }
 
-    apiRequest(url, _post) async {
-    // http.Response response = await http.post(
-    //   url,
-    //   headers: <String, String> {
-    //     'Content-type': 'application/json',
-    //   },
-    //   body: <String, dynamic> {(utf8.encode(jsonEncode(_post)));},
-    // );
-
+  apiRequest(url, _post) async {
+    var body = utf8.encode(jsonEncode(_post));
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String> {
+        'Content-type': 'application/json',
+      },
+      body: body,
+    );
+    String reply = response.body;
     //Http Client로 만들었던 것
-    HttpClient httpClient = new HttpClient();
-    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
-    request.headers.set('content-type', 'application/json');
-    request.add (utf8.encode(jsonEncode(_post)));
-    HttpClientResponse response = await request.close();
-
-    // todo - you should check the response.statusCode
-    // String reply = await response.transform(utf8.decoder).join();
-    String reply = "작성되었습니다.";
-    httpClient.close(); // 이때 요청함
+    // HttpClient httpClient = new HttpClient();
+    // HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+    // request.headers.set('content-type', 'application/json');
+    // request.add (utf8.encode(jsonEncode(_post)));
+    // HttpClientResponse response = await request.close();
+    //
+    // // todo - you should check the response.statusCode
+    // // String reply = await response.transform(utf8.decoder).join();
+    // String reply = "작성되었습니다.";
+    // httpClient.close(); // 이때 요청함
     return reply;
   }
 
@@ -157,13 +158,22 @@ class _AddPostPageState extends State<AddPostPage> {
             actions: [
               TextButton(
                 onPressed: _isButtonAbled ? () async {
-                  _addPost("${addTitle.text}", "${addContent.text}");
+                  Get.back();
+                  String result = await _addPost("${addTitle.text}", "${addContent.text}");
                   // _addPostData("${addTitle.text}", "${addContent.text}");
                   // Post inPost = new Post("${addTitle.text}", "${addContent.text}");
                   // inPost._addPost();
-                  print("제목 : ${addTitle.text}");
-                  print("내용 : ${addContent.text}");
-                  Get.back();
+                  Get.showSnackbar(
+                      GetBar(
+                        message: result,
+                        duration: Duration(seconds: 1),
+                        snackPosition: SnackPosition.TOP,
+                        maxWidth: 400.w,
+                        backgroundColor: themeColor2,
+                        borderRadius: 5,
+                        barBlur: 0,
+                      ),
+                  );
                 } : _isButtonDialog,
                 child: Text(
                   "완료",
@@ -250,6 +260,7 @@ class _AddPostPageState extends State<AddPostPage> {
                           Container(
                             child: TextField(
                               controller: addContent,
+                              maxLength: 2500,
                               onChanged: (value) {
                                 if (addContent.text.length >= 1) {
                                   setState(() {
