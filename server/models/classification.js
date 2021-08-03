@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
             this.hasMany(models.Post, {
                 foreignKey: 'classification_id',
             });
-            // hasMany(Preferred_subjects);
+            this.hasOne(models.Inquiry, {
+                foreignKey: 'user_id'
+            });;
         }
     };
     Classification.init({

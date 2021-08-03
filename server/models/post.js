@@ -9,8 +9,16 @@ module.exports = (sequelize, DataTypes) => {
             this.hasMany(models.Photo, {
                 foreignKey: 'post_id'
             });
-            //this.hasOne(models.Inpuiry);              // check reported post in inpuiry
-            this.belongsTo(models.Classification, {
+			this.hasMany(models.Report, {
+                foreignKey: 'post_id'
+            });
+            this.hasMany(models.Notification, {
+                foreignKey: 'post_id'
+            });
+			this.hasMany(models.Inquiry, {
+				foreignKey: 'post_id'
+            });
+			this.belongsTo(models.Classification, {
                 foreignKey: 'classification_id',
             });
             this.belongsTo(models.User, {
@@ -42,10 +50,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
-        },
-        deleted_date: {
-            type: DataTypes.DATE,
-            allowNull: true,
         },
         adopted_status: {
             type: DataTypes.INTEGER,
