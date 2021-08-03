@@ -231,7 +231,7 @@ class _BoardPageState extends State<BoardPage> {
                                 tooltip: "Search Button",
                                 iconSize: 27.w,
                                 onPressed: () {
-                                  Get.to(SearchPage(), transition: Transition.cupertino);
+                                  Get.to(() => SearchPage(), transition: Transition.cupertino);
                                 }
                               ),
                             )
