@@ -204,8 +204,55 @@ class _PostPageState extends State<PostPage> {
                           ),
                           // 날짜와 댓글 총 수
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              Row(
+                                children: [
+                                  Padding(
+
+                                    //comment 아이콘
+                                    padding: EdgeInsets.only(left:0, right:3.w, top:0, bottom:0),
+                                    child: Icon(
+                                      Icons.mode_comment_outlined,
+                                      size: 15.sp,
+                                      color: grayColor1,
+                                    ),
+                                  ),
+
+                                  //comment 수
+                                  Padding(
+                                    padding:EdgeInsets.all(0),
+                                    child: Text(
+                                      snapshot.data!.post_comments_count.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: grayColor1,
+                                        fontFamily: "barun",
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ),
+
+                                  // 채택여부 -> 이건 어차피 댓글로 보여지니까
+                                  // Padding(
+                                  //   padding: EdgeInsets.only(left: 5.w),
+                                  //   child: snapshot.data!.post_adopted_status ?
+                                  //   Icon(
+                                  //     Icons.star_rounded,
+                                  //     size: 19.sp,
+                                  //     color: grayColor1,
+                                  //   ) :
+                                  //   Icon(
+                                  //     Icons.star_outline_rounded,
+                                  //     size: 19.sp,
+                                  //     color: grayColor1,
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+
                               Padding(
                                 padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
                                 child: Text(
@@ -219,18 +266,6 @@ class _PostPageState extends State<PostPage> {
                                 ),
                               ),
 
-                              Padding(
-                                padding:EdgeInsets.all(0),
-                                child: Text(
-                                  snapshot.data!.post_comments_count.toString(),
-                                  style: TextStyle(
-                                    color: themeColor2,
-                                    fontFamily: "barun",
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ],
