@@ -2,6 +2,8 @@ const { Router } = require('express');
 const router = Router();
 const userController = require('../controllers/user');
 
+// for test
+router.post('/',userController.createUser);
 
 // nickname
 router.post('/:userId/nickname', userController.createNickname); // request : { nickName: hyunseo} , receive : req.body === hyunseo

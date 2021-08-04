@@ -60,3 +60,13 @@ exports.updatePoint = async (req, res) => {
     });
 }
 
+exports.createUser = async (req, res) => {
+	User.create({
+		google_id: req.body.googleId,
+		student_id : req.body.studentId,
+		name: req.body.name,
+		email: req.body.email
+		}).then(result => {
+			res.json(result);
+		});
+}
