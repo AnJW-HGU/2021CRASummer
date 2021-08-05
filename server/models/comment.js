@@ -35,6 +35,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+		recommends_count: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: false,
+            default: 0,
+        },
         reports_count: {
             type: DataTypes.INTEGER,
             defaultValue: 0,

@@ -21,7 +21,7 @@ sequelize
         .authenticate()
         .then(() => { console.log("Connection Success"); })
         .catch((e) => { console.log(e); });
-sequelize.sync(); 
+sequelize.sync({}); 
 
 // define router var
 const app = express();

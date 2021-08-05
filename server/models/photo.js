@@ -37,10 +37,10 @@ module.exports = (sequelize, DataTypes) => {
              type: DataTypes.BLOB,
 			 allowNull: false,
         },
-        size: {
-            type: DataTypes.BLOB,
-            allowNull: false,
-        },
+        //size: {
+        //    type: DataTypes.BLOB,
+        //    allowNull: false,
+        //},
         saved_path: {
             type: DataTypes.STRING(255),
             allowNull: false,
