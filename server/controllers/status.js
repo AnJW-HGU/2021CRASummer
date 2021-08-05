@@ -89,9 +89,14 @@ exports.deleteReport = async (req, res) => {
 	}).then(result => {
 		User.increment({
 			reports_count: -1
-	},{
+		},{
 		where: {id: result.user_id}
-	});
+		});
+	})
+	model.increment({
+		reports_count: -1
+	},{
+		where: {id: req.body.id}
 	}).then(result => {
 		if(result)
 			res.json(result);
@@ -163,8 +168,13 @@ exports.updateAdopt = async (req, res) => {
 			adopted_status: 1
 		},{
 			where: {id: result.post_id}		
-		}
-	)});
+		})
+		User.increment({
+			adopted_count: 1
+		},{
+			where: {id: result.user_id}
+		})
+	});
 }
 
 exports.deleteAdopt = async (req, res) => {
@@ -182,7 +192,12 @@ exports.deleteAdopt = async (req, res) => {
 			adopted_status: 0
 		},{
 			where: {id: result.post_id}		
-		}
-	)});
+		})
+		User.increment({
+			adopted_count: -1
+		},{
+			where: {id: result.user_id}
+		})
+	});
 }
 	

@@ -10,12 +10,13 @@ exports.createPost = async (req, res) => {
         user_id : req.body.userId,                     // 유저 id
         title : req.body.title,                        // 제목
         content : req.body.content,                        // 내용
-        adopted_status: 0,                             // 채택 여부
+        adopted_status: 0,                             // 채택 여부	   
+		deleted_status: 0
     }).then(result => {
 	    if(result)
 	        res.json(result)
 	    else
-		res.json({"result" : 0})
+			res.json({"result" : 0})
     });
     User.increment({
 	    posts_count: 1

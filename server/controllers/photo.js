@@ -19,18 +19,18 @@ exports.createPhoto = async (req, res) => {
         // make error
     }
 
-    var imageData = fs.readFileSync(__dirname + '/../static/assets/images/jsa-header.png');
-    Image.create({
+    var photoData = fs.readFileSync(__dirname + '/../static/assets/images/jsa-header.png');
+    Photo.create({
         [which_id] : req.body.id,                   // post 정보 FK
         user_id : req.body.userId,                  // 유저 id FK
         // type: 'png'
-        original_file_name : req.body.title,        // 원본 파일 이름
-        saved_file_name : req.body.content,         // 저장된 파일 이름
-        data: imageData,                            // image data
+        original_file_name : req.body.original_file_name,        // 원본 파일 이름
+        saved_file_name : req.body.saved_file_name,         // 저장된 파일 이름
+        data: photoData,                            // image data
         deleted_status: 0,                             // 삭제 여부 
-    }).then(image => {
+    }).then(photo => {
         try{
-            fs.writeFileSync(__dirname + '/../static/assets/images/jsa-header.png', image.data);				
+            fs.writeFileSync(__dirname + '/../static/assets/images/jsa-header.png', photo.data);				
         }catch(e){
             console.log(e);
         }

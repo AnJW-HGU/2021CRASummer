@@ -1,4 +1,8 @@
 const { Comment } = require('../models/index');
+const { User } = require('../models/index');
+const { Post } = require('../models/index');
+const sequelize = require('sequelize');
+const Op = sequelize.Op;
 
 // comment
 exports.createComment = async (req, res) => {
@@ -9,8 +13,21 @@ exports.createComment = async (req, res) => {
         adopted_status : 0,
         deleted_status: 0,
     }).then(result => {
-        res.json(result);
-    });
+        if(result)
+			res.json(result)
+		else
+			res.json({"result":0})
+    })
+	User.increment({
+		comments_count: 1
+	},{
+		where: {id: req.body.userId}
+	})
+	Post.increment({
+		comments_count: 1
+	},{
+		where: {id: req.body.postId}
+	});
 }
 
 // comment/<id>
