@@ -27,6 +27,12 @@ exports.createPost = async (req, res) => {
 
 exports.getPosts = async (req, res) => {
 	Post.findAll({
+		include:[
+			{
+				model: User,
+				attributes: ['nickname', 'named_type']
+			}
+		],
 		where: {
 		[Op.and]:[
 		{
@@ -35,11 +41,11 @@ exports.getPosts = async (req, res) => {
 						[Op.like]: "%"+req.query.searchKeyword+"%"}
 				},{	content: {
 						[Op.like]: "%"+req.query.searchKeyword+"%"}
-	}]},{
-			[Op.or]:[
-				{deleted_status: 0},
-				{deleted_status: null}
-			]}]}
+					}
+			]
+		},
+			{deleted_status: 0},
+		]}
 	}).then(result => {
 		res.json(result)
 	});
