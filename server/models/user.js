@@ -70,6 +70,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 0
         },
+        adopts_count: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
+        },
         reports_count: {
             type: DataTypes.INTEGER,
             allowNull: false,

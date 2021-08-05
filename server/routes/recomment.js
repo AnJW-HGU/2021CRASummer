@@ -4,7 +4,7 @@ const recommentController = require('../controllers/recomment');
 
 // recomment
 router.post('/', recommentController.createRecomment); // get userid and content of the comment with body
-// router.get('/', recommentController.getRecomments);
+router.get('/', recommentController.getRecomments);
 // router.put('/', recommentController.updateRecomments);
 // router.delete('/', recommentController.deleteRecomments);
 
