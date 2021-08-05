@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,10 +13,21 @@ import 'dart:math';
 
 import 'package:studytogether/main.dart';
 
+
+//POST
 Future<Post> fetchPost() async {
-  String postUrl =
-      "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post?post_id=000001";
+  final post_id = Get.arguments.toString();
+  // Map<String, dynamic> queryParams = {
+  //   'postId' : post_id,
+  // };
+  //
+  // String queryString = Uri(queryParameters: queryParams).query;
+  var postUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post"+"/"+post_id;
   var response = await http.get(Uri.parse(postUrl));
+
+  // String postUrl =
+  //     "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post?post_id=000001";
+  // var response = await http.get(Uri.parse(postUrl));
 
   if (response.statusCode == 200) {
     return Post.fromJson(json.decode(response.body));
@@ -25,6 +38,7 @@ Future<Post> fetchPost() async {
 
 // Post에 대한 Data
 class Post {
+  var post_id;
   var post_sub;
   var post_userId;
   var post_userName;
@@ -36,6 +50,7 @@ class Post {
   var post_adopted_status; // 채택된 댓글이 있니?
 
   Post({
+    this.post_id,
     this.post_sub,
     this.post_userId,
     this.post_userName,
@@ -47,8 +62,13 @@ class Post {
     this.post_adopted_status,
   });
 
+  getPostSub() {
+    return post_sub;
+  }
+
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
+      post_id: json["post_id"],
       post_sub: json["subject"],
       post_userId: json["user_id"],
       post_userName: json["user_name"],
@@ -61,6 +81,10 @@ class Post {
     );
   }
 }
+
+
+//Comment
+
 
 // UI
 class PostPage extends StatefulWidget {
@@ -100,14 +124,41 @@ class _PostPageState extends State<PostPage> {
             backgroundColor: Colors.white,
             elevation: 0.0,
             centerTitle: true,
-            title: Text(
-              Get.arguments,
-              style: TextStyle(
-                color: grayColor1,
-                fontFamily: "Barun",
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w400,
-              ),
+            title: FutureBuilder<Post>(
+              future: post,
+              builder: (context, snapshot) {
+                if (snapshot.data != null) {
+                  return Text(
+                    snapshot.data!.post_sub,
+                    style: TextStyle(
+                      color: grayColor1,
+                      fontFamily: "Barun",
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  );
+                }
+                else if (snapshot.hasError) {
+                  return Text(
+                    "질문",
+                    style: TextStyle(
+                      color: grayColor1,
+                      fontFamily: "Barun",
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  );
+                }
+                return Text(
+                  "질문",
+                  style: TextStyle(
+                    color: grayColor1,
+                    fontFamily: "Barun",
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                );
+              },
             ),
 
             // 뒤로가기 버튼
@@ -214,7 +265,7 @@ class _PostPageState extends State<PostPage> {
                                     //comment 아이콘
                                     padding: EdgeInsets.only(left:0, right:3.w, top:0, bottom:0),
                                     child: Icon(
-                                      Icons.mode_comment_outlined,
+                                      Icons.comment_outlined,
                                       size: 15.sp,
                                       color: grayColor1,
                                     ),
@@ -290,15 +341,44 @@ class _PostPageState extends State<PostPage> {
                     Expanded(
                       child: Padding(
                         padding:
-                            EdgeInsets.only(top: 20, left: 15.w, right: 15.w),
+                            EdgeInsets.only(top: 20.h, left: 15.w, right: 15.w),
                         child: Container(
                           padding: EdgeInsets.only(
-                              top: 15.w, left: 30.w, right: 30.w, bottom: 20.w),
+                              top: 15.w, left: 20.w, right: 20.w, bottom: 20.w),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               //댓글들...
-                              Text("Hi"),
+                              Padding(
+                                padding: EdgeInsets.all(0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor: themeColor4,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 10.w),
+                                          child: Text(
+                                            snapshot.data!.post_userName,
+                                            style: TextStyle(
+                                              color: themeColor2,
+                                              fontFamily: "Barun",
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                           decoration: BoxDecoration(
@@ -320,7 +400,8 @@ class _PostPageState extends State<PostPage> {
                     ),
                   ],
                 );
-              } else if (snapshot.hasError) {
+              }
+              else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
 
@@ -430,4 +511,11 @@ class _PostPageState extends State<PostPage> {
       },
     );
   }
+
+  // Widget _MakeComment(cUserId, cNickname, cContent, cWrittenDate, cAdopted) {
+  //   return Padding(
+  //     padding: EdgeInsets.all(0),
+  //     child: Col,
+  //   );
+  // }
 }

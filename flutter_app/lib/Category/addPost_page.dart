@@ -21,9 +21,9 @@ class AddPost {
   String? postContent;
 
   AddPost (inTitle, inContent) {
-    postClassifi = 011220;
-    postUser = 200404;
-    postImage = 0;
+    postClassifi = 1;
+    postUser = 1;
+    // postImage = 0;
     postTitle = inTitle;
     postContent = inContent;
   }
@@ -31,9 +31,9 @@ class AddPost {
   //jsonEncode 함수 있어서 메소드를 부를 필요는 없음
   Map<String, dynamic> toJson() =>
       {
-        'classification_id': postClassifi,
-        'user_id': postUser,
-        'image_id': postImage,
+        'classificationId': postClassifi,
+        'userId': postUser,
+        // 'image_id': postImage,
         'title': postTitle,
         'content': postContent
       };
@@ -160,6 +160,12 @@ class _AddPostPageState extends State<AddPostPage> {
                 onPressed: _isButtonAbled ? () async {
                   Get.back();
                   String result = await _addPost("${addTitle.text}", "${addContent.text}");
+                  if (result == "OK" || result == "작성이 완료되었습니다.") {
+                    result = "작성이 완료되었습니다.";
+                  }
+                  else {
+                    result = "작성에 실패하였습니다.";
+                  }
                   // _addPostData("${addTitle.text}", "${addContent.text}");
                   // Post inPost = new Post("${addTitle.text}", "${addContent.text}");
                   // inPost._addPost();

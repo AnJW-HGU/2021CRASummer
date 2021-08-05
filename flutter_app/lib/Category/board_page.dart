@@ -326,7 +326,7 @@ class _BoardPageState extends State<BoardPage> {
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
-                  Get.to(PostPage(), arguments: "$subDatum");
+                  Get.to(PostPage(), arguments: 1);
                 },
                 child: Container(
                   padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
