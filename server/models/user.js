@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
 			this.hasMany(models.Inquiry, {
                 foreignKey: 'user_id'
 			});
+			this.hasMany(models.Announcement, {
+                foreignKey: 'user_id'
+            });
 			this.hasMany(models.Notification, {
                 foreignKey: 'user_id'
             });
