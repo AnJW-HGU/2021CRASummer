@@ -7,13 +7,10 @@ exports.createPhoto = async (req, res) => {
     var fs = require('fs');
 
     if (req.body.type == 'post') {
-		// model = Post;
 		which_id = 'post_id';
 	} else if (req.body.type == 'comment') {
-		// model = Comment;
 		which_id = 'comment_id';
     } else if (req.body.type == 'inquiry') {
-		// model = Recomment;
 		which_id = 'recomment_id';
 	} else {
         // make error
@@ -24,14 +21,15 @@ exports.createPhoto = async (req, res) => {
         [which_id] : req.body.id,                               // post 정보 FK
         user_id : req.body.userId,                              // 유저 id FK
         // type: 'png'
-        original_file_name : 'jsa-header.png',       // 원본 파일 이름
-        saved_file_name : 'new-jsa-header.png',                     // 저장된 파일 이름
+        original_file_name : 'jsa-header.png',					// 원본 파일 이름
+        saved_file_name : 'new-jsa-header.png',					// 저장된 파일 이름
         data: photoData,                                        // image data
         saved_path: __dirname + '/../static/assets/images/',    // image data
         deleted_status: 0,                                      // 삭제 여부 
     }).then(photo => {
         try{
-            fs.writeFileSync('/../static/assets/images/' + Photo.saved_file_name, photo.data);
+			var path = Photo.saved_path + Photo.saved_file_name
+            fs.writeFileSync(path, photo.data);
             res.json(photo);
         }catch(e){
             console.log(e);
