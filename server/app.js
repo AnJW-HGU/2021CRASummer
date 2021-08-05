@@ -4,12 +4,12 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const session = require('express-session');
-const mysqlStore = require('./models');
+const MySQLStore = require('express-mysql-session')(session);
 const { sequelize } = require('./models');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/config/config.js');
+const config = require(__dirname + '/config/config.json');
 
 // maybe login ?
 // const secretKey = require('./config/jwt_secret');
@@ -21,20 +21,20 @@ sequelize
         .authenticate()
         .then(() => { console.log("Connection Success"); })
         .catch((e) => { console.log(e); });
-sequelize.sync({}); 
+sequelize.sync(); 
 
 // define router var
 const app = express();
 const router = require('./routes');
 
 // session store
-//const sessionStore = new mysqlStore({
-//    host: config.host,
-//    port: config.port,
-//    user: config.username,
-//    password: config.password,
-//    database: config.database
-//});
+const sessionStore = new MySQLStore({
+    host: config.host,
+    port: config.port,
+    user: config.username,
+    password: config.password,
+    database: config.database
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,6 +56,18 @@ app.use('/', router);
 //app.use('/users', userRouter);
 
 // catch 404 and forward to error handler
+app.use(session({
+	secret: "asdfghjkl",
+	resave: false,
+	saveUninitialized: false,
+	store: sessionStore,
+	cookie: {
+		secure: false,
+		httpOnly: true,
+		maxAge: 1000 * 60 * 2
+	}
+}));
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
