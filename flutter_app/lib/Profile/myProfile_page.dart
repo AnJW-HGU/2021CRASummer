@@ -3,16 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:async';
-
 import 'package:studytogether/main.dart';
 import 'package:studytogether/Profile//point_page.dart';
 import 'package:studytogether/Profile/Settings/setting_page.dart';
 import 'package:studytogether/Profile/myA_page.dart';
 import 'package:studytogether/Profile/myQ_page.dart';
 import 'Manage/manageMain_page.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
 
 Future<User> fetchUser() async {
   String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?post_id=1';
@@ -27,31 +27,34 @@ Future<User> fetchUser() async {
 }
 
 class User{
-  var user_status;
-  var user_id;
   var user_nickname;
   var user_point;
   var user_questionNum;
   var user_answerNum;
 
   User({
-    this.user_status,
-    this.user_id,
     this.user_nickname,
     this.user_point,
     this.user_questionNum,
     this.user_answerNum,
 });
 
-
+  // test용
+  // factory User.fromJson(String nickname){
+  //   return User(
+  //     user_nickname: nickname,
+  //     // user_point: json['points'],
+  //     // user_questionNum: json['posts_count'],
+  //     // user_answerNum: json['comments_count'],
+  //   );
+  // }
+  // 기존 것
   factory User.fromJson(Map<String, dynamic> json){
     return User(
-      user_status: json['status'],
-      user_id: json['id'],
       user_nickname: json['nickname'],
-      user_point: json['question_num'],
-      user_questionNum: json['answer_num'],
-      user_answerNum: json['point'],
+      user_point: json['points'],
+      user_questionNum: json['posts_count'],
+      user_answerNum: json['comments_count'],
     );
   }
 }
@@ -65,30 +68,6 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   late Future<User> user;
-//   Future<dynamic> _fetchUsers() async {
-//     var url = Uri.parse('https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test/');
-//     var response = await http.get(url);
-//
-//     if(response.statusCode == 200){
-//       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
-//       setState(() {
-//         _isData = true; // data가 받아졌는 지 여부 확인
-//         _nickName = jsonResponse['nickname'];
-//         _point = jsonResponse['point'];
-//         _questionNum = jsonResponse['question_num'];
-//         _answerNum = jsonResponse['answer_num'];
-//       });
-//     }
-//   }
-
-  // 서버에서 받아온 data 저장하는 변수
-  String _nickName = "";
-  int _point = 0;
-  int _questionNum = 0;
-  int _answerNum = 0;
-
-  bool _isData = false;
-
   // 뱃지 이미지 리스트
   // images.add(Image.asset('', height: ,));
 
@@ -126,11 +105,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
             elevation: 0.0,
             actions: <Widget>[
               IconButton(
-                  icon: Icon(Icons.settings_rounded, size: 27.w,),
-                  onPressed: () {
-                    Get.to(SettingPage(), arguments: _nickName);
-                  }
-              ),
+              icon: Icon(Icons.settings_rounded, size: 27.w,),
+                onPressed: () {
+                  Get.to(SettingPage());
+                }
+            ),
             ],
           ),
           body:  FutureBuilder<User>(
