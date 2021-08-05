@@ -61,11 +61,9 @@ exports.getPost = async (req, res) => {
 		}
 	],
         where: { 
-			[Op.and]: [{
-				[Op.or]: [
-					{deleted_status: 0},
-					{deleted_status: null}
-				]},{id: req.params.postId }
+			[Op.and]: [
+				{deleted_status: 0},
+				{id: req.params.postId}
 			]}
     }).then(result => {
 		res.json(result)
@@ -83,7 +81,7 @@ exports.updatePost = async (req, res) => {
 	    if(result)
 	        res.json(result)
 	    else
-		res.json({"result" : 0})
+			res.json({"result" : 0})
     });
 }
 
