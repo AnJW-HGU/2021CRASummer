@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -6,7 +8,37 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/animation.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+
+Future<Splash> fetchSplash() async {
+  var response = await http.get(Uri.parse('https://0c5f29c1-526c-4b53-af83-ce20fecb0819.mock.pstmn.io/noti?user_id=020202'));
+
+  if (response.statusCode == 200) {
+    // 만약 서버로의 요청이 성공하면, JSON을 파싱합니다.
+    print("a");
+    return Splash.fromJson(json.decode(response.body));
+  } else {
+    // 만약 요청이 실패하면, 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
+class Splash {
+  var splash_id;
+  var splash_is_logined;
+
+  Splash({this.splash_id, this.splash_is_logined});
+
+  factory Splash.fromJson(Map<String, dynamic> json) {
+    return Splash(
+      splash_id: json["id"],
+      splash_is_logined: json["is_logined"],
+    );
+  }
+}
+
 
 class SplashPage extends StatefulWidget {
   @override
@@ -14,8 +46,11 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+  late Future<Splash> splash;
+
   late AnimationController _controller;
   late Animation<double> _animation;
+
   bool _isLoggedIn = false;
 
   void initState() {
@@ -27,20 +62,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
     _controller.forward();
     super.initState();
+    splash = fetchSplash();
 
-    _isLoggedIn = true; //_getUserLoggedInStatus();
-  }
 
-  /*_getUserLoggedInStatus() async {
-    await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
-      if (value != null) {
-        setState(() {
-          _isLoggedIn = value;
-        });
-      }
-    });
   }
-   */
 
   Future MainPage() async {
     await Future.delayed(Duration(seconds: 3), () => Navigator.pop(context));
