@@ -100,7 +100,6 @@ class _NotiPageState extends State<NotiPage> {
 
                   Padding(padding: EdgeInsets.only(bottom: 10)),
 
-
                   Container(
                      child: FutureBuilder<Noti>(
                         future: noti,
