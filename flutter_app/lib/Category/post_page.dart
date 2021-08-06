@@ -97,6 +97,7 @@ class _PostPageState extends State<PostPage> {
   bool _isComment = true;
   @override
   void dispose() {
+    super.dispose();
     commentController.dispose();
   }
 
@@ -187,6 +188,7 @@ class _PostPageState extends State<PostPage> {
               )
             ],
           ),
+
           body: FutureBuilder<Post>(
             future: post,
             builder: (context, snapshot) {
@@ -372,7 +374,7 @@ class _PostPageState extends State<PostPage> {
                                           child: Text(
                                             snapshot.data!.post_userName,
                                             style: TextStyle(
-                                              color: themeColor2,
+                                              color: Colors.black,
                                               fontFamily: "Barun",
                                               fontSize: 15.sp,
                                               fontWeight: FontWeight.w400,
@@ -407,37 +409,63 @@ class _PostPageState extends State<PostPage> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
-                        color: Colors.white,
+                        constraints: BoxConstraints(
+                          maxHeight: 80.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                            top: BorderSide(
+                              width: 1,
+                              color: grayColor1,
+                            ),
+                          ),
+                        ),
                         child: Padding(
                           padding: EdgeInsets.only(left: 15.w, right: 15.w),
-                          child: TextField(
-                            controller: commentController,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            // onSubmitted: (value) {
-                            //   print("${commentController.text}");
-                            // },
-                            decoration: InputDecoration(
-                              hintText: "답변을 입력하세요.",
-                              hintStyle: TextStyle(
-                                fontFamily: "Barun",
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: TextField(
+                                    controller: commentController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    // onSubmitted: (value) {
+                                    //   print("${commentController.text}");
+                                    // },
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "답변을 입력하세요.",
+                                      hintStyle: TextStyle(
+                                        fontFamily: "Barun",
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+
+                                      // border: OutlineInputBorder(
+                                      //   borderSide: BorderSide(
+                                      //     color: grayColor2,
+                                      //     width: 1,
+                                      //   ),
+                                      //   borderRadius: BorderRadius.circular(15),
+                                      // ),
+                                    ),
+                                  ),
+                                ),
                               ),
 
-                              suffixIcon: IconButton(
+                              IconButton(
                                 onPressed: () {
+                                  print("${commentController.text}");
+                                  commentController.clear();
                                 },
-                                icon: Icon(Icons.check),
-                              )
-                              // border: OutlineInputBorder(
-                              //   borderSide: BorderSide(
-                              //     color: grayColor2,
-                              //     width: 1,
-                              //   ),
-                              //   borderRadius: BorderRadius.circular(15),
-                              // ),
-                            ),
+                                icon: Icon(
+                                    Icons.check,
+                                  color: themeColor2,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
