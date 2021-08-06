@@ -62,10 +62,6 @@ class Post {
     this.post_adopted_status,
   });
 
-  getPostSub() {
-    return post_sub;
-  }
-
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       post_id: json["post_id"],
@@ -96,6 +92,13 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   late Future<Post> post;
+
+  final commentController = TextEditingController();
+  bool _isComment = true;
+  @override
+  void dispose() {
+    commentController.dispose();
+  }
 
   @override
   void initState() {
@@ -190,6 +193,8 @@ class _PostPageState extends State<PostPage> {
               if (snapshot.data != null) {
                 return Column(
                   children: [
+
+                    // 질문 관련
                     Container(
                       padding: EdgeInsets.only(
                           top: 0.h, left: 30.w, right: 30.w, bottom: 25.h),
@@ -337,7 +342,7 @@ class _PostPageState extends State<PostPage> {
                       ),
                     ),
 
-                    // 댓글
+                    // 댓글 관련
                     Expanded(
                       child: Padding(
                         padding:
@@ -398,6 +403,45 @@ class _PostPageState extends State<PostPage> {
                         ),
                       ),
                     ),
+
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 15.w, right: 15.w),
+                          child: TextField(
+                            controller: commentController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            // onSubmitted: (value) {
+                            //   print("${commentController.text}");
+                            // },
+                            decoration: InputDecoration(
+                              hintText: "답변을 입력하세요.",
+                              hintStyle: TextStyle(
+                                fontFamily: "Barun",
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                },
+                                icon: Icon(Icons.check),
+                              )
+                              // border: OutlineInputBorder(
+                              //   borderSide: BorderSide(
+                              //     color: grayColor2,
+                              //     width: 1,
+                              //   ),
+                              //   borderRadius: BorderRadius.circular(15),
+                              // ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 );
               }

@@ -24,7 +24,7 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMixin {
   var _userId; // 유저 아이디
 
-  final _scroll = ScrollController();
+  // final _scroll = ScrollController();
 
   // 학부 리스트
   final List<String> _majorList = <String> [
@@ -74,7 +74,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
                           tooltip: "Login Button",
                           iconSize: 27.w,
                           onPressed: () {
-                            Get.to(LoginPage());
+                            Get.to(() => LoginPage());
                           }
                       ),
                     ),
@@ -87,7 +87,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
                         tooltip: "Notification Button",
                         iconSize: 27.w,
                         onPressed: () {
-                          Get.to(NotiPage());
+                          Get.to(() => NotiPage());
                         },
                       ),
                     ),
@@ -102,7 +102,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
                             tooltip: "Profile Button",
                             iconSize: 27.w,
                             onPressed: () {
-                              Get.to(MyProfilePage());
+                              Get.to(() => MyProfilePage());
                             }
                         ),
                       ),
@@ -122,7 +122,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
                       // 나만의 게시판 버튼
                       GestureDetector(
                         onTap: () {
-                          Get.to(MyBoardPage(), arguments: "나만의 게시판", transition: Transition.cupertino);
+                          Get.to(() => MyBoardPage(), arguments: "나만의 게시판", transition: Transition.cupertino);
                         },
                         child: Container( // 숨김리스트 아닌 카테고리
                           width: 355.w,
@@ -185,7 +185,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
   Widget _buildCategory(inTitle) {
     return GestureDetector(
       onTap: () {
-        Get.to(BoardPage(), arguments: inTitle, transition: Transition.cupertino);
+        Get.to(() => BoardPage(), arguments: inTitle, transition: Transition.cupertino);
       },
       child: Container(
         width: 355.w,
@@ -219,11 +219,11 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
   // 숨김리스트 카테고리
   Widget _buildExpansionCategory(inTitle, listData) {
 
-    AnimationController _animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-    _animationController.forward(from:0.0);
+    // AnimationController _animationController = AnimationController(
+    //   duration: const Duration(seconds: 2),
+    //   vsync: this,
+    // );
+    // _animationController.forward(from:0.0);
 
     // Animation<double> _animation = CurvedAnimation(
     //   parent: _animationController, curve: Curves.linear);
@@ -248,17 +248,17 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
           ),
 
           // 오른쪽 아이콘!
-          // trailing: Icon(
-          //   Icons.arrow_drop_down_rounded,
-          //   color: themeColor3,
-          // ),
-          trailing: RotationTransition(
-            turns: Tween(begin: 0.0, end: 0.5).animate(_animationController),
-            child: Icon(
-              Icons.arrow_drop_up_rounded,
-              color: themeColor3,
-            ),
+          trailing: Icon(
+            Icons.arrow_drop_down_rounded,
+            color: themeColor3,
           ),
+          // trailing: RotationTransition(
+          //   turns: Tween(begin: 0.0, end: 0.5).animate(_animationController),
+          //   child: Icon(
+          //     Icons.arrow_drop_up_rounded,
+          //     color: themeColor3,
+          //   ),
+          // ),
 
           // 처음에 펼쳐져있냐 아니냐
           initiallyExpanded: false,
@@ -302,7 +302,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Get.to(BoardPage(), arguments: inTitle, transition: Transition.cupertino);
+        Get.to(() => BoardPage(), arguments: inTitle, transition: Transition.cupertino);
       },
       child: Container(
         padding: EdgeInsets.only(top: 12, bottom: 12, left: 20.w, right: 20.w),

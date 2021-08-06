@@ -176,7 +176,7 @@ class _SubSearchPageState extends State<SubSearchPage> {
                       // FocusScope.of(context).unfocus();
                       },
                     padding: EdgeInsets.all(0.0),
-                    icon: Icon(Icons.clear, color: themeColor1,),
+                    icon: Icon(Icons.clear , color: themeColor1,),
                   ),
 
                   hintText: "강의명 또는 교수명을 입력하세요.",
