@@ -23,7 +23,6 @@ Future<User> fetchUser() async {
   } else {
     throw Exception("Failed to load User");
   }
-
 }
 
 class User{
