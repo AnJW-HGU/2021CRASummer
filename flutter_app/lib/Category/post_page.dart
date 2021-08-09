@@ -1,16 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'dart:ui';
-import 'dart:math';
 
 import 'package:studytogether/main.dart';
 
@@ -25,10 +21,6 @@ Future<Post> fetchPost() async {
   // String queryString = Uri(queryParameters: queryParams).query;
   var postUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post"+"/"+post_id;
   var response = await http.get(Uri.parse(postUrl));
-
-  // String postUrl =
-  //     "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post?post_id=000001";
-  // var response = await http.get(Uri.parse(postUrl));
 
   if (response.statusCode == 200) {
     return Post.fromJson(json.decode(response.body));
@@ -81,6 +73,50 @@ class Post {
 
 
 //Comment
+_AddComment(inPostId, inUserId, inContent) async {
+  String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Comment/";
+  Comment _addComment = Comment(inPostId, inUserId, inContent);
+
+  return (await apiRequest(url, _addComment));
+}
+
+apiRequest(url, _addComment) async {
+  var body = utf8.encode(jsonEncode(_addComment));
+  http.Response response = await http.post(
+    Uri.parse(url),
+    headers: <String, String> {
+      'Content-type': 'application/json',
+    },
+    body: body,
+  );
+
+  String reply = "작성에 실패하였습니다.";
+  if (response.statusCode == 200) {
+    reply = response.body;
+  }
+  return reply;
+}
+
+class Comment {
+  var comment_post_id;
+  var comment_user_id;
+  var comment_content;
+
+  Comment(inPostId, inUserId, inContent) {
+    comment_post_id = inPostId;
+    comment_user_id = inUserId;
+    comment_content = inContent;
+  }
+
+  //jsonEncode 함수 있어서 메소드를 부를 필요는 없음
+  Map<String, dynamic> toJson() =>
+      {
+        "postId": comment_post_id,
+        "userId": comment_user_id,
+        "content": comment_content,
+      };
+}
+
 
 
 // UI
@@ -94,8 +130,11 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   late Future<Post> post;
 
+  final userId=1;
+
   final commentController = TextEditingController();
   bool _isComment = true;
+
   @override
   void dispose() {
     super.dispose();
@@ -354,7 +393,7 @@ class _PostPageState extends State<PostPage> {
                               // height: 377.h,
                               child: Padding(
                                 padding:
-                                EdgeInsets.only(top: 20.h, left: 15.w, right: 15.w),
+                                EdgeInsets.only(top: 20.h, bottom: 20.h, left: 15.w, right: 15.w),
                                 child: Container(
                                   padding: EdgeInsets.only(
                                       top: 15.w, left: 20.w, right: 20.w, bottom: 20.w),
@@ -466,7 +505,7 @@ class _PostPageState extends State<PostPage> {
 
                               IconButton(
                                 onPressed: () {
-                                  print("${commentController.text}");
+                                  _AddComment(snapshot.data!.post_id, userId, "${commentController.text}");
                                   commentController.clear();
                                 },
                                 icon: Icon(

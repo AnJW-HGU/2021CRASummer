@@ -82,8 +82,12 @@ class _AddPostPageState extends State<AddPostPage> {
       },
       body: body,
     );
-    String reply = response.body;
-    //Http Client로 만들었던 것
+
+    String reply = "작성에 실패하였습니다.";
+    if (response.statusCode == 200) {
+      reply = response.body;
+    }
+    // Http Client로 만들었던 것
     // HttpClient httpClient = new HttpClient();
     // HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
     // request.headers.set('content-type', 'application/json');
@@ -96,32 +100,6 @@ class _AddPostPageState extends State<AddPostPage> {
     // httpClient.close(); // 이때 요청함
     return reply;
   }
-
-  // void _addPostData(inTitle, inContent) async {
-  //   var headers = {
-  //     'Content-Type': 'application/json'
-  //   };
-  //
-  //   var request = http.Request('POST', Uri.parse('https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/'));
-  //   request.bodyFields = {
-  //     'classification_id': '011220',
-  //     'user_id': '200404',
-  //     'image_id': '0',
-  //     'title': "zz",
-  //     'content': "zz"
-  //   };
-  //
-  //   request.headers.addAll(headers);
-  //
-  //   http.StreamedResponse response = await request.send();
-  //
-  //   if (response.statusCode == 200) {
-  //     print(await response.stream.bytesToString());
-  //   }
-  //   else {
-  //     print(response.reasonPhrase);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +138,7 @@ class _AddPostPageState extends State<AddPostPage> {
                 onPressed: _isButtonAbled ? () async {
                   Get.back();
                   String result = await _addPost("${addTitle.text}", "${addContent.text}");
-                  if (result == "OK" || result == "작성이 완료되었습니다.") {
+                  if (result == "OK") {
                     result = "작성이 완료되었습니다.";
                   }
                   else {
@@ -357,12 +335,6 @@ class _AddPostPageState extends State<AddPostPage> {
                         ),
                         backgroundColor: themeColor2,
                         duration: Duration(seconds: 1),
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.only(
-                        //     topLeft: Radius.circular(10),
-                        //     topRight: Radius.circular(10),
-                        //   )
-                        // ),
                       ),
                     );
                   },
@@ -397,23 +369,6 @@ class _AddPostPageState extends State<AddPostPage> {
           duration: Duration(seconds: 1),
         ),
       );
-      // Get.defaultDialog(
-      //   barrierDismissible: true,
-      //   title: "",
-      //   titleStyle: TextStyle(
-      //     fontFamily: "Barun",
-      //     fontSize: 15.sp,
-      //     fontWeight: FontWeight.w400,
-      //   ),
-      //   content: Text(
-      //     "과목을 선택해주세요\n",
-      //     style: TextStyle(
-      //       fontFamily: "Barun",
-      //       fontSize: 17.sp,
-      //       fontWeight: FontWeight.w600,
-      //     ),
-      //   ),
-      // );
     }
     else if (_isTitle != true) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -430,25 +385,6 @@ class _AddPostPageState extends State<AddPostPage> {
           duration: Duration(seconds: 1),
         ),
       );
-      // Get.defaultDialog(
-      //   barrierDismissible: true,
-      //   title: "",
-      //   titleStyle: TextStyle(
-      //     color: grayColor2,
-      //     fontFamily: "Barun",
-      //     fontSize: 16.sp,
-      //     fontWeight: FontWeight.w400,
-      //   ),
-      //   content: Text(
-      //     "제목을 입력해주세요\n",
-      //     style: TextStyle(
-      //       color: themeColor1,
-      //       fontFamily: "Barun",
-      //       fontSize: 17.sp,
-      //       fontWeight: FontWeight.w500,
-      //     ),
-      //   ),
-      // );
     }
     else if (_isContent != true) {
       ScaffoldMessenger.of(context).showSnackBar(
