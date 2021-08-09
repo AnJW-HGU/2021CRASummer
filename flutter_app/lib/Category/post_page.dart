@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -167,7 +168,7 @@ class _PostPageState extends State<PostPage> {
 
             // 뒤로가기 버튼
             leading: IconButton(
-              color: themeColor1,
+              color: themeColor2,
               icon: Icon(Icons.arrow_back_ios_new_rounded),
               tooltip: "Back Button",
               iconSize: 15.w,
@@ -195,217 +196,225 @@ class _PostPageState extends State<PostPage> {
               if (snapshot.data != null) {
                 return Column(
                   children: [
-
-                    // 질문 관련
-                    Container(
-                      padding: EdgeInsets.only(
-                          top: 0.h, left: 30.w, right: 30.w, bottom: 25.h),
-                      child: Column(
-                        children: [
-                          // 프로필과 닉네임
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {},
-                                child: CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor: themeColor4,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 10.w),
-                                child: Text(
-                                  snapshot.data!.post_userName,
-                                  style: TextStyle(
-                                    color: themeColor2,
-                                    fontFamily: "Barun",
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          // 질문 제목과 질문 내용
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.h),
-                                child: Text(
-                                  snapshot.data!.post_title,
-                                  style: TextStyle(
-                                    fontFamily: "Barun",
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10.h),
-                                child: Text(
-                                  snapshot.data!.post_content,
-                                  style: TextStyle(
-                                    fontFamily: "Barun",
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-
-                          Padding(
-                            padding: EdgeInsets.only(top: 15.h, left: 0, right: 0, bottom: 0),
-                          ),
-                          // 날짜와 댓글 총 수
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-
-                                    //comment 아이콘
-                                    padding: EdgeInsets.only(left:0, right:3.w, top:0, bottom:0),
-                                    child: Icon(
-                                      Icons.comment_outlined,
-                                      size: 15.sp,
-                                      color: grayColor1,
-                                    ),
-                                  ),
-
-                                  //comment 수
-                                  Padding(
-                                    padding:EdgeInsets.all(0),
-                                    child: Text(
-                                      snapshot.data!.post_comments_count.toString(),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: grayColor1,
-                                        fontFamily: "barun",
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                  ),
-
-                                  // 채택여부 -> 이건 어차피 댓글로 보여지니까
-                                  // Padding(
-                                  //   padding: EdgeInsets.only(left: 5.w),
-                                  //   child: snapshot.data!.post_adopted_status ?
-                                  //   Icon(
-                                  //     Icons.star_rounded,
-                                  //     size: 19.sp,
-                                  //     color: grayColor1,
-                                  //   ) :
-                                  //   Icon(
-                                  //     Icons.star_outline_rounded,
-                                  //     size: 19.sp,
-                                  //     color: grayColor1,
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
-
-                              Padding(
-                                padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
-                                child: Text(
-                                  snapshot.data!.post_writtenDate,
-                                  style: TextStyle(
-                                    color: grayColor1,
-                                    fontFamily: "barun",
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ),
-
-                            ],
-                          ),
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: blurColor,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                      ),
-                    ),
-
-                    // 댓글 관련
                     Expanded(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 20.h, left: 15.w, right: 15.w),
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              top: 15.w, left: 20.w, right: 20.w, bottom: 20.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              //댓글들...
-                              Padding(
-                                padding: EdgeInsets.all(0),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor: themeColor4,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          children: [
+                            // 배경? == 질문+댓글
+                            Container(
+                              padding: EdgeInsets.only(
+                                  top: 0.h, left: 30.w, right: 30.w, bottom: 25.h),
+                              child: Column(
+                                children: [
+                                  // 프로필과 닉네임
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: themeColor4,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 10.w),
+                                        child: Text(
+                                          snapshot.data!.post_userName,
+                                          style: TextStyle(
+                                            color: themeColor2,
+                                            fontFamily: "Barun",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 10.w),
-                                          child: Text(
-                                            snapshot.data!.post_userName,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: "Barun",
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w400,
+                                      ),
+                                    ],
+                                  ),
+
+                                  // 질문 제목과 질문 내용
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 20.h),
+                                        child: Text(
+                                          snapshot.data!.post_title,
+                                          style: TextStyle(
+                                            fontFamily: "Barun",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10.h),
+                                        child: Text(
+                                          snapshot.data!.post_content,
+                                          style: TextStyle(
+                                            fontFamily: "Barun",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 15.h, left: 0, right: 0, bottom: 0),
+                                  ),
+                                  // 날짜와 댓글 총 수
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Padding(
+
+                                            //comment 아이콘
+                                            padding: EdgeInsets.only(left:0, right:3.w, top:0, bottom:0),
+                                            child: Icon(
+                                              Icons.comment_outlined,
+                                              size: 15.sp,
+                                              color: grayColor1,
                                             ),
                                           ),
+
+                                          //comment 수
+                                          Padding(
+                                            padding:EdgeInsets.all(0),
+                                            child: Text(
+                                              snapshot.data!.post_comments_count.toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: grayColor1,
+                                                fontFamily: "barun",
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ),
+
+                                          // 채택여부 -> 이건 어차피 댓글로 보여지니까
+                                          // Padding(
+                                          //   padding: EdgeInsets.only(left: 5.w),
+                                          //   child: snapshot.data!.post_adopted_status ?
+                                          //   Icon(
+                                          //     Icons.star_rounded,
+                                          //     size: 19.sp,
+                                          //     color: grayColor1,
+                                          //   ) :
+                                          //   Icon(
+                                          //     Icons.star_outline_rounded,
+                                          //     size: 19.sp,
+                                          //     color: grayColor1,
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                                        child: Text(
+                                          snapshot.data!.post_writtenDate,
+                                          style: TextStyle(
+                                            color: grayColor1,
+                                            fontFamily: "barun",
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w300,
+                                          ),
                                         ),
-                                      ],
+                                      ),
+
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: blurColor,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  )
+                                ],
+                              ),
+                            ),
+
+                            // 댓글 관련
+                            Container(
+                              // height: 377.h,
+                              child: Padding(
+                                padding:
+                                EdgeInsets.only(top: 20.h, left: 15.w, right: 15.w),
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      top: 15.w, left: 20.w, right: 20.w, bottom: 20.w),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+
+                                      //댓글들...
+
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: themeColor4,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 10.w),
+                                            child: Text(
+                                              snapshot.data!.post_userName,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: "Barun",
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
                                     ),
-                                  ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: blurColor,
+                                        blurRadius: 4,
+                                        offset: Offset(2, 0),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: blurColor,
-                                blurRadius: 4,
-                                offset: Offset(2, 0),
-                              )
-                            ],
-                          ),
+                          ],
                         ),
                       ),
                     ),
 
+                    // 답변 입력창
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
@@ -422,7 +431,7 @@ class _PostPageState extends State<PostPage> {
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 15.w, right: 15.w),
+                          padding: EdgeInsets.only(left: 15.w),
                           child: Row(
                             children: [
                               Expanded(
@@ -461,122 +470,24 @@ class _PostPageState extends State<PostPage> {
                                   commentController.clear();
                                 },
                                 icon: Icon(
-                                    Icons.check,
-                                  color: themeColor2,
+                                  Icons.check,
+                                  color: grayColor1,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
+
                 );
               }
               else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
 
-              return Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: 0.h, left: 30.w, right: 30.w, bottom: 25.h),
-                    child: Column(
-                      children: [
-                        // 프로필과 닉네임
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundColor: themeColor4,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10.w),
-                              child: Container(
-                                width: 100.w,
-                                height: 16.h,
-                                color: themeColor4,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        // 질문 제목과 질문 내용
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 20.h),
-                              child: Container(
-                                height: 16.h,
-                                color: grayColor2,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: Container(
-                                height: 30.h,
-                                color: grayColor2,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: blurColor,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                    ),
-                  ),
-
-                  // 댓글
-                  Expanded(
-                    child: Padding(
-                      padding:
-                      EdgeInsets.only(top: 20, left: 15.w, right: 15.w),
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            top: 15.w, left: 30.w, right: 30.w, bottom: 20.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            //댓글들...
-                            Text("Hi"),
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: blurColor,
-                              blurRadius: 4,
-                              offset: Offset(2, 0),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              );
+              return Center(child: CircularProgressIndicator(),);
             },
           ),
         );
