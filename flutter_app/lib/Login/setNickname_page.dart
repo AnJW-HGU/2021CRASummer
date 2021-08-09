@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +9,49 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:studytogether/splash_page.dart';
+import 'package:http/http.dart' as http;
+
+Future<Nickname> fetchNickname() async {
+  var response = await http.post(
+      Uri.parse('https://0c5f29c1-526c-4b53-af83-ce20fecb0819.mock.pstmn.io/nickname?user_id=000000'),
+      headers: <String, String> {
+        'Content-Type': 'application/json'
+      },
+      body: <String, String> {
+        "id" : "22000050",
+        "nickname": "가나다"
+      }
+  );
+
+  if (response.statusCode == 200) {
+    // 만약 서버로의 요청이 성공하면, JSON을 파싱합니다.
+    print("a");
+    return Nickname.fromJson(json.decode(response.body));
+  } else {
+    // 만약 요청이 실패하면, 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
+class Nickname {
+  var noti_id;
+  var noti_kind;
+  var noti_read_status;
+  var noti_written_date;
+  var noti_post_id;
+
+  Nickname({this.noti_id, this.noti_kind, this.noti_read_status, this.noti_written_date, this.noti_post_id});
+
+  factory Nickname.fromJson(Map<String, dynamic> json) {
+    return Nickname(
+      noti_id: json["id"],
+      noti_kind: json["kind"],
+      noti_read_status: json["read_status"],
+      noti_written_date: json["written_date"],
+      noti_post_id: json["post_id"],
+    );
+  }
+}
 
 
 class SetNicknamePage extends StatefulWidget {
@@ -15,6 +60,15 @@ class SetNicknamePage extends StatefulWidget {
 }
 
 class _SetNicknamePageState extends State<SetNicknamePage> {
+
+  late Future<Nickname> nickname;
+
+  @override
+  void initState() {
+    super.initState();
+    nickname = fetchNickname();
+  }
+
   bool _isChecked1 = false; //이용약관
   bool _isChecked2 = false; //개인정보 처리
   bool _isNamed = false; //닉네임을 입력했는지
