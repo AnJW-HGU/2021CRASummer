@@ -133,7 +133,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       //  _launchURL(context);
                       //};
 
-                    Get.to(SetNicknamePage());
+                    Get.to(SetNicknamePage(), arguments: "22000000",); //user_id
                   },
                   //버튼 안에 text
                   label: Text("      구글로 회원가입        ", style: TextStyle(
