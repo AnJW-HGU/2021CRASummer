@@ -15,7 +15,7 @@ import 'dart:convert';
 import 'dart:async';
 
 Future<User> fetchUser() async {
-  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?post_id=1';
+  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?user_id=1';
   var response = await http.get(Uri.parse(userUrl));
 
   if(response.statusCode == 200) {
@@ -72,8 +72,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   void initState() {
-    super.initState();
     user = fetchUser();
+    super.initState();
   }
 
 
