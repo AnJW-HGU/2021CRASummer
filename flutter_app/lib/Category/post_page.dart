@@ -122,7 +122,7 @@ class AddComment {
 List<Comment> CommentfromJson (json) {
   List<Comment> result = [];
   json.forEach((item){
-    result.add(Comment(item["user_id"], item["nickname"], item['content'], item["recommends_count"], item["written_date"], item["adopted_status"]));
+    result.add(Comment(item["id"], item["user_id"], item["nickname"], item['content'], item["recommends_count"], item["written_date"], item["adopted_status"]));
   });
 
   return result;
@@ -144,6 +144,7 @@ Future<List<Comment>> fetchComment() async {
 
 // Comment 가져올 때 데이터 형식
 class Comment{
+  var comment_id;
   var comment_userId;
   var comment_nickName;
   var comment_content;
@@ -152,6 +153,7 @@ class Comment{
   var comment_adoptedStatus;
 
   Comment(
+    this.comment_id,
     this.comment_userId,
     this.comment_nickName,
     this.comment_content,
@@ -181,6 +183,50 @@ class Comment{
   // }
 }
 
+
+// Recommend(추천) 누르기
+_AddRecommend (inCommentId, inUserId) async {
+  String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/recommend/";
+  Recommend _addRecommend = Recommend(inCommentId, inUserId);
+
+  return (await apiRequest(url, _addRecommend));
+}
+
+_recommendRequest(url, _addRecommend) async {
+  var body = utf8.encode(jsonEncode(_addRecommend));
+  http.Response response = await http.post(
+    Uri.parse(url),
+    headers: <String, String> {
+      'Content-type': 'application/json',
+    },
+    body: body,
+  );
+
+  String reply = "이미 추천한 답변입니다.";
+  if (response.statusCode == 200) {
+    if (response.body == "Ok") {
+      reply = "답변을 추천하였습니다.";
+    }
+  }
+  return reply;
+}
+
+// Recommend(추천)의 Data형식
+class Recommend {
+  var comment_id;
+  var recommend_userId;
+
+  Recommend(inCommentId, inUserId) {
+    comment_id = inCommentId;
+    recommend_userId = inUserId;
+  }
+
+  Map<String, dynamic> toJson() =>
+      {
+        "id": comment_id,
+        "userId": recommend_userId,
+      };
+}
 
 
 ///////////////////////////////////////////////////////////////////
@@ -585,6 +631,7 @@ class _PostPageState extends State<PostPage> {
                                                       // 댓글추천
                                                       InkWell(
                                                         onTap: () {
+                                                          _AddRecommend(_commentDataList[i].comment_id, userId);
                                                           print("Thumb Up");
                                                         },
                                                         child: Container(
@@ -636,13 +683,46 @@ class _PostPageState extends State<PostPage> {
                                                         ),
                                                       ),
                                                     ],
-                                                  )
+                                                  ),
                                                 ),
                                               ],
                                             ),
 
 
-                                            // 구분선
+                                            // 디스커션 구분선
+                                            Divider(
+                                              color: grayColor2,
+                                            ),
+
+                                            // 대댓글 버튼
+                                            GestureDetector(
+                                              behavior: HitTestBehavior.opaque,
+                                              onTap: () {
+                                                print("대댓글 작성할래");
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.only(left: 10.w),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.add_rounded,
+                                                      color: grayColor2,
+                                                      size: 16.sp,
+                                                    ),
+                                                    Text(
+                                                      "Discussion",
+                                                      style: TextStyle(
+                                                        color: grayColor2,
+                                                        fontFamily: "Barun",
+                                                        fontSize: 14.sp,
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            // 댓글 구분선
                                             Divider(
                                               color: grayColor1,
                                             ),
