@@ -482,6 +482,8 @@ class _PostPageState extends State<PostPage> {
                               ),
                             ),
 
+
+
                             // 댓글 관련
                             Container(
                               width: 450.w,
@@ -500,6 +502,7 @@ class _PostPageState extends State<PostPage> {
                                       for (int i=0; i<_commentDataList.length; i++) Container(
                                         child: Column(
                                           children: [
+
                                             // 프로필 & 닉네임 & 채택
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -547,6 +550,7 @@ class _PostPageState extends State<PostPage> {
 
                                             // 댓글 내용
                                             Container(
+                                              padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 _commentDataList[i].comment_content,
@@ -556,6 +560,91 @@ class _PostPageState extends State<PostPage> {
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
+                                            ),
+
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.all(0),
+                                                  child: Text(
+                                                    _commentDataList[i].comment_writtenDate,
+                                                    style: TextStyle(
+                                                      color: grayColor1,
+                                                      fontFamily: "Barun",
+                                                      fontSize: 14.sp,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                Material(
+                                                  child: Row(
+                                                    children: [
+
+                                                      // 댓글추천
+                                                      InkWell(
+                                                        onTap: () {
+                                                          print("Thumb Up");
+                                                        },
+                                                        child: Container(
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                "추천",
+                                                                style: TextStyle(
+                                                                  color: grayColor1,
+                                                                  fontFamily: "Barun",
+                                                                  fontSize: 14.sp,
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ),
+
+                                                              Padding(padding: EdgeInsets.all(2.w)),
+
+                                                              Text(
+                                                                _commentDataList[i].comment_recommendCount.toString(),
+                                                                style: TextStyle(
+                                                                  color: grayColor1,
+                                                                  fontFamily: "Barun",
+                                                                  fontSize: 14.sp,
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+
+                                                      Padding(padding: EdgeInsets.all(5.w)),
+                                                      
+                                                      // 댓글 신고
+                                                      InkWell(
+                                                        onTap: () {
+                                                          print("Report Button");
+                                                        },
+                                                        child: Container(
+                                                          child: Text(
+                                                            "신고",
+                                                            style: TextStyle(
+                                                              color: grayColor1,
+                                                              fontFamily: "Barun",
+                                                              fontSize: 14.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                              ],
+                                            ),
+
+
+                                            // 구분선
+                                            Divider(
+                                              color: grayColor1,
                                             ),
                                           ],
                                         ),
