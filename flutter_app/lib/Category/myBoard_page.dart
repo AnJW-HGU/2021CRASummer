@@ -25,8 +25,6 @@ class MyBoardPage extends StatefulWidget {
 }
 
 class _MyBoardPageState extends State<MyBoardPage> {
-  String boardTitle = Get.arguments; // 카테고리 페이지로부터 타이틀 받음
-
   // 선호 과목리스트
   final List<String> _userSubList = <String>[
     "성경의 이해", "데이터 구조"
@@ -60,8 +58,6 @@ class _MyBoardPageState extends State<MyBoardPage> {
   ].obs;
 
   var _maxPost = 20; // 게시글 총 개수
-
-  // final _refreshKey = GlobalKey<RefreshIndicatorState>();
   var _scroll = ScrollController().obs;
 
   var _subData = <String>[].obs;
@@ -119,9 +115,9 @@ class _MyBoardPageState extends State<MyBoardPage> {
             appBar: AppBar(
               backgroundColor: themeColor1, // 앱바색
               elevation: 0.0, // 앱바 그림자 없게 하기
-              centerTitle: true,
+              centerTitle: false,
               title: Text(
-                boardTitle, // 타이틀
+                Get.arguments, // 타이틀
                 style: TextStyle(
                   fontFamily: "Barun",
                   fontSize: 20.sp,
@@ -143,6 +139,23 @@ class _MyBoardPageState extends State<MyBoardPage> {
               actions: [
                 Row(
                   children: [
+                    // 검색 버튼
+                    Padding(
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        width: 40.w,
+                        child: IconButton(
+                            icon: Icon(Icons.search_rounded),
+                            tooltip: "Profile Button",
+                            iconSize: 27.w,
+                            onPressed: () {
+                              Get.to(() => SearchPage(), arguments: Get.arguments); // 카테고리로부터 받은 게시판 타이틀
+                            }
+                        ),
+                      ),
+                    ),
+
+
                     // 알림버튼
                     Container(
                       width: 40,
@@ -178,39 +191,10 @@ class _MyBoardPageState extends State<MyBoardPage> {
             ),
 
 
-            // 검색 버튼
-            // Padding(
-            //     padding: EdgeInsets.only(top: 5, bottom: 20),
-            //     child: GestureDetector(
-            //       onTap: () {
-            //         Get.to(SearchPage());
-            //       },
-            //
-            //       child: Container(
-            //         width: 350.w,
-            //         height: 35,
-            //         alignment: Alignment.centerRight,
-            //
-            //         padding: EdgeInsets.only(right: 10.w),
-            //         child: Icon(
-            //           Icons.search_rounded,
-            //           color: Colors.white,
-            //         ),
-            //
-            //         decoration: BoxDecoration(
-            //             color: Colors.white.withOpacity(0.25),
-            //             border: Border.all(color: Colors.white.withOpacity(0.75)),
-            //             borderRadius: BorderRadius.circular(10)
-            //         ),
-            //       ),
-            //     )
-            // ),
-
-
             // 게시글
             body: SafeArea(
               child: Container (
-                padding: EdgeInsets.only(top: 30, left: 30.w, right: 30.w),
+                padding: EdgeInsets.only(top: 30, bottom: 10.h, left: 25.w, right: 25.w),
                 //흰색 배경안에 들어갈 것들
                 child: Column(
                   children: [
@@ -281,7 +265,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
                       ],
                     ),
 
-                    Padding(padding: EdgeInsets.only(bottom: 20)),
+                    Padding(padding: EdgeInsets.only(bottom: 5)),
 
                     //게시글 리스트
                     Expanded(
@@ -289,15 +273,16 @@ class _MyBoardPageState extends State<MyBoardPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           // 게시판 흰색 부분에 들어갈 것
+
                           // 타이틀 - 게시글
-                          Text(
-                            "게시글",
-                            style: TextStyle(
-                              fontFamily: "Barun",
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          // Text(
+                          //   "게시글",
+                          //   style: TextStyle(
+                          //     fontFamily: "Barun",
+                          //     fontSize: 20.sp,
+                          //     fontWeight: FontWeight.w500,
+                          //   ),
+                          // ),
 
                           Padding(padding: EdgeInsets.only(bottom: 10)),
 
@@ -333,40 +318,40 @@ class _MyBoardPageState extends State<MyBoardPage> {
             ),
 
             // 하단 네비게이터 (나중에 Tapbar로 고칠 예정/현재 bottomAppBar)
-            bottomNavigationBar: BottomAppBar(
-              color: Colors.white,
-              // shape: CircularNotchedRectangle(),
-              // notchMargin: 4.0,
-
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                children: [
-                  IconButton(
-                    onPressed: () {
-
-                    },
-                    icon: Icon(
-                      Icons.question_answer_rounded,
-                      color: grayColor1,
-                    ),
-                    tooltip: "Q&A Board Button",
-                  ),
-
-                  IconButton(
-                    onPressed: () {
-
-                    },
-                    icon: Icon(
-                      Icons.people_rounded,
-                      color: grayColor1,
-                    ),
-                    tooltip: "Study Board Button",
-                  ),
-                ],
-              ),
-            ),
+            // bottomNavigationBar: BottomAppBar(
+            //   color: Colors.white,
+            //   // shape: CircularNotchedRectangle(),
+            //   // notchMargin: 4.0,
+            //
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.max,
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //
+            //     children: [
+            //       IconButton(
+            //         onPressed: () {
+            //
+            //         },
+            //         icon: Icon(
+            //           Icons.question_answer_rounded,
+            //           color: grayColor1,
+            //         ),
+            //         tooltip: "Q&A Board Button",
+            //       ),
+            //
+            //       IconButton(
+            //         onPressed: () {
+            //
+            //         },
+            //         icon: Icon(
+            //           Icons.people_rounded,
+            //           color: grayColor1,
+            //         ),
+            //         tooltip: "Study Board Button",
+            //       ),
+            //     ],
+            //   ),
+            // ),
           );
         }
     );

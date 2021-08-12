@@ -13,7 +13,7 @@ import 'package:studytogether/main.dart';
 
 //POST의 데이터 가져오기
 Future<Post> fetchPost() async {
-  final post_id = Get.arguments.toString();
+  final post_id = Get.arguments[0].toString();
   // Map<String, dynamic> queryParams = {
   //   'postId' : post_id,
   // };
@@ -129,7 +129,7 @@ List<Comment> CommentfromJson (json) {
 }
 
 Future<List<Comment>> fetchComment() async {
-  final post_id = Get.arguments.toString();
+  final post_id = Get.arguments[0].toString();
   var commentUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/comments"+"?postId="+post_id;
   // var commentUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/comments?postId=1";
   var response = await http.get(Uri.parse(commentUrl));
@@ -162,15 +162,7 @@ class Comment{
     this.comment_adoptedStatus,
   );
 
-  // Comment(inUserId, inNick, inContent, inRecommend, inWritten, inAdopted) {
-  //   comment_userId=inUserId;
-  //   comment_nickName = inNick;
-  //   comment_content=inContent;
-  //   comment_recommendCount=inRecommend;
-  //   comment_writtenDate=inWritten;
-  //   comment_apoptedStatus=inAdopted;
-  // }
-
+  // factory json
   // factory Comment.fromJson(Map<String, dynamic> json) {
   //   return Comment(
   //     comment_userId: json["user_id"],
@@ -265,13 +257,13 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     super.initState();
     _getComment();
-
     this._scroll.value.addListener(() {
       if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
           this._hasMoreComment.value) {
         _getComment();
       }
     });
+
     post = fetchPost();
   }
 

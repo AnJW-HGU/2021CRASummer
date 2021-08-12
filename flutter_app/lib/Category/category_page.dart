@@ -28,7 +28,7 @@ class _CategoryPageState extends State<CategoryPage> with TickerProviderStateMix
 
   // 학부 리스트
   final List<String> _majorList = <String> [
-    "GLS", "창의융합교육원", "국제어문", "언론정보문화", "커뮤니케이션",
+    "글로벌리더십", "창의융합교육원", "국제어문", "언론정보문화", "커뮤니케이션",
     "경영경제", "법", "상담심리사회복지", "생명과학", "ICT창업", "AI융합교육원",
     "전산전자", "산업정보디자인", "기계제어", "공간환경시스템", "콘텐츠융합디자인",
     "산업교육",
