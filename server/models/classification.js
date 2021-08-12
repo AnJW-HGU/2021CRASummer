@@ -7,39 +7,31 @@ module.exports = (sequelize, DataTypes) => {
             this.hasMany(models.Post, {
                 foreignKey: 'classification_id',
             });
-            this.hasOne(models.Inquiry, {
-                foreignKey: 'user_id'
-            });;
+            // hasMany(Preferred_subjects);
         }
     };
     Classification.init({
-        id: {
-            primaryKey: true,
-            autoIncrement: true,
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        domain: {
-            type: DataTypes.STRING(5),
-            allowNull: false,
-        },
-        major: {
-            type: DataTypes.STRING(15),
-            allowNull: false,
-        },
-        subject: {
-            type: DataTypes.STRING(100),
-            allowNull: false,
-        },
-        professor_name: {
-            type: DataTypes.STRING(65),
-            allowNull: false,
-        }
+        학부: DataTypes.STRING,
+        구분: DataTypes.STRING,
+        과목코드: DataTypes.STRING,
+        분반: DataTypes.STRING,
+        과목명: DataTypes.STRING,
+        학점: DataTypes.STRING,
+        개설정보: DataTypes.STRING,
+        시간: DataTypes.STRING,
+        강의실: DataTypes.STRING,
+        정원: DataTypes.STRING,
+        인원: DataTypes.STRING,
+        영어: DataTypes.STRING,
+        교양: DataTypes.STRING,
+        성적유형: DataTypes.STRING,
+        PF병행: DataTypes.STRING,
+        강의: DataTypes.STRING,
+        비고: DataTypes.STRING
     }, {
         sequelize,
         modelName: 'Classification',
         tableName: 'Classifications',
-        timestamps: false
     });
-    return Classification;
+  return Classification;
 };
