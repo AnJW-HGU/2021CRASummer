@@ -3,14 +3,14 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const { sequelize } = require('./models');
-const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/config/config.json');
-
+const config = require(__dirname + '/config/config.json')[env];
+const passport = require('passport');
 // maybe login ?
 // const secretKey = require('./config/jwt_secret');
 // const passport = require('passport');
@@ -25,9 +25,15 @@ sequelize.sync();
 
 // define router var
 const app = express();
-const router = require('./routes');
 
-// session store
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(cors());
+app.use(logger('dev'));
+app.use(cookieParser('asdfghjkl'));
+
 const sessionStore = new MySQLStore({
     host: config.host,
     port: config.port,
@@ -36,19 +42,30 @@ const sessionStore = new MySQLStore({
     database: config.database
 });
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+const grabController = require('./controllers/grab');
+grabController.main();
 
-app.use(cors());
-app.use(logger('dev'));
+app.use(session({
+	secret: "asdfghjkl",
+	resave: false,
+	saveUninitialized: true,
+	store: sessionStore,
+	cookie: {
+		secure: false,
+		httpOnly: false,
+		maxAge: 1000 * 60 * 2
+	}
+}));
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
-
+const router = require('./routes');
 app.use('/', router);
+
 // TODO: initialize express-session to allow us track the logged-in user across sessions.
 
 // use router var
@@ -56,17 +73,7 @@ app.use('/', router);
 //app.use('/users', userRouter);
 
 // catch 404 and forward to error handler
-app.use(session({
-	secret: "asdfghjkl",
-	resave: false,
-	saveUninitialized: false,
-	store: sessionStore,
-	cookie: {
-		secure: false,
-		httpOnly: true,
-		maxAge: 1000 * 60 * 2
-	}
-}));
+
 
 app.use(function(req, res, next) {
   next(createError(404));
