@@ -62,7 +62,6 @@ class MyQPage extends StatefulWidget {
 }
 
 class _MyQPageState extends State<MyQPage> {
-  // late Future<User_Post> user_post;
   List<User_Post> _userDataList = [];
 
   var _maxUserPostInfo = 30;
@@ -71,6 +70,8 @@ class _MyQPageState extends State<MyQPage> {
 
   var _isLoading = false.obs;
   var _hasMore = false.obs;
+
+  var _refreshKey = GlobalKey<RefreshIndicatorState>(); // 새로고침 key
 
   @override
   void dispose() {
@@ -105,9 +106,17 @@ class _MyQPageState extends State<MyQPage> {
 
   reload() async {
     _isLoading.value = true;
-
-    await Future.delayed(Duration(seconds: 2));
+    _userDataList.clear();
     _getUserPostInfo();
+  }
+
+  // 새로고침
+  Future<Null> refresh() async {
+    _userDataList.clear();
+    _isLoading.value = false;
+    _hasMore.value = false;
+    _getUserPostInfo();
+    await Future.delayed(Duration(seconds: 1));
   }
 
   @override
@@ -138,53 +147,61 @@ class _MyQPageState extends State<MyQPage> {
               centerTitle: true,
               backgroundColor: Colors.white,
             ),
-            body: Container(
-              child: Obx(
-                () => Padding(
-                  padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-                  child: ListView.separated(
-                    controller: scrollController.value,
-                    itemBuilder: (BuildContext _context, index) {
-                      if (index < _userDataList.length) {
+            body: RefreshIndicator(
+              // 새로고침 추가
+              key: _refreshKey,
+              child: Container(
+                child: Obx(
+                  // 질문 리스트
+                  () => Padding(
+                    padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                    child: ListView.separated(
+                      controller: scrollController.value,
+                      itemBuilder: (BuildContext _context, index) {
+                        if (index < _userDataList.length) {
+                          return Container(
+                            child: _makeInfoTile(
+                                "${_userDataList[index].user_subject}",
+                                "${_userDataList[index].user_title}",
+                                "${_userDataList[index].user_content}"),
+                          );
+                        }
+                        if (_hasMore.value || _isLoading.value) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
                         return Container(
-                          child: _makeInfoTile(
-                              "${_userDataList[index].user_subject}",
-                              "${_userDataList[index].user_title}",
-                              "${_userDataList[index].user_content}"),
-                        );
-                      }
-                      if (_hasMore.value || _isLoading.value) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text('질문 수의 마지막 입니다'),
-                              IconButton(
-                                onPressed: () {
-                                  reload();
-                                },
-                                icon: Icon(Icons.arrow_upward_rounded),
-                              ),
-                            ],
+                          padding: const EdgeInsets.all(10.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text('질문 수의 마지막 입니다'),
+                                IconButton(
+                                  onPressed: () {
+                                    reload();
+                                  },
+                                  icon: Icon(Icons.arrow_upward_rounded),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (_, index) => Divider(),
-                    itemCount: _userDataList.length +1,
+                        );
+                      },
+                      separatorBuilder: (_, index) => Divider(),
+                      itemCount: _userDataList.length + 1,
+                    ),
                   ),
                 ),
               ),
+              // 새로고침 시 실행할 함수
+              onRefresh: () => refresh(),
             ),
           );
         });
   }
 
+  // 리스트 만드는 위젯젯
   Widget _makeInfoTile(sub, title, content) {
     return Container(
       child: ListTile(
