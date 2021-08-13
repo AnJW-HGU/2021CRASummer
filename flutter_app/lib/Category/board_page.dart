@@ -9,10 +9,10 @@ import 'dart:ui';
 
 import 'package:studytogether/main.dart';
 
+import 'search_page.dart';
 import 'noti_page.dart';
 import 'package:studytogether/Profile/myProfile_page.dart';
 
-import 'search_page.dart';
 import 'addPost_page.dart';
 
 import 'post_page.dart';

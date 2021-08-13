@@ -2,20 +2,71 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:studytogether/Category/subSearch_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'dart:async';
 import 'dart:ui';
-import 'dart:math';
 
 import 'package:studytogether/main.dart';
 
+import 'search_page.dart';
 import 'noti_page.dart';
 import 'package:studytogether/Profile/myProfile_page.dart';
 
-import 'search_page.dart';
+import 'subSearch_page.dart';
 import 'addPost_page.dart';
 
 import 'post_page.dart';
+
+
+// Posts 데이터 가져오기
+List<Posts> PostsfromJson (json) {
+  List<Posts> result = [];
+  json.forEach((item) {
+    result.add(Posts(item["subject"], item["id"], item["user_id"], item["title"], item["content"], item["comments_count"], item["written_date"], item["adopted_status"]));
+  });
+
+  return result;
+}
+
+Future<List<Posts>> fetchPosts() async {
+  final boardTitle = Get.arguments; // 카테고리 페이지로부터 타이틀 받음
+  var postsUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/posts?major="+boardTitle;
+  var response = await http.get(Uri.parse(postsUrl));
+
+  if (response.statusCode == 200) {
+    return PostsfromJson(json.decode(response.body));
+  } else {
+    throw Exception("Faild to load posts");
+  }
+}
+
+// Posts 데이터 형식
+class Posts{
+  var posts_subject;
+  var posts_id;
+  var posts_userId;
+  var posts_title;
+  var posts_content;
+  var posts_commentsC;
+  var posts_writtenDate;
+  var posts_adoptedStatus;
+
+  Posts(
+      this.posts_subject,
+      this.posts_id,
+      this.posts_userId,
+      this.posts_title,
+      this.posts_content,
+      this.posts_commentsC,
+      this.posts_writtenDate,
+      this.posts_adoptedStatus,
+      );
+}
+
+
+///////////////////////////////////////////////////////
+
 
 class MyBoardPage extends StatefulWidget {
   const MyBoardPage({Key? key}) : super(key: key);
@@ -29,82 +80,43 @@ class _MyBoardPageState extends State<MyBoardPage> {
   final List<String> _userSubList = <String>[
     "성경의 이해", "데이터 구조"
   ];
-  
-  // 과목 리스트
-  final List<String> _subList = <String>[
-    "자바 프로그래밍", "성경의 이해", "데이터 구조", "실전프로젝트",
-    "공학설계입문", "C 프로그래밍", "파이썬", "타이포그래피",
-    "무언가", "끼룩", "도비", "토익",
-    "과목", "과목", "과목", "과목",
-    "과목", "과목", "과목", "과목",
-  ].obs;
 
-  // 질문 제목 리스트
-  final List<String> _titleList = <String>[
-    "질문 제목1", "질문 제목2", "질문 제목3", "질문 제목4",
-    "질문 제목5", "질문 제목6", "질문 제목7", "질문 제목8",
-    "질문 제목9", "질문 제목10", "질문 제목11", "질문 제목12",
-    "질문 제목13", "질문 제목14", "질문 제목15", "질문 제목16",
-    "질문 제목17", "질문 제목18", "질문 제목19", "질문 제목20",
-  ].obs;
+  List<Posts> _postsDataList = <Posts>[].obs;
 
-  // 질문 내용 리스트
-  final List<String> _contentList = <String> [
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-  ].obs;
-
-  var _maxPost = 20; // 게시글 총 개수
   var _scroll = ScrollController().obs;
 
-  var _subData = <String>[].obs;
-  var _titleData = <String>[].obs;
-  var _contentData = <String>[].obs;
-
-  var isLoading = false.obs;
-  var hasMore = false.obs;
+  var _maxPost = 20; // 게시글 총 개수
+  var _isLoading = false.obs;
+  var _hasMorePosts = false.obs;
 
   @override
   void initState() {
-    _getPost();
-
+    super.initState();
+    _getPosts();
     this._scroll.value.addListener(() {
       if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
-          this.hasMore.value) {
-        _getPost();
+          this._hasMorePosts.value) {
+        _getPosts();
       }
     });
-
-    super.initState();
   }
 
-  _getPost() async {
-    isLoading.value = true;
-
-    await Future.delayed(Duration(seconds: 1));
-
-    int offset = _subData.length;
-    _subData.addAll(_subList.sublist(offset, offset+10));
-    _titleData.addAll(_titleList.sublist(offset, offset+10));
-    _contentData.addAll(_contentList.sublist(offset, offset+10));
-
-    isLoading.value = false;
-    hasMore.value = _subData.length < _maxPost;
+  _getPosts() async {
+    _isLoading.value = true;
+    List<Posts> _newPostsDataList = await fetchPosts();
+    setState(() {
+      _postsDataList.addAll(_newPostsDataList);
+    });
+    _isLoading.value = false;
+    _hasMorePosts.value = _postsDataList.length < _maxPost;
   }
 
   _reload() async {
-    isLoading.value = true;
-    _subData.clear();
-    _titleData.clear();
-    _contentData.clear();
-
-    await Future.delayed(Duration(seconds: 1));
-
-    _getPost();
+    _isLoading.value = true;
+    _postsDataList.clear();
+    _getPosts();
   }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -473,64 +485,51 @@ class _MyBoardPageState extends State<MyBoardPage> {
         child: ListView.separated(
           controller: _scroll.value,
           itemBuilder: (_, index) {
-            print(hasMore.value); // 데이터 더 있는지 콘솔창에 출력 (확인용)
-
-            if (index < _subData.length) {
-              var subDatum = _subData[index];
-              var titleDatum = _titleData[index];
-              var contentDatum = _contentData[index];
+            if (index < _postsDataList.length) {
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
-                  Get.to(PostPage(), arguments: "$subDatum");
+                  Get.to(PostPage(), arguments: [_postsDataList[index].posts_id, _postsDataList[index].posts_userId]);
                 },
                 child: Container(
                   padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
-                  child: _makePostTile("$subDatum", "$titleDatum", "$contentDatum"),
+                  child: _makePostTile(_postsDataList[index].posts_subject, _postsDataList[index].posts_title,
+                      _postsDataList[index].posts_content, _postsDataList[index].posts_commentsC,
+                      _postsDataList[index].posts_writtenDate, _postsDataList[index].posts_adoptedStatus),
                 ),
               );
             }
 
-            if (hasMore.value || isLoading.value) {
+            if (_hasMorePosts.value || _isLoading.value) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
 
             return Container(
-              padding: EdgeInsets.all(10.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                        "게시글의 마지막 입니다"
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        _reload();
-                      },
-                      icon: Icon(Icons.arrow_upward_rounded),
-                    ),
-                  ],
-                ),
+              child: IconButton(
+                onPressed: () {
+                  _reload();
+                },
+                icon: Icon(Icons.arrow_upward_rounded),
               ),
             );
           },
           separatorBuilder: (_, index) => Divider(),
-          itemCount: _subData.length + 1,
+          itemCount: _postsDataList.length + 1,
         ),
       ),),
     );
   }
 
-  Widget _makePostTile(sub, title, content) {
+  Widget _makePostTile(inSub, inTitle, inContent, inCount, inDate, inAdopted) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
           Text(
-            sub,
+            inSub,
             style: TextStyle(
               color: themeColor1,
               fontFamily: "Barun",
@@ -540,7 +539,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
           ),
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
-            title,
+            inTitle,
             style: TextStyle(
               fontFamily: "Barun",
               fontSize: 15.sp,
@@ -549,7 +548,8 @@ class _MyBoardPageState extends State<MyBoardPage> {
           ),
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
-            content,
+            inContent,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: grayColor2,
               fontFamily: "Barun",
