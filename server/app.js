@@ -42,9 +42,6 @@ const sessionStore = new MySQLStore({
     database: config.database
 });
 
-const grabController = require('./controllers/grab');
-grabController.main();
-
 app.use(session({
 	secret: "asdfghjkl",
 	resave: false,

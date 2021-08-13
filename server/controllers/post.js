@@ -1,6 +1,7 @@
 // posts
 const { Post } = require('../models');
 const { User } = require('../models');
+const { Classification } = require('../models');
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
 
@@ -25,12 +26,19 @@ exports.createPost = async (req, res) => {
     });
 }
 
-exports.getPosts = async (req, res) => {
+//exports.getPosts = async (req, res) => {
+//	Post.findAll({
+//		include:[
+//			{
+//				model: Classification,
+//				attributes: ['
+			
+exports.searchPosts = async (req, res) => {
 	Post.findAll({
 		include:[
 			{
-				model: User,
-				attributes: ['nickname', 'named_type']
+				model: Classification,
+				attributes: ['subject']
 			}
 		],
 		where: {
