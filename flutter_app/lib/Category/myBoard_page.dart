@@ -19,6 +19,39 @@ import 'addPost_page.dart';
 import 'post_page.dart';
 
 
+// Preferred Subjects 데이터 가져오기
+List<PreferredSubject> PreferredfromJson (json) {
+  List<PreferredSubject> result = [];
+  json.forEach((item) {
+    result.add(PreferredSubject(item["id"], item["subject"]));
+  });
+
+  return result;
+}
+
+Future<List<PreferredSubject>> fetchPreferred() async {
+  final userId = 1;
+  var preferredUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/preferred?userId="+userId.toString();
+  var response = await http.get(Uri.parse(preferredUrl));
+
+  if (response.statusCode == 200) {
+    return PreferredfromJson(json.decode(response.body));
+  } else {
+    throw Exception("Faild to load preferred subject");
+  }
+}
+
+// Preferred Subjects 데이터 형식
+class PreferredSubject{
+  var preferred_id;
+  var preferred_subject;
+
+  PreferredSubject(
+      this.preferred_id,
+      this.preferred_subject,
+  );
+}
+
 // Posts 데이터 가져오기
 List<Posts> PostsfromJson (json) {
   List<Posts> result = [];
@@ -77,22 +110,29 @@ class MyBoardPage extends StatefulWidget {
 
 class _MyBoardPageState extends State<MyBoardPage> {
   // 선호 과목리스트
-  final List<String> _userSubList = <String>[
-    "성경의 이해", "데이터 구조"
-  ];
+  List<PreferredSubject> _preferredSubjectDataList = <PreferredSubject>[].obs;
+  late Future<List<PreferredSubject>> _preferredSubjects;
 
+  var _maxPreferred = 20; // 게시글 총 개수
+  var _isPreferredLoading = false.obs;
+  var _hasMorePreferred = false.obs;
+
+
+  // 게시글 리스트
   List<Posts> _postsDataList = <Posts>[].obs;
 
   var _scroll = ScrollController().obs;
 
-  var _maxPost = 20; // 게시글 총 개수
-  var _isLoading = false.obs;
+  var _maxPosts = 20; // 게시글 총 개수
+  var _isPostsLoading = false.obs;
   var _hasMorePosts = false.obs;
 
   @override
   void initState() {
     super.initState();
     _getPosts();
+    _preferredSubjects = fetchPreferred();
+
     this._scroll.value.addListener(() {
       if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
           this._hasMorePosts.value) {
@@ -101,18 +141,28 @@ class _MyBoardPageState extends State<MyBoardPage> {
     });
   }
 
+  _getPreferredSubject() async {
+    _isPreferredLoading.value = true;
+    List<PreferredSubject> _newPreferredDataList = await fetchPreferred();
+    setState(() {
+      _preferredSubjectDataList.addAll(_newPreferredDataList);
+    });
+    _isPreferredLoading.value = false;
+    _hasMorePreferred.value = _preferredSubjectDataList.length < _maxPreferred;
+  }
+
   _getPosts() async {
-    _isLoading.value = true;
+    _isPostsLoading.value = true;
     List<Posts> _newPostsDataList = await fetchPosts();
     setState(() {
       _postsDataList.addAll(_newPostsDataList);
     });
-    _isLoading.value = false;
-    _hasMorePosts.value = _postsDataList.length < _maxPost;
+    _isPostsLoading.value = false;
+    _hasMorePosts.value = _postsDataList.length < _maxPosts;
   }
 
   _reload() async {
-    _isLoading.value = true;
+    _isPostsLoading.value = true;
     _postsDataList.clear();
     _getPosts();
   }
@@ -257,19 +307,25 @@ class _MyBoardPageState extends State<MyBoardPage> {
                                 ),
                               ),
 
-                              Padding(
-                                padding: EdgeInsets.only(right: 5.w),
-                              ),
+                              Padding(padding: EdgeInsets.only(right: 5.w),),
 
-                              for (int i=0; i<_userSubList.length; i++)
-                                Row(
-                                  children: [
-                                    _makeSub(_userSubList[i]),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 5.w),
-                                    )
-                                  ],
-                                )
+                              FutureBuilder<List<PreferredSubject>> (
+                                future: _preferredSubjects,
+                                builder: (context, snapshot) {
+                                  if (snapshot.data != null) {
+                                    return Row(
+                                      children: [
+                                        for (int i=0; i<snapshot.data!.length; i++) _makeSub(snapshot.data![i].preferred_subject),
+                                      ],
+                                    );
+                                  }
+                                  else if (snapshot.hasError) {
+                                    return Text("${snapshot.error}");
+                                  }
+
+                                  return Center();
+                                },
+                              ),
 
                             ],
                           ),
@@ -405,9 +461,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
           actions: [
             TextButton(
               onPressed: () {
-                setState(() {
-                  Get.back();
-                });
+                Get.back();
               },
               child: Text(
                 "아니오",
@@ -422,10 +476,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
 
             TextButton(
               onPressed: () {
-                setState(() {
-                  _userSubList.remove(inSubTitle);
-                  Get.back();
-                });
+                Get.back();
               },
               child: Text(
                   "예",
@@ -441,37 +492,40 @@ class _MyBoardPageState extends State<MyBoardPage> {
         );
       },
 
-      child: Container(
-        padding: EdgeInsets.only(top:5, bottom: 5, left: 10.w, right: 5.w),
-        child: Row(
-          children: [
-            Text(
-              inSubTitle,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: "Barun",
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
+      child: Padding(
+        padding: EdgeInsets.only(right: 5.w),
+        child: Container(
+          padding: EdgeInsets.only(top:5, bottom: 5, left: 10.w, right: 5.w),
+          child: Row(
+            children: [
+              Text(
+                inSubTitle,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Barun",
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            ),
 
-            // IconButton으로 만들면 크기가...
-            Icon(
-              Icons.clear_rounded,
-              color: Colors.white,
-              size: 15.w,
-            ),
-          ],
-        ),
+              // IconButton으로 만들면 크기가...
+              Icon(
+                Icons.clear_rounded,
+                color: Colors.white,
+                size: 15.w,
+              ),
+            ],
+          ),
 
-        decoration: BoxDecoration(
-            color: themeColor1,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            )
+          decoration: BoxDecoration(
+              color: themeColor1,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              )
+          ),
         ),
       ),
     );
@@ -500,7 +554,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
               );
             }
 
-            if (_hasMorePosts.value || _isLoading.value) {
+            if (_hasMorePosts.value || _isPostsLoading.value) {
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -562,101 +616,3 @@ class _MyBoardPageState extends State<MyBoardPage> {
     );
   }
 }
-
-// class InfiniteScrollView extends GetView<InfiniteScrollController> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Obx(
-//             () => Padding(
-//               padding: EdgeInsets.all(10.0),
-//               child: ListView.separated(
-//                 controller: controller._scroll.value,
-//                 itemBuilder: (_, index) {
-//                   print(controller.hasMore.value);
-//                   if (index < controller.data.length) {
-//                     var datum = controller.data[index];
-//                     return Material(
-//                       elevation: 10.0,
-//                       child: Container(
-//                         padding: const EdgeInsets.all(10.0),
-//                         child: ListTile(
-//                           leading: Icon(Icons.android_outlined),
-//                           title: Text('$datum 번째 데이터'),
-//                           trailing: Icon(Icons.arrow_forward_outlined),
-//                         ),
-//                       ),
-//                     );
-//                   }
-//                   if (controller.hasMore.value || controller.isLoading.value) {
-//                     return Center(child: RefreshProgressIndicator());
-//                   }
-//                   return Container(
-//                     padding: const EdgeInsets.all(10.0),
-//                     child: Center(
-//                       child: Column(
-//                         children: [
-//                           Text('데이터의 마지막 입니다'),
-//                           IconButton(
-//                             onPressed: () {
-//                               controller.reload();
-//                             },
-//                             icon: Icon(Icons.refresh_outlined),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   );
-//                 },
-//                 separatorBuilder: (_, index) => Divider(),
-//                 itemCount: controller.data.length + 1,
-//               ),
-//             ),
-//       ),
-//     );
-//   }
-// }
-//
-// class InfiniteScrollController extends GetxController {
-//   var data = <int>[].obs;
-//   var isLoading = false.obs;
-//   var hasMore = false.obs;
-//
-//   var _scroll = ScrollController().obs;
-//
-//   @override
-//   void onInit() {
-//     _getData();
-//
-//     this._scroll.value.addListener(() {
-//       if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
-//           this.hasMore.value) {
-//         _getData();
-//       }
-//     });
-//
-//     super.onInit();
-//   }
-//
-//   _getData() async {
-//     isLoading.value = true;
-//
-//     await Future.delayed(Duration(seconds: 2));
-//
-//     int offset = data.length;
-//     var appendData = List<int>.generate(10, (index) => index+1+offset);
-//     data.addAll(appendData);
-//
-//     isLoading.value = false;
-//     hasMore.value = data.length < 30;
-//   }
-//
-//   reload() async {
-//     isLoading.value = true;
-//     data.clear();
-//
-//     await Future.delayed(Duration(seconds: 2));
-//
-//     _getData();
-//   }
-// }
