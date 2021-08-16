@@ -11,7 +11,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:studytogether/splash_page.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,6 +19,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  getToken() async{
+    var token  = await FirebaseMessaging.instance.getToken();
+    return token;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -90,6 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
+                    String token = getToken();
+                    print('${token}');
                     Get.offAll(() => SplashPage());
                     /*var isLogined = fetch();
                     if(isLogined == true){
