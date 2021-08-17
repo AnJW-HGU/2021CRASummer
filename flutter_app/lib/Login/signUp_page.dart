@@ -71,27 +71,28 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Center(
           child: Container(
             //위치 조정
-            padding: EdgeInsets.only(top: 95.h, left: 50.w, right: 50.w),
+            padding: EdgeInsets.only(top: 235.h, left: 50.w, right: 50.w),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                //'ST' 넣기
-                Text('ST',style: TextStyle(
-                    fontSize: 64.sp,
-                    fontWeight: FontWeight.w400,
-                    color: themeColor1,
-                    fontFamily: "Barun", //폰트 지정
-                    shadows: [Shadow(
-                      color: blurColor,
-                      offset: Offset(0,4.0),
-                      blurRadius: 4,
-                    )]
-                ),),
-                SizedBox(height: 100.h,),
-                //아이콘이 포함된 버튼( 회원가입 버튼 )
+                // //'ST' 넣기
+                // Text('ST',style: TextStyle(
+                //     fontSize: 64.sp,
+                //     fontWeight: FontWeight.w400,
+                //     color: themeColor1,
+                //     fontFamily: "Barun", //폰트 지정
+                //     // shadows: [Shadow(
+                //     //   color: blurColor,
+                //     //   offset: Offset(0,4.0),
+                //     //   blurRadius: 4,
+                //     // )]
+                // ),),
+                // SizedBox(height: 110.h,),
+                // //아이콘이 포함된 버튼( 회원가입 버튼 )
                 ElevatedButton.icon(
                   icon: Icon(
                     Icons.g_mobiledata_sharp,
-                    size: 50,
+                    size: 45,
                     color: themeColor1,
                   ),
                   style: ElevatedButton.styleFrom(
@@ -99,7 +100,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     //onPrimary: themeColor2,
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(15.0),
+                      borderRadius: new BorderRadius.circular(5.0),
                     ),
                     side: BorderSide(
                       width: 1.5, color: themeColor1,
@@ -132,17 +133,18 @@ class _SignUpPageState extends State<SignUpPage> {
                       //  _launchURL(context);
                       //};
 
-                    Get.to(SetNicknamePage());
+                    Get.to(SetNicknamePage(), arguments: "22000000",); //user_id
                   },
                   //버튼 안에 text
-                  label: Text("   Sign Up with Google     ", style: TextStyle(
+                  label: Text("      구글로 회원가입        ", style: TextStyle(
+                      fontFamily: "Barun",
                       color: themeColor1,
                       fontWeight: FontWeight.w500,
                       fontSize: 17.sp,
                       shadows: [Shadow(
                         color: blurColor,
                         offset: Offset(0,1.0),
-                        blurRadius: 2,
+                        blurRadius: 1,
                       )]
                   ),),
                 ),
