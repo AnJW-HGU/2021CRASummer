@@ -9,13 +9,13 @@ import 'package:studytogether/Profile/myA_page.dart';
 import 'package:studytogether/Profile/myQ_page.dart';
 
 
-class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({Key? key}) : super(key: key);
+class OtherProfile extends StatefulWidget {
+  const OtherProfile({Key? key}) : super(key: key);
   @override
-  _MyProfilePageState createState() => _MyProfilePageState();
+  _OtherProfileState createState() => _OtherProfileState();
 }
 
-class _MyProfilePageState extends State<MyProfilePage> {
+class _OtherProfileState extends State<OtherProfile> {
   String _nickName = "자유로운도비영혼"; // 서버에서 받아온 닉네임
   int _point = 3000;
   int _questionNum = 2;

@@ -4,91 +4,119 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+
+Future<List<User_Post>> fetchUserPost() async {
+  var userUrl =
+      'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/get?user_id=123456';
+  var response = await http.get(Uri.parse(userUrl));
+
+  if (response.statusCode == 200) {
+    return UserfromJson(json.decode(response.body));
+  } else {
+    throw Exception("Failed to load User_Post");
+  }
+}
+
+class User_Post {
+  var user_postId;
+  var user_subject;
+  var user_title;
+  var user_content;
+
+  User_Post(
+    this.user_postId,
+    this.user_subject,
+    this.user_title,
+    this.user_content,
+  );
+
+  // 기존 것
+  // factory User.fromJson(Map<String, dynamic> json) {
+  //   return User(
+  //     user_postId: json['id'],
+  //     user_subject: json['subject'],
+  //     user_title: json['title'],
+  //     user_content: json['content']
+  //   );
+  // }
+}
+
+List<User_Post> UserfromJson(json) {
+  List<User_Post> result = [];
+  json.forEach((item) {
+    result.add(
+        User_Post(item["id"], item['subject'], item['title'], item['content']));
+  });
+
+  return result;
+}
+
 class MyQPage extends StatefulWidget {
+  const MyQPage({Key? key}) : super(key: key);
+
   @override
   _MyQPageState createState() => _MyQPageState();
 }
 
 class _MyQPageState extends State<MyQPage> {
-  final List<String> _subList = <String>[
-    "성경의 이해", "데이타구조", "분 류", "분류우",
-    "분류", "분류에오", "분 류", "분류우",
-    // "분류", "분류에오", "분 류", "분류우",
-    // "분류", "분류에오", "분 류", "분류우",
-    // "분류", "분류에오", "분 류", "분류우",
-  ].obs;
+  List<User_Post> _userDataList = [];
 
-  final List<String> _titleList = <String>[
-    "질문 제목1", "질문 제목2", "질문 제목3", "질문 제목4",
-    "질문 제목5", "질문 제목6", "질문 제목7", "질문 제목8",
-    // "질문 제목9", "질문 제목10", "질문 제목11", "질문 제목12",
-    // "질문 제목13", "질문 제목14", "질문 제목15", "질문 제목16",
-    // "질문 제목17", "질문 제목18", "질문 제목19", "질문 제목20",
-  ].obs;
+  var _maxUserPostInfo = 30;
 
-  final List<String> _contentList = <String>[
-    "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-    "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-    // "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-    // "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-    // "질문 내용이에오", "질문 내용이에오", "질문 내용이에오", "질문 내용이에오",
-  ].obs;
+  final scrollController = ScrollController().obs;
 
-  var maxInfo = 20;
+  var _isLoading = false.obs;
+  var _hasMore = false.obs;
 
-  var scrollController = ScrollController().obs;
+  var _refreshKey = GlobalKey<RefreshIndicatorState>(); // 새로고침 key
 
-  var _subData = <String>[].obs;
-  var _titleData = <String>[].obs;
-  var _contentData = <String>[].obs;
-
-  var isLoading = false.obs;
-  var hasMore = false.obs;
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
-    _getInfo();
+    super.initState();
+    _getUserPostInfo();
 
     this.scrollController.value.addListener(() {
-      if(this.scrollController.value.position.pixels ==
-          this.scrollController.value.position.maxScrollExtent && this.hasMore.value) {
-        _getInfo();
+      if (this.scrollController.value.position.pixels ==
+              this.scrollController.value.position.maxScrollExtent &&
+          this._hasMore.value) {
+        _getUserPostInfo();
       }
     });
-    super.initState();
   }
 
-  _getInfo() async {
-    isLoading.value = true;
-
+  _getUserPostInfo() async {
+    _isLoading.value = true;
+    List<User_Post> _newUserPostDataList = await fetchUserPost();
     await Future.delayed(Duration(seconds: 2));
 
-    int offset = _subData.length;
-    if(_subList.length<10){
-      _subData.addAll(_subList.sublist(offset));
-      _titleData.addAll(_titleList.sublist(offset));
-      _contentData.addAll(_contentList.sublist(offset));
-      isLoading.value = false;
-      hasMore.value = false;
-    }else {
-      _subData.addAll(_subList.sublist(offset, offset + 10));
-      _titleData.addAll(_titleList.sublist(offset, offset + 10));
-      _contentData.addAll(_contentList.sublist(offset, offset + 10));
-
-      isLoading.value = false;
-      hasMore.value = _subData.length < maxInfo;
-    }
+    setState(() {
+      _userDataList.addAll(_newUserPostDataList);
+    });
+    _isLoading.value = false;
+    _hasMore.value = _userDataList.length < _maxUserPostInfo;
   }
 
   reload() async {
-    isLoading.value = true;
-    _subData.clear();
-    _titleData.clear();
-    _contentData.clear();
+    _isLoading.value = true;
+    _userDataList.clear();
+    _getUserPostInfo();
+  }
 
-    await Future.delayed(Duration(seconds: 2));
-
-    _getInfo();
+  // 새로고침
+  Future<Null> refresh() async {
+    _userDataList.clear();
+    _isLoading.value = false;
+    _hasMore.value = false;
+    _getUserPostInfo();
+    await Future.delayed(Duration(seconds: 1));
   }
 
   @override
@@ -103,7 +131,10 @@ class _MyQPageState extends State<MyQPage> {
                   Get.back();
                 },
                 color: themeColor1,
-                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 15.w,
+                ),
               ),
               title: Text(
                 "질문 수",
@@ -116,64 +147,64 @@ class _MyQPageState extends State<MyQPage> {
               centerTitle: true,
               backgroundColor: Colors.white,
             ),
-            body: _MyQPageBody(),
-          );
-        }
-    );
-  }
-
-  Widget _MyQPageBody() {
-    return Container(
-      child: Obx(
-            () => Padding(
-          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-          child: ListView.separated(
-            controller: scrollController.value,
-            itemBuilder: (_, index) {
-              print(hasMore.value);
-
-              if (index < _subData.length) {
-                var subDatum = _subData[index];
-                var titleDatum = _titleData[index];
-                var contentDatum = _contentData[index];
-
-                return Container(
-                  child: _makeInfoTile("$subDatum", "$titleDatum", "$contentDatum"),
-                );
-              }
-              if (hasMore.value || isLoading.value) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Text('질문 수의 마지막 입니다'),
-                      IconButton(
-                        onPressed: () {
-                          reload();
-                        },
-                        icon: Icon(Icons.arrow_upward_rounded),
-                      ),
-                    ],
+            body: RefreshIndicator(
+              // 새로고침 추가
+              key: _refreshKey,
+              child: Container(
+                child: Obx(
+                  // 질문 리스트
+                  () => Padding(
+                    padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                    child: ListView.separated(
+                      controller: scrollController.value,
+                      itemBuilder: (BuildContext _context, index) {
+                        if (index < _userDataList.length) {
+                          return Container(
+                            child: _makeInfoTile(
+                                "${_userDataList[index].user_subject}",
+                                "${_userDataList[index].user_title}",
+                                "${_userDataList[index].user_content}"),
+                          );
+                        }
+                        if (_hasMore.value || _isLoading.value) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text('질문 수의 마지막 입니다'),
+                                IconButton(
+                                  onPressed: () {
+                                    reload();
+                                  },
+                                  icon: Icon(Icons.arrow_upward_rounded),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, index) => Divider(),
+                      itemCount: _userDataList.length + 1,
+                    ),
                   ),
                 ),
-              );
-            },
-            separatorBuilder: (_, index) => Divider(),
-            itemCount: _subData.length + 1,
-          ),
-        ),
-      ),
-    );
+              ),
+              // 새로고침 시 실행할 함수
+              onRefresh: () => refresh(),
+            ),
+          );
+        });
   }
 
+  // 리스트 만드는 위젯젯
   Widget _makeInfoTile(sub, title, content) {
     return Container(
-      child : ExpansionTile(
+      child: ListTile(
         subtitle: Text(
           title,
           style: TextStyle(
@@ -190,22 +221,6 @@ class _MyQPageState extends State<MyQPage> {
             color: themeColor2,
           ),
         ),
-        initiallyExpanded: false,
-        backgroundColor: Colors.white,
-        children: <Widget>[
-          Divider(height: 1),
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 20.0.w, right: 20.0.w ),
-            child: Text(
-              content,
-              style: TextStyle(
-                fontFamily: "Barun",
-                fontSize: 14.sp,
-              ),
-            ),
-          )
-        ],
       ),
     );
   }
