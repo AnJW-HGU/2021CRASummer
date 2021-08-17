@@ -2,19 +2,70 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'dart:async';
 import 'dart:ui';
-import 'dart:math';
 
 import 'package:studytogether/main.dart';
 
+import 'search_page.dart';
 import 'noti_page.dart';
 import 'package:studytogether/Profile/myProfile_page.dart';
 
-import 'search_page.dart';
 import 'addPost_page.dart';
 
 import 'post_page.dart';
+
+
+
+// Posts 데이터 가져오기
+List<Posts> PostsfromJson (json) {
+  List<Posts> result = [];
+  json.forEach((item) {
+    result.add(Posts(item["subject"], item["id"], item["user_id"], item["title"], item["content"], item["comments_count"], item["written_date"], item["adopted_status"]));
+  });
+
+  return result;
+}
+
+Future<List<Posts>> fetchPosts() async {
+  final boardTitle = Get.arguments; // 카테고리 페이지로부터 타이틀 받음
+  var postsUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/posts?major="+boardTitle;
+  var response = await http.get(Uri.parse(postsUrl));
+
+  if (response.statusCode == 200) {
+    return PostsfromJson(json.decode(response.body));
+  } else {
+    throw Exception("Faild to load posts");
+  }
+}
+
+// Posts 데이터 형식
+class Posts{
+  var posts_subject;
+  var posts_id;
+  var posts_userId;
+  var posts_title;
+  var posts_content;
+  var posts_commentsC;
+  var posts_writtenDate;
+  var posts_adoptedStatus;
+
+  Posts(
+    this.posts_subject,
+    this.posts_id,
+    this.posts_userId,
+    this.posts_title,
+    this.posts_content,
+    this.posts_commentsC,
+    this.posts_writtenDate,
+    this.posts_adoptedStatus,
+  );
+}
+
+
+/////////////////////////////////////////////////////////////////
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -24,85 +75,43 @@ class BoardPage extends StatefulWidget {
 }
 
 class _BoardPageState extends State<BoardPage> {
-  String boardTitle = Get.arguments; // 카테고리 페이지로부터 타이틀 받음
+  List<Posts> _postsDataList = <Posts>[].obs;
 
-  // 과목 리스트
-  final List<String>_subList = <String>[
-    "자바 프로그래밍", "성경의 이해", "데이터 구조", "실전프로젝트",
-    "공학설계입문", "C 프로그래밍", "파이썬", "타이포그래피",
-    "무언가", "끼룩", "도비", "토익",
-    "과목", "과목", "과목", "과목",
-    "과목", "과목", "과목", "과목",
-  ].obs;
 
-  // 질문 제목 리스트
-  final List<String> _titleList = <String>[
-    "질문 제목1", "질문 제목2", "질문 제목3", "질문 제목4",
-    "질문 제목5", "질문 제목6", "질문 제목7", "질문 제목8",
-    "질문 제목9", "질문 제목10", "질문 제목11", "질문 제목12",
-    "질문 제목13", "질문 제목14", "질문 제목15", "질문 제목16",
-    "질문 제목17", "질문 제목18", "질문 제목19", "질문 제목20",
-  ].obs;
-
-  // 질문 내용 리스트
-  final List<String> _contentList = <String> [
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-    "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.", "질문 내용입니다.",
-  ].obs;
-
-  var _maxPost = 20; // 게시글 총 개수
-
-  // final _refreshKey = GlobalKey<RefreshIndicatorState>();
   var _scroll = ScrollController().obs;
 
-  var _subData = <String>[].obs;
-  var _titleData = <String>[].obs;
-  var _contentData = <String>[].obs;
-
-  var isLoading = false.obs;
-  var hasMore = false.obs;
+  var _maxPost = 20; // 게시글 총 개수
+  var _isLoading = false.obs;
+  var _hasMorePosts = false.obs;
 
   @override
   void initState() {
-    _getPost();
-
+    super.initState();
+    _getPosts();
     this._scroll.value.addListener(() {
       if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
-      this.hasMore.value) {
-        _getPost();
+      this._hasMorePosts.value) {
+        _getPosts();
       }
     });
-
-    super.initState();
   }
 
-  _getPost() async {
-    isLoading.value = true;
-
-    await Future.delayed(Duration(seconds: 1));
-
-    int offset = _subData.length;
-    _subData.addAll(_subList.sublist(offset, offset+10));
-    _titleData.addAll(_titleList.sublist(offset, offset+10));
-    _contentData.addAll(_contentList.sublist(offset, offset+10));
-
-    isLoading.value = false;
-    hasMore.value = _subData.length < _maxPost;
+  _getPosts() async {
+    _isLoading.value = true;
+    List<Posts> _newPostsDataList = await fetchPosts();
+    setState(() {
+      _postsDataList.addAll(_newPostsDataList);
+    });
+    _isLoading.value = false;
+    _hasMorePosts.value = _postsDataList.length < _maxPost;
   }
 
   _reload() async {
-    isLoading.value = true;
-    _subData.clear();
-    _titleData.clear();
-    _contentData.clear();
-
-    await Future.delayed(Duration(seconds: 1));
-
-    _getPost();
+    _isLoading.value = true;
+    _postsDataList.clear();
+    _getPosts();
   }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -113,9 +122,9 @@ class _BoardPageState extends State<BoardPage> {
               appBar: AppBar(
                 backgroundColor: themeColor1, // 앱바색
                 elevation: 0.0, // 앱바 그림자 없게 하기
-                centerTitle: true,
+                centerTitle: false,
                 title: Text(
-                  boardTitle, // 타이틀
+                  Get.arguments, // 타이틀
                   style: TextStyle(
                     fontFamily: "Barun",
                     fontSize: 20.sp,
@@ -137,19 +146,38 @@ class _BoardPageState extends State<BoardPage> {
                 actions: [
                   Row(
                     children: [
-                      // 알림버튼
-                      Container(
-                        width: 40,
-                        child: IconButton(
-                          icon: Icon(Icons.notifications_rounded),
-                          tooltip: "Notification Button",
-                          iconSize: 27.w,
-                          onPressed: () {
-                            Get.to(NotiPage());
-                          },
+
+                      // 검색 버튼
+                      Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Container(
+                          width: 40.w,
+                          child: IconButton(
+                              icon: Icon(Icons.search_rounded),
+                              tooltip: "Profile Button",
+                              iconSize: 27.w,
+                              onPressed: () {
+                                Get.to(() => SearchPage(), arguments: Get.arguments); // 카테고리로부터 받은 게시판 타이틀
+                              }
+                          ),
                         ),
                       ),
 
+                      // 알림버튼
+                      Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Container(
+                          width: 40.w,
+                          child: IconButton(
+                            icon: Icon(Icons.notifications_rounded),
+                            tooltip: "Notification Button",
+                            iconSize: 27.w,
+                            onPressed: () {
+                              Get.to(() => NotiPage());
+                            },
+                          ),
+                        ),
+                      ),
 
                       // 프로필 버튼
                       Padding(
@@ -172,72 +200,43 @@ class _BoardPageState extends State<BoardPage> {
               ),
 
 
-            // 검색 버튼
-            // Padding(
-            //     padding: EdgeInsets.only(top: 5, bottom: 20),
-            //     child: GestureDetector(
-            //       onTap: () {
-            //         Get.to(SearchPage());
-            //       },
-            //
-            //       child: Container(
-            //         width: 350.w,
-            //         height: 35,
-            //         alignment: Alignment.centerRight,
-            //
-            //         padding: EdgeInsets.only(right: 10.w),
-            //         child: Icon(
-            //           Icons.search_rounded,
-            //           color: Colors.white,
-            //         ),
-            //
-            //         decoration: BoxDecoration(
-            //             color: Colors.white.withOpacity(0.25),
-            //             border: Border.all(color: Colors.white.withOpacity(0.75)),
-            //             borderRadius: BorderRadius.circular(10)
-            //         ),
-            //       ),
-            //     )
-            // ),
-
-
             // 게시글
               body: SafeArea(
                 child: Container (
-                    padding: EdgeInsets.only(top: 20, left: 30.w, right: 30.w),
+                    padding: EdgeInsets.only(top: 15.h, bottom: 10.h, left: 25.w, right: 25.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // 각 위젯간의 공간을 둠
-                          children: [
-                            // 게시판 흰색 부분에 들어갈 것
-                            // 타이틀 - 게시글
-                            Text(
-                              "게시글",
-                              style: TextStyle(
-                                fontFamily: "Barun",
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-
-                            //검색 버튼
-                            Container(
-                              padding: EdgeInsets.all(0.0),
-                              child: IconButton(
-                                padding: EdgeInsets.all(0.0),
-                                icon: Icon(Icons.search_rounded, color: themeColor1,),
-                                tooltip: "Search Button",
-                                iconSize: 27.w,
-                                onPressed: () {
-                                  Get.to(SearchPage(), transition: Transition.cupertino);
-                                }
-                              ),
-                            )
-
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween, // 각 위젯간의 공간을 둠
+                        //   children: [
+                        //     // 게시판 흰색 부분에 들어갈 것
+                        //     // 타이틀 - 게시글
+                        //     Text(
+                        //       "게시글",
+                        //       style: TextStyle(
+                        //         fontFamily: "Barun",
+                        //         fontSize: 20.sp,
+                        //         fontWeight: FontWeight.w500,
+                        //       ),
+                        //     ),
+                        //
+                        //     //검색 버튼
+                        //     Container(
+                        //       padding: EdgeInsets.all(0.0),
+                        //       child: IconButton(
+                        //         padding: EdgeInsets.all(0.0),
+                        //         icon: Icon(Icons.search_rounded, color: themeColor1,),
+                        //         tooltip: "Search Button",
+                        //         iconSize: 27.w,
+                        //         onPressed: () {
+                        //           Get.to(() => SearchPage(), transition: Transition.cupertino);
+                        //         }
+                        //       ),
+                        //     )
+                        //
+                        //   ],
+                        // ),
 
                         Padding(padding: EdgeInsets.only(bottom: 10)),
 
@@ -270,40 +269,39 @@ class _BoardPageState extends State<BoardPage> {
               ),
 
               // 하단 네비게이터 (나중에 Tapbar로 고칠 예정/현재 bottomAppBar)
-              bottomNavigationBar: BottomAppBar(
-                color: Colors.white,
-                // shape: CircularNotchedRectangle(),
-                // notchMargin: 4.0,
-
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                  children: [
-                    IconButton(
-                      onPressed: () {
-
-                      },
-                      icon: Icon(
-                        Icons.question_answer_rounded,
-                        color: grayColor1,
-                      ),
-                      tooltip: "Q&A Board Button",
-                    ),
-
-                    IconButton(
-                      onPressed: () {
-
-                      },
-                      icon: Icon(
-                        Icons.people_rounded,
-                        color: grayColor1,
-                      ),
-                      tooltip: "Study Board Button",
-                    ),
-                  ],
-                ),
-              ),
+              // bottomNavigationBar: BottomAppBar(
+              //   color: Colors.white,
+              //   // shape: CircularNotchedRectangle(),
+              //   // notchMargin: 4.0,
+              //
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //
+              //     children: [
+              //       IconButton(
+              //         onPressed: () {
+              //
+              //         },
+              //         icon: Icon(
+              //           Icons.question_answer_rounded,
+              //           color: grayColor1,
+              //         ),
+              //         tooltip: "Q&A Board Button",
+              //       ),
+              //
+              //       IconButton(
+              //         onPressed: () {
+              //
+              //         },
+              //         icon: Icon(
+              //           Icons.people_rounded,
+              //           color: grayColor1,
+              //         ),
+              //         tooltip: "Study Board Button",
+              //       ),
+              //     ],
+              //   ),
+              // ),
             );
         }
     );
@@ -317,64 +315,51 @@ class _BoardPageState extends State<BoardPage> {
         child: ListView.separated(
           controller: _scroll.value,
           itemBuilder: (_, index) {
-            print(hasMore.value); // 데이터 더 있는지 콘솔창에 출력 (확인용)
-
-            if (index < _subData.length) {
-              var subDatum = _subData[index];
-              var titleDatum = _titleData[index];
-              var contentDatum = _contentData[index];
+            if (index < _postsDataList.length) {
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
-                  Get.to(PostPage(), arguments: "$subDatum");
+                  Get.to(PostPage(), arguments: [_postsDataList[index].posts_id, _postsDataList[index].posts_userId]);
                 },
                 child: Container(
                   padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
-                  child: _makePostTile("$subDatum", "$titleDatum", "$contentDatum"),
+                  child: _makePostTile(_postsDataList[index].posts_subject, _postsDataList[index].posts_title,
+                      _postsDataList[index].posts_content, _postsDataList[index].posts_commentsC,
+                      _postsDataList[index].posts_writtenDate, _postsDataList[index].posts_adoptedStatus),
                 ),
               );
             }
 
-            if (hasMore.value || isLoading.value) {
+            if (_hasMorePosts.value || _isLoading.value) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
 
             return Container(
-              padding: EdgeInsets.all(10.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "게시글의 마지막 입니다"
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        _reload();
-                      },
-                      icon: Icon(Icons.arrow_upward_rounded),
-                    ),
-                  ],
-                ),
+              child: IconButton(
+                onPressed: () {
+                  _reload();
+                },
+                icon: Icon(Icons.arrow_upward_rounded),
               ),
             );
           },
           separatorBuilder: (_, index) => Divider(),
-          itemCount: _subData.length + 1,
+          itemCount: _postsDataList.length + 1,
         ),
       ),),
     );
   }
 
-  Widget _makePostTile(sub, title, content) {
+  Widget _makePostTile(inSub, inTitle, inContent, inCount, inDate, inAdopted) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
           Text(
-            sub,
+            inSub,
             style: TextStyle(
               color: themeColor1,
               fontFamily: "Barun",
@@ -384,7 +369,7 @@ class _BoardPageState extends State<BoardPage> {
           ),
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
-            title,
+            inTitle,
             style: TextStyle(
               fontFamily: "Barun",
               fontSize: 15.sp,
@@ -393,7 +378,8 @@ class _BoardPageState extends State<BoardPage> {
           ),
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
-            content,
+            inContent,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: grayColor2,
               fontFamily: "Barun",
@@ -406,101 +392,3 @@ class _BoardPageState extends State<BoardPage> {
     );
   }
 }
-
-// class InfiniteScrollView extends GetView<InfiniteScrollController> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Obx(
-//             () => Padding(
-//               padding: EdgeInsets.all(10.0),
-//               child: ListView.separated(
-//                 controller: controller._scroll.value,
-//                 itemBuilder: (_, index) {
-//                   print(controller.hasMore.value);
-//                   if (index < controller.data.length) {
-//                     var datum = controller.data[index];
-//                     return Material(
-//                       elevation: 10.0,
-//                       child: Container(
-//                         padding: const EdgeInsets.all(10.0),
-//                         child: ListTile(
-//                           leading: Icon(Icons.android_outlined),
-//                           title: Text('$datum 번째 데이터'),
-//                           trailing: Icon(Icons.arrow_forward_outlined),
-//                         ),
-//                       ),
-//                     );
-//                   }
-//                   if (controller.hasMore.value || controller.isLoading.value) {
-//                     return Center(child: RefreshProgressIndicator());
-//                   }
-//                   return Container(
-//                     padding: const EdgeInsets.all(10.0),
-//                     child: Center(
-//                       child: Column(
-//                         children: [
-//                           Text('데이터의 마지막 입니다'),
-//                           IconButton(
-//                             onPressed: () {
-//                               controller.reload();
-//                             },
-//                             icon: Icon(Icons.refresh_outlined),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   );
-//                 },
-//                 separatorBuilder: (_, index) => Divider(),
-//                 itemCount: controller.data.length + 1,
-//               ),
-//             ),
-//       ),
-//     );
-//   }
-// }
-//
-// class InfiniteScrollController extends GetxController {
-//   var data = <int>[].obs;
-//   var isLoading = false.obs;
-//   var hasMore = false.obs;
-//
-//   var _scroll = ScrollController().obs;
-//
-//   @override
-//   void onInit() {
-//     _getData();
-//
-//     this._scroll.value.addListener(() {
-//       if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
-//           this.hasMore.value) {
-//         _getData();
-//       }
-//     });
-//
-//     super.onInit();
-//   }
-//
-//   _getData() async {
-//     isLoading.value = true;
-//
-//     await Future.delayed(Duration(seconds: 2));
-//
-//     int offset = data.length;
-//     var appendData = List<int>.generate(10, (index) => index+1+offset);
-//     data.addAll(appendData);
-//
-//     isLoading.value = false;
-//     hasMore.value = data.length < 30;
-//   }
-//
-//   reload() async {
-//     isLoading.value = true;
-//     data.clear();
-//
-//     await Future.delayed(Duration(seconds: 2));
-//
-//     _getData();
-//   }
-// }
