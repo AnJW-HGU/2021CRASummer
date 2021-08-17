@@ -30,7 +30,7 @@ dependencies:
   hexcolor: ^2.0.4
   flutter:
     sdk: flutter
-
+  firebase_core: ^1.4.0
 
   http: ^0.13.3
   webview_flutter: ^2.0.10

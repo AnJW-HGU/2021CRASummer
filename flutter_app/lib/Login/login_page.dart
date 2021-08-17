@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,13 +20,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var token;
 
   getToken() async{
-    var token  = await FirebaseMessaging.instance.getToken();
-    return token;
+    token  = await FirebaseMessaging.instance.getToken();
+    return token.toString();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +98,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-                    String token = getToken();
-                    print('${token}');
+                    Firebase.initializeApp();
+                    getToken();
+                    print('token: ${token}');
                     Get.offAll(() => SplashPage());
                     /*var isLogined = fetch();
                     if(isLogined == true){
