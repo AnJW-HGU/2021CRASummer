@@ -8,6 +8,33 @@ import 'dart:ui';
 
 import 'package:studytogether/main.dart';
 
+// class AddPost {
+//   String? postClassifi;
+//   String? postUser;
+//   String? postImage;
+//   String? postTitle;
+//   String? postContent;
+//
+//   AddPost (inTitle, inContent) {
+//     postClassifi = '011220';
+//     postUser = '200404';
+//     postImage = '0';
+//     postTitle = inTitle;
+//     postContent = inContent;
+//   }
+//
+//   //jsonEncode 함수 있어서 메소드를 부를 필요는 없음
+//   Map<String, dynamic> toJson() =>
+//       {
+//         'classification_id': postClassifi,
+//         'user_id': postUser,
+//         'image_id': postImage,
+//         'title': postTitle,
+//         'content': postContent
+//       };
+// }
+
+
 class SubSearchPage extends StatefulWidget {
   const SubSearchPage({Key? key}) : super(key: key);
 
@@ -71,6 +98,27 @@ class _SubSearchPageState extends State<SubSearchPage> {
     super.dispose();
   }
 
+  // void _addPost(inTitle, inContent) async {
+  //   String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/";
+  //   AddPost _addPost = AddPost(inTitle, inContent);
+  //
+  //   print(await apiRequest(url, _addPost));
+  // }
+  //
+  // Future<String> apiRequest(url, _post) async {
+  //   HttpClient httpClient = new HttpClient();
+  //   HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+  //   request.headers.set('content-type', 'application/json');
+  //   request.add (utf8.encode(jsonEncode(_post)));
+  //   HttpClientResponse response = await request.close();
+  //
+  //   // todo - you should check the response.statusCode
+  //   // String reply = await response.transform(utf8.decoder).join();
+  //   String reply = "작성되었습니다.";
+  //   httpClient.close(); // 이때 요청함
+  //   return reply;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -128,7 +176,7 @@ class _SubSearchPageState extends State<SubSearchPage> {
                       // FocusScope.of(context).unfocus();
                       },
                     padding: EdgeInsets.all(0.0),
-                    icon: Icon(Icons.clear, color: themeColor1,),
+                    icon: Icon(Icons.clear , color: themeColor1,),
                   ),
 
                   hintText: "강의명 또는 교수명을 입력하세요.",

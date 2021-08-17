@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +9,44 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:studytogether/splash_page.dart';
+import 'package:http/http.dart' as http;
 
+setNickname(String _id, String nickname_nickname) async {
+  var response = await http.post(
+      Uri.parse('https://0c5f29c1-526c-4b53-af83-ce20fecb0819.mock.pstmn.io/nickname?user_id=000000'),
+      headers: <String, String> {
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(<String, dynamic> {
+        'id': _id, //앞 페이지에서 받아오기
+        'nickname': nickname_nickname
+      })
+  );
+
+  if (response.statusCode == 200) {
+    if(response.body.isNotEmpty) {
+      return Nickname.fromJson(json.decode(response.body));
+    }
+
+  } else {
+    // 만약 요청이 실패하면, 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
+class Nickname {
+  //var nickname_id;
+  var nickname_nickname;
+
+  Nickname({this.nickname_nickname});
+
+  factory Nickname.fromJson(String nickname_nickname) {
+    return Nickname(
+      //nickname_id: json["id"],
+      nickname_nickname: nickname_nickname,
+    );
+  }
+}
 
 class SetNicknamePage extends StatefulWidget {
   @override
@@ -15,11 +54,19 @@ class SetNicknamePage extends StatefulWidget {
 }
 
 class _SetNicknamePageState extends State<SetNicknamePage> {
+  String _id = Get.arguments; //회원가입 페이지에서 id 받아오기
   bool _isChecked1 = false; //이용약관
   bool _isChecked2 = false; //개인정보 처리
   bool _isNamed = false; //닉네임을 입력했는지
 
   final _nickName = TextEditingController();
+
+  Future<Nickname>? nickname;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -44,208 +91,228 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
 
   //body
   Widget _setNicknamePageBody() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      //배경
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/Login.png'),
-          fit: BoxFit.cover,
+    return Center(
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        //배경
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Login.png'),
+            fit: BoxFit.cover,
+          ),
         ),
-      ),
-      child: SafeArea(
-        child: Center(
-          child: Container(
-            padding: EdgeInsets.only(top: 150.h, left: 80.w, right: 80.w),
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    //닉네임 받기
-                    TextField(
-                      controller: _nickName,
-                      textInputAction: TextInputAction.go,
-                      onSubmitted: (value) {
-                        if(_nickName.text.length >= 1) {
-                          setState(() {
-                            _isNamed = true;
-                          });
-                        } else{
-                          setState(() {
-                            _isNamed = false;
-                          });
-                        }
-                        print("${_nickName.text}");
-                      },
-                      textAlign: TextAlign.center,
-                      //닉네임 문자 제한
-                      maxLength: 8,
-                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
-                      cursorHeight: 20,
-                      decoration: InputDecoration(
-                        counterStyle: TextStyle(
-                          color: themeColor1.withOpacity(0.75),
-                        ),
-                        //counterText: "",
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                        hintText: '닉네임은 최대 8글자까지, 한글만 가능합니다',
-                        hintStyle: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w300,
-                          color: HexColor("#C2C2C2"),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(color: themeColor2)
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: themeColor2),
-                        ),
-                        //counterStyle: TextStyle(
-                        //  color: themeColor2,
-                        //),
+        child: SafeArea(
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.only(top: 150.h, left: 80.w, right: 80.w),
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          Text('  닉네임을 설정해주세요:)',style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            color: themeColor2,
+                            fontFamily: "Barun",
+                          ),),
+                        ],
                       ),
-                    ),
+                      SizedBox(height: 10,),
 
-                    //선 긋기
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 10.w, right: 10.w, bottom: 10),
-                      child: Divider(color: themeColor3, thickness: 1.0,),
-                    ),
-
-                    //이용약관
-                    Container(
-                      padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        title: const Text('이용약관', style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.lightBlue,
-                          fontFamily: "Barun",
-                        ),),
-                        value: _isChecked1,
-                        onChanged: (value) {
-                          Get.defaultDialog(
-                            title: '이용약관',
-                            content: Flexible(
-                              child: SingleChildScrollView(
-                                child: getContent1()),
-                            ),
-                            barrierDismissible: false,
-                            radius: 15.0,
-                            confirm: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isChecked1 = true;
-                                  });
-                                  Get.back();
-                                },
-                                child: Text("동의", style: TextStyle(fontFamily: "Barun",))),
-                            cancel: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isChecked1 = false;
-                                  });
-                                  Get.back();
-                                },
-                                child: Text("취소", style: TextStyle(fontFamily: "Barun",))),
-                            titleStyle: TextStyle(fontFamily: "Barun"),
-                            middleTextStyle: TextStyle(fontFamily: "Barun"),
-                          );
+                      //닉네임 받기
+                      TextField(
+                        //autofocus: true,
+                        controller: _nickName,
+                        textInputAction: TextInputAction.go,
+                        onSubmitted: (value) {
+                          if(_nickName.text.length >= 1) {
+                            setState(() {
+                              _isNamed = true;
+                            });
+                          } else{
+                            setState(() {
+                              _isNamed = false;
+                            });
+                          }
+                          print("${_nickName.text}");
                         },
-                        activeColor: themeColor2,
-                        checkColor: Colors.white,
-                        isThreeLine: false,
-                        selected: _isChecked1,
+                        textAlign: TextAlign.center,
+                        //닉네임 문자 제한
+                        maxLength: 8,
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
+                        cursorHeight: 20,
+                        decoration: InputDecoration(
+                          counterStyle: TextStyle(
+                            color: themeColor1.withOpacity(0.75),
+                            fontSize: 13.sp,
+                          ),
+                          //counterText: "",
+                          contentPadding: EdgeInsets.symmetric(vertical: 3),
+                          hintText: '닉네임은 한글만 가능합니다',
+                          hintStyle: TextStyle(
+                            fontFamily: "Barun",
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w300,
+                            color: HexColor("#C2C2C2"),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: themeColor2)
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: themeColor2),
+                          ),
+                          //counterStyle: TextStyle(
+                          //  color: themeColor2,
+                          //),
+                        ),
                       ),
-                    ),
 
-                    //개인정보처리방침
-                    Container(
-                      padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        title: const Text('개인정보 처리방침', style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.lightBlue,
+                      //선 긋기
+                      Padding(
+                        padding: EdgeInsets.only(top: 15.h, left: 10.w, right: 10.w, bottom: 6.h),
+                        child: Divider(color: themeColor3, thickness: 1.5,),
+                      ),
+
+                      //이용약관
+                      Container(
+                        padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                        child: ListTileTheme(
+                          dense: true,
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: Text('이용약관', style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: themeColor2,
+                              fontFamily: "Barun",
+                            ),),
+                            value: _isChecked1,
+                            onChanged: (value) {
+                              Get.defaultDialog(
+                                title: '이용약관',
+                                content: Flexible(
+                                  child: SingleChildScrollView(
+                                      child: getContent1()),
+                                ),
+                                barrierDismissible: false,
+                                radius: 15.0,
+                                confirm: ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isChecked1 = true;
+                                      });
+                                      Get.back();
+                                    },
+                                    child: Text("동의", style: TextStyle(fontFamily: "Barun",))),
+                                cancel: ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isChecked1 = false;
+                                      });
+                                      Get.back();
+                                    },
+                                    child: Text("취소", style: TextStyle(fontFamily: "Barun",))),
+                                titleStyle: TextStyle(fontFamily: "Barun"),
+                                middleTextStyle: TextStyle(fontFamily: "Barun"),
+                              );
+                            },
+                            activeColor: themeColor2,
+                            checkColor: Colors.white,
+                            isThreeLine: false,
+                            selected: _isChecked1,
+                          ),
+                        ),
+                      ),
+
+                      //개인정보처리방침
+                      Container(
+                        padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          title: Text('개인정보 처리방침', style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            color: themeColor2,
+                            fontFamily: "Barun",
+                          ),),
+                          value: _isChecked2,
+                          onChanged: (value) {
+                            Get.defaultDialog(
+                              title: '개인정보 처리방침',
+                              //middleText: '약관에 동의 한다면 확인',
+                              content: Flexible(
+                                child: SingleChildScrollView(
+                                    child: getContent2()),
+                              ),
+                              barrierDismissible: false,
+                              radius: 15.0,
+                              confirm: ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isChecked2 = true;
+                                    });
+                                    Get.back();
+                                  },
+                                  child: Text("동의", style: TextStyle(fontFamily: "Barun",))),
+                              cancel: ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isChecked2 = false;
+                                    });
+                                    Get.back();
+                                  },
+                                  child: Text("취소", style: TextStyle(fontFamily: "Barun",))),
+                              titleStyle: TextStyle(fontFamily: "Barun"),
+                              middleTextStyle: TextStyle(fontFamily: "Barun"),
+                            );
+                          },
+                          activeColor: themeColor2,
+                          checkColor: Colors.white,
+                          isThreeLine: false,
+                          selected: _isChecked2,
+                        ),
+                      ),
+
+                      //선 긋기
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.h, left: 10.w, right: 10.w, bottom: 30.h),
+                        child: Divider(color: themeColor3, thickness: 1.5,),
+                      ),
+
+                      //확인 버튼
+                      MaterialButton(
+                        minWidth: double.infinity,
+                        height: 45,
+                        onPressed: _isChecked1 ? (_isChecked2 ? (_isNamed ? whenTap : null) : null) : null,
+                        color: themeColor1,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)
+                        ),
+                        child: Text("확인", style: TextStyle(
                           fontFamily: "Barun",
+                          color: HexColor("#FFFFFF"),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17.sp,
+                          shadows: [Shadow(
+                            color: blurColor,
+                            offset: Offset(0,2.0),
+                            blurRadius: 2,
+                          )],
                         ),),
-                        value: _isChecked2,
-                        onChanged: (value) {
-                          Get.defaultDialog(
-                            title: '개인정보 처리방침',
-                            //middleText: '약관에 동의 한다면 확인',
-                            content: Flexible(
-                              child: SingleChildScrollView(
-                                  child: getContent2()),
-                            ),
-                            barrierDismissible: false,
-                            radius: 15.0,
-                            confirm: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isChecked2 = true;
-                                  });
-                                  Get.back();
-                                },
-                                child: Text("동의", style: TextStyle(fontFamily: "Barun",))),
-                            cancel: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isChecked2 = false;
-                                  });
-                                  Get.back();
-                                },
-                                child: Text("취소", style: TextStyle(fontFamily: "Barun",))),
-                            titleStyle: TextStyle(fontFamily: "Barun"),
-                            middleTextStyle: TextStyle(fontFamily: "Barun"),
-                          );
-                        },
-                        activeColor: themeColor2,
-                        checkColor: Colors.white,
-                        isThreeLine: false,
-                        selected: _isChecked2,
+                        //버튼 비활성화 색
+                        disabledColor: grayColor2,
                       ),
-                    ),
-
-                    //선 긋기
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, left: 10.w, right: 10.w, bottom: 30),
-                      child: Divider(color: themeColor3, thickness: 1.0,),
-                    ),
-
-                    //확인 버튼
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 45,
-                      onPressed: _isChecked1 ? (_isChecked2 ? (_isNamed ? whenTap : null) : null) : null,
-                      color: themeColor1,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Text("확인", style: TextStyle(
-                        color: HexColor("#FFFFFF"),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17.sp,
-                        shadows: [Shadow(
-                          color: blurColor,
-                          offset: Offset(0,2.0),
-                          blurRadius: 2,
-                        )],
-                      ),),
-                      //버튼 비활성화 색
-                      disabledColor: grayColor2,
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -255,6 +322,7 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
 
   //확인 버튼이 눌렸을 때
   void whenTap(){
+    setNickname(_id, _nickName.text);
     Get.offAll(SplashPage());
   }
 

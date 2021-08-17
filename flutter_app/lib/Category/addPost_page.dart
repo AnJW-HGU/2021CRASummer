@@ -1,11 +1,43 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:studytogether/Category/subSearch_page.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'dart:ui';
 
 import 'package:studytogether/main.dart';
+import '../Data/Post_data.dart';
+
+class AddPost {
+  int? postClassifi;
+  int? postUser;
+  int? postImage;
+  String? postTitle;
+  String? postContent;
+
+  AddPost (inTitle, inContent) {
+    postClassifi = 1;
+    postUser = 1;
+    // postImage = 0;
+    postTitle = inTitle;
+    postContent = inContent;
+  }
+
+  //jsonEncode 함수 있어서 메소드를 부를 필요는 없음
+  Map<String, dynamic> toJson() =>
+      {
+        'classificationId': postClassifi,
+        'userId': postUser,
+        // 'image_id': postImage,
+        'title': postTitle,
+        'content': postContent
+      };
+}
 
 class AddPostPage extends StatefulWidget {
   const AddPostPage({Key? key}) : super(key: key);
@@ -15,14 +47,6 @@ class AddPostPage extends StatefulWidget {
 }
 
 class _AddPostPageState extends State<AddPostPage> {
-  final _userId = ""; // 유저 아이디
-  final _subSelect = ""; // 선택한 과목
-  final _proSelect = ""; // 선택한 과목의 교수님
-
-  final _addTitle = ""; // 글쓰기 제목
-  final _addContent = ""; // 글쓰기 내용
-  final _addImage = ""; // 첨부한 이미지
-  final _addWrittenDate = ""; // 글 작성 시간
 
   final addTitle = TextEditingController();
   final addContent = TextEditingController();
@@ -38,6 +62,43 @@ class _AddPostPageState extends State<AddPostPage> {
     addTitle.dispose();
     addContent.dispose();
     super.dispose();
+  }
+
+
+  // Data
+  _addPost(inTitle, inContent) async {
+    String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/";
+    AddPost _addPost = AddPost(inTitle, inContent);
+
+    return (await apiRequest(url, _addPost));
+  }
+
+  apiRequest(url, _post) async {
+    var body = utf8.encode(jsonEncode(_post));
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String> {
+        'Content-type': 'application/json',
+      },
+      body: body,
+    );
+
+    String reply = "작성에 실패하였습니다.";
+    if (response.statusCode == 200) {
+      reply = response.body;
+    }
+    // Http Client로 만들었던 것
+    // HttpClient httpClient = new HttpClient();
+    // HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+    // request.headers.set('content-type', 'application/json');
+    // request.add (utf8.encode(jsonEncode(_post)));
+    // HttpClientResponse response = await request.close();
+    //
+    // // todo - you should check the response.statusCode
+    // // String reply = await response.transform(utf8.decoder).join();
+    // String reply = "작성되었습니다.";
+    // httpClient.close(); // 이때 요청함
+    return reply;
   }
 
   @override
@@ -74,10 +135,29 @@ class _AddPostPageState extends State<AddPostPage> {
             // 완료 버튼
             actions: [
               TextButton(
-                onPressed: _isButtonAbled ? () {
-                  print("제목 : ${addTitle.text}");
-                  print("내용 : ${addContent.text}");
+                onPressed: _isButtonAbled ? () async {
                   Get.back();
+                  String result = await _addPost("${addTitle.text}", "${addContent.text}");
+                  if (result == "OK") {
+                    result = "작성이 완료되었습니다.";
+                  }
+                  else {
+                    result = "작성에 실패하였습니다.";
+                  }
+                  // _addPostData("${addTitle.text}", "${addContent.text}");
+                  // Post inPost = new Post("${addTitle.text}", "${addContent.text}");
+                  // inPost._addPost();
+                  Get.showSnackbar(
+                      GetBar(
+                        message: result,
+                        duration: Duration(seconds: 1),
+                        snackPosition: SnackPosition.TOP,
+                        maxWidth: 400.w,
+                        backgroundColor: themeColor2,
+                        borderRadius: 5,
+                        barBlur: 0,
+                      ),
+                  );
                 } : _isButtonDialog,
                 child: Text(
                   "완료",
@@ -164,6 +244,7 @@ class _AddPostPageState extends State<AddPostPage> {
                           Container(
                             child: TextField(
                               controller: addContent,
+                              maxLength: 2500,
                               onChanged: (value) {
                                 if (addContent.text.length >= 1) {
                                   setState(() {
@@ -254,12 +335,6 @@ class _AddPostPageState extends State<AddPostPage> {
                         ),
                         backgroundColor: themeColor2,
                         duration: Duration(seconds: 1),
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.only(
-                        //     topLeft: Radius.circular(10),
-                        //     topRight: Radius.circular(10),
-                        //   )
-                        // ),
                       ),
                     );
                   },
@@ -294,23 +369,6 @@ class _AddPostPageState extends State<AddPostPage> {
           duration: Duration(seconds: 1),
         ),
       );
-      // Get.defaultDialog(
-      //   barrierDismissible: true,
-      //   title: "",
-      //   titleStyle: TextStyle(
-      //     fontFamily: "Barun",
-      //     fontSize: 15.sp,
-      //     fontWeight: FontWeight.w400,
-      //   ),
-      //   content: Text(
-      //     "과목을 선택해주세요\n",
-      //     style: TextStyle(
-      //       fontFamily: "Barun",
-      //       fontSize: 17.sp,
-      //       fontWeight: FontWeight.w600,
-      //     ),
-      //   ),
-      // );
     }
     else if (_isTitle != true) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -327,25 +385,6 @@ class _AddPostPageState extends State<AddPostPage> {
           duration: Duration(seconds: 1),
         ),
       );
-      // Get.defaultDialog(
-      //   barrierDismissible: true,
-      //   title: "",
-      //   titleStyle: TextStyle(
-      //     color: grayColor2,
-      //     fontFamily: "Barun",
-      //     fontSize: 16.sp,
-      //     fontWeight: FontWeight.w400,
-      //   ),
-      //   content: Text(
-      //     "제목을 입력해주세요\n",
-      //     style: TextStyle(
-      //       color: themeColor1,
-      //       fontFamily: "Barun",
-      //       fontSize: 17.sp,
-      //       fontWeight: FontWeight.w500,
-      //     ),
-      //   ),
-      // );
     }
     else if (_isContent != true) {
       ScaffoldMessenger.of(context).showSnackBar(
