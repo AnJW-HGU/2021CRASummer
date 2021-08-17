@@ -37,7 +37,7 @@ Future<List<Posts>> fetchPosts() async {
   if (response.statusCode == 200) {
     return PostsfromJson(json.decode(response.body));
   } else {
-    throw Exception("Faild to load posts");
+    throw Exception("Failed to load posts");
   }
 }
 
