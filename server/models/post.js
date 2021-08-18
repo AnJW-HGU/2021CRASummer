@@ -41,15 +41,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+		category: {
+			type: DataTypes.STRING(50),
+			allowNull: false
+		},
         comments_count: {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
         },
-		category: {
-			type: DataTypes.STRING(50),
-			allowNull: false
-		},
         reports_count: {
             type: DataTypes.INTEGER,
             allowNull: false,
