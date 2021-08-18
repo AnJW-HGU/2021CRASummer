@@ -5,9 +5,17 @@ const Op = sequelize.Op;
 exports.searchClassifications = async (req, res) => {
 	Classification.findAll({
 		where: {
-			과목명: {
-				[Op.like]: "%"+req.query.searchKeyword+"%"
-			}
+			[Op.or]: [
+				{
+					과목명: {
+						[Op.like]: "%"+req.query.searchKeyword+"%"
+					}
+				}, {
+					개설정보: {
+						[Op.like]: "%"+req.query.searchKeyword+"%"
+					}
+				}
+			]
 		}
 	}).then(result => {
 		if(result)
