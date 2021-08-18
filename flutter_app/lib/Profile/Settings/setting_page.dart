@@ -11,14 +11,55 @@ import 'privacyRule_page.dart';
 import 'spon_page.dart';
 import 'useRule_page.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+
+Future<User> fetchUser() async {
+  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?post_id=1';
+  var response = await http.get(Uri.parse(userUrl));
+
+  if(response.statusCode == 200) {
+    return User.fromJson(json.decode(response.body));
+  } else {
+    throw Exception("Failed to load User");
+  }
+}
+
+class User{
+  var user_nickname;
+
+  User({
+    this.user_nickname,
+  });
+
+  // 찐 서버 연결시
+  // factory User.fromJson(String nickname){
+  //   return User(
+  //     user_nickname: nickname,
+  //   );
+  // }
+  factory User.fromJson(Map<String, dynamic> json){
+    return User(
+      user_nickname: json['nickname'],
+    );
+  }
+}
+
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-  String _nickName = Get.arguments; // 닉네임
+  late Future<User> user;
   bool isSwitched = false; // 푸시알림 on/off
+
+  @override
+  void initState() {
+    super.initState();
+    user = fetchUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +86,41 @@ class _SettingPageState extends State<SettingPage> {
                     fontSize: 15.sp
                 ),
               ),
-
               centerTitle: true,
             ),
-            body: _settingPageBody()
+            body: FutureBuilder<User>(
+              future: user,
+              builder: (context, snapshot) {
+                if(snapshot.data != null){
+                  return ListView(
+                    children: <Widget>[
+                      _listTile_nickName("닉네임", EditNicknamePage(), snapshot.data!.user_nickname),
+                      _listTile_noPage("테마 색상"),
+                      _listTile_alarm("푸쉬알림 설정"),
+                      Padding(padding: EdgeInsets.all(2.0)),
+                      _listTile("공지사항", InfoPage()),
+                      _listTile("문의하기", AskPage()),
+                      _listTile_appVersion("앱 버전"),
+                      _listTile("개발자 페이지", SponPage()),
+                      Padding(padding: EdgeInsets.all(2.0)),
+                      _listTile("이용약관", UseRulePage()),
+                      _listTile("개인정보 처리방침", PrivacyRulePage()),
+                      _listTile_noPage("로그아웃"),
+                    ],
+                  );
+                }else if(snapshot.hasError){
+                  return Text("${snapshot.error}");
+                }
+                return Center(child: CircularProgressIndicator());
+              }
+            )
           );
         }
     );
   }
 
   // 닉네임 리스트
-  Widget _listTile_nickName(context, Next){
+  Widget _listTile_nickName(context, Next, _nickName){
     return ListTile(
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
       title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
@@ -127,25 +192,6 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  // 리스트타일들
-  Widget _settingPageBody() {
-    return ListView(
-        children: <Widget>[
-          _listTile_nickName("닉네임", EditNicknamePage()),
-          _listTile_noPage("테마 색상"),
-          _listTile_alarm("푸쉬알림 설정"),
-          Padding(padding: EdgeInsets.all(2.0)),
-          _listTile("공지사항", InfoPage()),
-          _listTile("문의하기", AskPage()),
-          _listTile_appVersion("앱 버전"),
-          _listTile("개발자 페이지", SponPage()),
-          Padding(padding: EdgeInsets.all(2.0)),
-          _listTile("이용약관", UseRulePage()),
-          _listTile("개인정보 처리방침", PrivacyRulePage()),
-          _listTile_noPage("로그아웃"),
-        ],
-    );
-  }
 }
 
 

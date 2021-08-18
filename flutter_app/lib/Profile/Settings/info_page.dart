@@ -4,11 +4,41 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+
+Future<User> fetchUser() async {
+  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?post_id=1';
+  var response = await http.get(Uri.parse(userUrl));
+
+  if(response.statusCode == 200) {
+    return User.fromJson(json.decode(response.body));
+  } else {
+    throw Exception("Failed to load User");
+  }
+}
+
+// 공지사항 어디서 받아오는지 ?
+class User{
+  var user_nickname;
+
+  User({
+    this.user_nickname,
+  });
+
+
+  factory User.fromJson(Map<String, dynamic> json){
+    return User(
+      user_nickname: json['nickname'],
+    );
+  }
+}
+
 class InfoPage extends StatefulWidget {
   @override
   _InfoPageState createState() => _InfoPageState();
 }
-
 
 class _InfoPageState extends State<InfoPage> {
 

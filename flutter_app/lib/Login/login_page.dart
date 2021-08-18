@@ -11,7 +11,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:studytogether/splash_page.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,6 +19,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  getToken() async{
+    var token  = await FirebaseMessaging.instance.getToken();
+    return token;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -53,27 +61,31 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Container(
             //위치 조정
-            padding: EdgeInsets.only(top: 150.h, left: 50.w, right: 50.w),
+            padding: EdgeInsets.only(left: 50.w, right: 50.w),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //'ST' 넣기
-                Text('ST',style: TextStyle(
-                    fontSize: 64.sp,
-                    fontWeight: FontWeight.w400,
-                    color: themeColor1,
-                    fontFamily: "Barun", //폰트 지정
-                    shadows: [Shadow(
-                      color: blurColor,
-                      offset: Offset(0,4.0),
-                      blurRadius: 4,
-                    )]
-                ),),
-                SizedBox(height: 100.h,),
-                //아이콘이 포함된 버튼( 로그인 버튼 )
+                // //'ST' 넣기
+                // Text('',
+                //   style: TextStyle(
+                //     letterSpacing: -8,
+                //     fontSize: 60.sp,
+                //     fontWeight: FontWeight.w400,
+                //     color: themeColor1,
+                //     fontFamily: "Barun", //폰트 지정
+                //     // shadows: [Shadow(
+                //     //   color: blurColor,
+                //     //   offset: Offset(0,4.0),
+                //     //   blurRadius: 4,
+                //     // )]
+                //   ),
+                // ),
+                // SizedBox(height: 100.h,),
+                // //아이콘이 포함된 버튼( 로그인 버튼 )
                 ElevatedButton.icon(
                   icon: Icon(
                     Icons.g_mobiledata_sharp,
-                    size: 50,
+                    size: 45,
                     color: HexColor("#FFFFFF"),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -81,11 +93,13 @@ class _LoginPageState extends State<LoginPage> {
                     //onPrimary: themeColor2,
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(15.0),
+                      borderRadius: new BorderRadius.circular(5.0),
                     ),
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
+                    String token = getToken();
+                    print('${token}');
                     Get.offAll(() => SplashPage());
                     /*var isLogined = fetch();
                     if(isLogined == true){
@@ -97,7 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                      */
                   },
                   //버튼 안에 text
-                  label: Text("    Log in with Google     ", style: TextStyle(
+                  label: Text("학교 계정으로 시작하기  ", style: TextStyle(
+                      fontFamily: "Barun",
                       color: HexColor("#FFFFFF"),
                       fontWeight: FontWeight.w500,
                       fontSize: 17.sp,
@@ -108,23 +123,28 @@ class _LoginPageState extends State<LoginPage> {
                       )]
                   ),),
                 ),
-                SizedBox(height: 12.h,),
+                SizedBox(height: 12,),
                 //로그인 버튼 밑의 글( 회원가입으로 넘어가는 버튼 )
+                // //선 긋기
+                // Padding(
+                //   padding: EdgeInsets.only(top: 5, left: 120.w, right: 120.w, bottom: 5),
+                //   child: Divider(color: themeColor3, thickness: 1.5,),
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Column(
                       children: [
-                        Text('If this is your first visit  ',style: TextStyle(
+                        Text('앱이 처음이라면  ',style: TextStyle(
                             fontSize: 14.5.sp,
                             fontWeight: FontWeight.w300,
                             color: themeColor1,
                             fontFamily: "Barun",
-                            shadows: [Shadow(
-                              color: blurColor,
-                              offset: Offset(0,1.0),
-                              blurRadius: 2,
-                            )]
+                            // shadows: [Shadow(
+                            //   color: blurColor,
+                            //   offset: Offset(0,1.0),
+                            //   blurRadius: 2,
+                            // )]
                         ),),
                       ],
                     ),
@@ -135,8 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {
                             Get.to(() => SignUpPage());
                           },
-                          child: Text("Sign up", style: TextStyle(
-                              fontSize: 15.sp,
+                          child: Text("회원가입", style: TextStyle(
+                              fontSize: 15.5.sp,
                               fontWeight: FontWeight.w500,
                               color: themeColor1,
                               fontFamily: "Barun",
@@ -144,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                               shadows: [Shadow(
                                 color: blurColor,
                                 offset: Offset(0,1.0),
-                                blurRadius: 2,
+                                blurRadius: 1,
                               )]
                           ),),
                         ),

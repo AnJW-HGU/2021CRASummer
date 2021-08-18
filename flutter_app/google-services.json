@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "896273889572",
+    "project_id": "study-together-notification",
+    "storage_bucket": "study-together-notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896273889572:android:d1e81e2d247377a331dbb1",
+        "android_client_info": {
+          "package_name": "com.cra.studytogether.studytogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "896273889572-0s6gure3icr08ptfevie9i9e01qk6kul.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA07-t9r7suDuzDr8MZ1jS7Qcoik_X7_sw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896273889572-0s6gure3icr08ptfevie9i9e01qk6kul.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

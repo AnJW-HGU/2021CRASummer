@@ -62,7 +62,7 @@ class _NamedAnswerPageState extends State<NamedAnswerPage> {
                   TextButton(
                       onPressed: _isButtonAbled ?
                         _isButtonDialog
-                      : _isButtonDialog,
+                      : _isFalsedButtonDialog,
                       child: Text(
                         "완료",
                         style: TextStyle(
@@ -78,136 +78,132 @@ class _NamedAnswerPageState extends State<NamedAnswerPage> {
               body: Padding(
                 padding: EdgeInsets.only(
                     top: 20.0, bottom: 20.0, left: 20.0.w, right: 20.0.w),
-                child: _NamedAnswerPageBody(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: 250,
+                      padding: EdgeInsets.only(
+                          top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
+                      decoration: BoxDecoration(
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: blurColor,
+                        //     blurRadius: 4,
+                        //     offset: Offset(0.0, 3.0),
+                        //   ),
+                        // ],
+                        color: themeColor4,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            studentId,
+                            style: TextStyle(
+                              fontFamily: "Barun",
+                              fontSize: 14.sp,
+                              color: themeColor1,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                            child: Text(
+                              title_content,
+                              style: TextStyle(
+                                fontFamily: "Barun",
+                                fontSize: 16.sp,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 1,
+                            color: Colors.black,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text(
+                              "내요오옹",
+                              style: TextStyle(
+                                fontFamily: "Barun",
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 15.0, left: 5.0.w, right: 5.0.w),
+                      child: IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              VerticalDivider(thickness: 4, color: themeColor4,),
+                              Container(
+                                padding: EdgeInsets.only(left: 3.0.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _UserInfo("이메일", email),
+                                    _UserInfo("질문 수", question_num),
+                                    _UserInfo("답변 수", answer_num),
+                                    _UserInfo("채택 수", select_num),
+                                    _UserInfo("포인트", point),
+                                    _UserInfo("신고", declaration_num),
+                                    _UserInfo("네임드", named),
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 5.0, left: 12.0.w, right: 5.0.w),
+                      child: DropdownButton(
+                        style: TextStyle(
+                          fontFamily: "Barun",
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                        value: _selectedValue,
+                        items: _valueList.map(
+                                (value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                        onChanged: (value) {
+                          _selectedValue = value.toString();
+                          if (_selectedValue.compareTo(initialValue)==0) {
+                            setState(() {
+                              _isButtonAbled = false;
+                            });
+                          } else if (_selectedValue.compareTo(named)==0) {
+                            setState(() {
+                              _isButtonAbled = false;
+                            });
+                          } else {
+                            setState(() {
+                              _changedValue = _selectedValue;
+                              _isButtonAbled = true;
+                              _isValued = true;
+                            });
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
               )
           );
         }
-    );
-  }
-
-  Widget _NamedAnswerPageBody() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          height: 250,
-          padding: EdgeInsets.only(
-              top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
-          decoration: BoxDecoration(
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: blurColor,
-            //     blurRadius: 4,
-            //     offset: Offset(0.0, 3.0),
-            //   ),
-            // ],
-            color: themeColor4,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                studentId,
-                style: TextStyle(
-                  fontFamily: "Barun",
-                  fontSize: 14.sp,
-                  color: themeColor1,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
-                child: Text(
-                  title_content,
-                  style: TextStyle(
-                    fontFamily: "Barun",
-                    fontSize: 16.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Container(
-                height: 1,
-                color: Colors.black,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Text(
-                  "내요오옹",
-                  style: TextStyle(
-                    fontFamily: "Barun",
-                    fontSize: 14.sp,
-                    color: Colors.black,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(top: 15.0, left: 5.0.w, right: 5.0.w),
-          child: IntrinsicHeight(
-              child: Row(
-                children: [
-                  VerticalDivider(thickness: 4, color: themeColor4,),
-                  Container(
-                    padding: EdgeInsets.only(left: 3.0.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _UserInfo("이메일", email),
-                        _UserInfo("질문 수", question_num),
-                        _UserInfo("답변 수", answer_num),
-                        _UserInfo("채택 수", select_num),
-                        _UserInfo("포인트", point),
-                        _UserInfo("신고", declaration_num),
-                        _UserInfo("네임드", named),
-                      ],
-                    ),
-                  )
-                ],
-              )
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(top: 5.0, left: 12.0.w, right: 5.0.w),
-          child: DropdownButton(
-            style: TextStyle(
-              fontFamily: "Barun",
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
-            value: _selectedValue,
-            items: _valueList.map(
-                    (value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              _selectedValue = value.toString();
-              if (_selectedValue.compareTo(initialValue)==0) {
-                setState(() {
-                  _isButtonAbled = false;
-                });
-              } else if (_selectedValue.compareTo(named)==0) {
-                setState(() {
-                  _isButtonAbled = false;
-                });
-              } else {
-                setState(() {
-                  _changedValue = _selectedValue;
-                  _isButtonAbled = true;
-                  _isValued = true;
-                });
-              }
-            },
-          ),
-        )
-      ],
     );
   }
 
@@ -250,39 +246,32 @@ class _NamedAnswerPageState extends State<NamedAnswerPage> {
     );
   }
 
+  void  _isFalsedButtonDialog() async{
+
+  }
+
   void _isButtonDialog() async {
     if (_isValued==true) {
-      AlertDialog(
-        title: Text("네임드 확인"),
-        content: Text("네임드를 '$named'에서 '$_changedValue'로 수정합니다."),
+      Get.defaultDialog(
+        title: "네임드 확인",
+        content: Text("네임드를 $named -> $_changedValue 수정합니다."),
         actions: <Widget>[
           FlatButton(
             child: Text("확인"),
             onPressed: () {
               Get.back();
+              Get.back();
+              // 변경된 네임드 값을 Post 해주면 될듯
             },
           ),
           FlatButton(
             child: Text("취소"),
-            onPressed: () {},
-          ),
-        ],
+            onPressed: () {
+              Get.back();
+            },
+          )
+        ]
       );
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(
-      //       "네임드를 '$named'에서 '$_changedValue'로 수정합니다.",
-      //       style: TextStyle(
-      //         fontFamily: "Barun",
-      //         fontSize: 16.sp,
-      //         fontWeight: FontWeight.w500,
-      //       ),
-      //     ),
-      //     backgroundColor: themeColor2,
-      //     duration: Duration(seconds: 1),
-      //   ),
-      // );
-      Get.back();
     }
   }
 }
