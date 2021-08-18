@@ -20,12 +20,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var token;
-
-  getToken() async{
-    token  = await FirebaseMessaging.instance.getToken();
-    return token.toString();
-  }
+  // var token;
+  //
+  // getToken() async{
+  //   token  = await FirebaseMessaging.instance.getToken();
+  //   return token.toString();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +98,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-                    Firebase.initializeApp();
-                    getToken();
-                    print('token: ${token}');
+                    // Firebase.initializeApp();
+                    // getToken();
+                    // print('token: ${token}');
                     Get.offAll(() => SplashPage());
                     /*var isLogined = fetch();
                     if(isLogined == true){
