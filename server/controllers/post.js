@@ -11,6 +11,7 @@ exports.createPost = async (req, res) => {
         user_id : req.body.userId,                     // 유저 id
         title : req.body.title,                        // 제목
         content : req.body.content,                        // 내용
+		category: req.body.category,
         adopted_status: 0,                             // 채택 여부	   
 		deleted_status: 0
     }).then(result => {
@@ -26,19 +27,45 @@ exports.createPost = async (req, res) => {
     });
 }
 
-//exports.getPosts = async (req, res) => {
-//	Post.findAll({
-//		include:[
-//			{
-//				model: Classification,
-//				attributes: ['
+exports.getPosts = async (req, res) => {
+	if(req.query.category === 'all'){
+		Post.findAll({
+			include:[
+				{
+					model: Classification,
+					attributes: ['과목명']
+				}
+			],
+			where:{deleted_status: 0},
+			}).then(result => {
+			res.json(result);
+		});
+	} else {
+		Post.findAll({
+			include:[
+				{
+					model: Classification,
+					attributes: ['과목명']
+				}
+			],
+			where:{
+				[Op.and]:[
+					{deleted_status: 0},
+					{category: req.query.category}
+				]}
+			}).then(result => {
+			res.json(result);
+		});
+	}
+
+}
 			
 exports.searchPosts = async (req, res) => {
 	Post.findAll({
 		include:[
 			{
 				model: Classification,
-				attributes: ['subject']
+				attributes: ['과목명']
 			}
 		],
 		where: {

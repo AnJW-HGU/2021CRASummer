@@ -10,6 +10,7 @@ const statusRouter = require('./status');
 const authRouter = require('./auth');
 const inquiryRouter = require('./inquiry');
 const announceRouter = require('./announcement');
+const notificationRouter = require('./notification');
 
 router.use('/user', userRouter);
 router.use('/post', postRouter);
@@ -20,5 +21,6 @@ router.use('/status', statusRouter);
 router.use('/auth',authRouter);
 router.use('/inquiry', inquiryRouter);
 router.use('/announcement', announceRouter);
+router.use('/notification', notificationRouter);
 
 module.exports = router;

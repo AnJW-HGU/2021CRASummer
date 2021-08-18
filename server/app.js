@@ -11,20 +11,33 @@ const fileUpload = require('express-fileupload');
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/config/config.json')[env];
 const passport = require('passport');
+const app = express();
+app.listen(3000, function () {
+  console.log('app listening on port 3000!');
+});
+//const server = require('http').createServer(app);
+//const io = require('socket.io')(server);
+
+app.get('/',function(req, res){
+		res.send("main");
+});
+
+//io.on('connection', function(socket){
+//		console.log("connected");
+//	socket.on('connetion', ()=> {
+//			console.log("connected");
+//	});
+//});
 // maybe login ?
 // const secretKey = require('./config/jwt_secret');
 // const passport = require('passport');
 // const passportConfig = require('./middlewares/passport');
-
 // sequelize
 sequelize
         .authenticate()
         .then(() => { console.log("Connection Success"); })
         .catch((e) => { console.log(e); });
 sequelize.sync(); 
-
-// define router var
-const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -87,8 +100,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000, function () {
-  console.log('app listening on port 3000!');
-});
+//app.listen(3000, function () {
+//  console.log('app listening on port 3000!');
+//});
+
 
 module.exports = app;
