@@ -11,6 +11,7 @@ const authRouter = require('./auth');
 const inquiryRouter = require('./inquiry');
 const announceRouter = require('./announcement');
 const notificationRouter = require('./notification');
+const classificationRouter = require('./classification');
 
 router.use('/user', userRouter);
 router.use('/post', postRouter);
@@ -22,5 +23,6 @@ router.use('/auth',authRouter);
 router.use('/inquiry', inquiryRouter);
 router.use('/announcement', announceRouter);
 router.use('/notification', notificationRouter);
+router.use('/classification', classificationRouter);
 
 module.exports = router;
