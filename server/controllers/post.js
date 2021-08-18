@@ -2,6 +2,7 @@
 const { Post } = require('../models');
 const { User } = require('../models');
 const { Classification } = require('../models');
+const { Preferred_subject } = require('../models');
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
 
@@ -33,7 +34,7 @@ exports.getPosts = async (req, res) => {
 			include:[
 				{
 					model: Classification,
-					attributes: ['과목명']
+					attributes: ['과목명', '분반']
 				}
 			],
 			where:{deleted_status: 0},
@@ -45,7 +46,7 @@ exports.getPosts = async (req, res) => {
 			include:[
 				{
 					model: Classification,
-					attributes: ['과목명']
+					attributes: ['과목명', '분반']
 				}
 			],
 			where:{
@@ -59,13 +60,34 @@ exports.getPosts = async (req, res) => {
 	}
 
 }
+
+exports.getPreferredPosts = async (req, res) => {
+	var p_sResult = [];
+	Preferred_subject.findAll({
+		where: {user_id: req.query.userId}
+	}).then(result => {
+		for(p_s in result){
+			p_sResult[p_s] = result[p_s].dataValues.classification_id;
+		}
+		Post.findAll({
+			where: {
+				[Op.and]:[
+					{classification_id: p_sResult},
+					{deleted_status: 0}
+				]
+			}
+		}).then(result2 => {
+			res.json(result2);
+		})
+	})
+}
 			
 exports.searchPosts = async (req, res) => {
 	Post.findAll({
 		include:[
 			{
 				model: Classification,
-				attributes: ['과목명']
+				attributes: ['과목명','분반']
 			}
 		],
 		where: {

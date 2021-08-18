@@ -5,6 +5,7 @@ const postController = require('../controllers/post');
 // posts
 router.post('/', postController.createPost); // get title and content with body
 router.get('/',postController.getPosts);
+router.get('/preferred', postController.getPreferredPosts);
 router.get('/search',postController.searchPosts);
 //router.get('/:keyword', postController.getPosts);
 //router.put();

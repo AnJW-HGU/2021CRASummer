@@ -12,6 +12,7 @@ const inquiryRouter = require('./inquiry');
 const announceRouter = require('./announcement');
 const notificationRouter = require('./notification');
 const classificationRouter = require('./classification');
+const preferred_subjectRouter = require('./preferred_subject');
 
 router.use('/user', userRouter);
 router.use('/post', postRouter);
@@ -24,5 +25,6 @@ router.use('/inquiry', inquiryRouter);
 router.use('/announcement', announceRouter);
 router.use('/notification', notificationRouter);
 router.use('/classification', classificationRouter);
+router.use('/preferred_subject', preferred_subjectRouter);
 
 module.exports = router;
