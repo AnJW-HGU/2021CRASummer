@@ -10,6 +10,8 @@ import 'dart:ui';
 
 import 'package:studytogether/main.dart';
 
+import 'myBoard_page.dart';
+
 // Subject Search 결과 데이터 가져오기
 List<SubSearch> SubSearchfromJson (json) {
   List<SubSearch> result = [];
@@ -240,7 +242,9 @@ class _SubSearchPageState extends State<SubSearchPage> {
       itemBuilder: (context, index) {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => Get.back(),
+          onTap: () {
+            Get.back();
+          },
           child: Container(
             // padding: EdgeInsets.only(top: 10, bottom: 5, left: 25.w, right: 20.w,),
             child: Padding(
