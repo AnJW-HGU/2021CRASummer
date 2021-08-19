@@ -9,6 +9,9 @@ const { google } = require('googleapis')
 const MySQLStore = require('express-mysql-session')(session);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env]
+const jwt = require('jsonwebtoken');
+const secret = require('../config/secret.js');
+const { isLoggedIn } = require('../middlewares/auth');
 
 const GOOGLE_CLIENT_ID = "195470571341-alkmg5ng2aj9gkqnug0rpps3f9oioshj.apps.googleusercontent.com"
 const GOOGLE_CLIENT_SECRET = "YfI3qg4wYdq9qW_iWXZKFFV7";
@@ -38,6 +41,7 @@ passport.serializeUser((user, done) => {
 });
 
 var user_id;
+var token;
 
 passport.deserializeUser((id, done) => {
 	console.log("User access");
@@ -68,25 +72,35 @@ router.get('/', function(req, res){
 	res.send(url);
 });
 
+
 router.get('/callback', passport.authenticate("google", {
   failureRedirect: "/auth/fail",
 }), (req, res) => {
   console.log("Success redirect");
+	user_id = req.user.id;
+	const secretKey = secret.secret;
+	token = jwt.sign({
+				id: req.user.id,
+			}, secretKey, {
+				expiresIn: '1m',
+				issuer: 'study_together'
+			});
   res.redirect('/auth/success')
 });
 
 router.get('/success', function(req, res){
 	res.json({"login": true});
-	console.log("succes: " + req.user);
-	if(req.session.passport)
-		user_id = req.user
 });
 
 router.get('/fail', function(req, res){
 	res.json({"login": false})
 });
 
-router.get('/load', function(req, res){
+router.get('/check', function(req, res){
+	res.json({"token": token});
+});
+
+router.get('/load', isLoggedIn, function(req, res){
 	if(user_id !== undefined){
 		User.findOne({
 			where:{google_id: user_id}
