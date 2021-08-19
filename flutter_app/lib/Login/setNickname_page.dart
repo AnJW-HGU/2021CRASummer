@@ -22,12 +22,10 @@ setNickname(String _id, String nickname_nickname) async {
         'nickname': nickname_nickname
       })
   );
-
   if (response.statusCode == 200) {
     if(response.body.isNotEmpty) {
       return Nickname.fromJson(json.decode(response.body));
     }
-
   } else {
     // 만약 요청이 실패하면, 에러를 던집니다.
     throw Exception('Failed to load post');
@@ -48,6 +46,38 @@ class Nickname {
   }
 }
 
+Future<CheckNickname> checkNickname(String nickname_nickname) async {
+  final url = '0c5f29c1-526c-4b53-af83-ce20fecb0819.mock.pstmn.io';
+  final path = '/checkNickname/';
+  var params = {
+    'nickname' : nickname_nickname,
+  };
+
+  var response = await http.get(
+    Uri.http(url, path, params),
+  );
+
+  if (response.statusCode == 200) {
+    print('a');
+    return CheckNickname.fromJSON(json.decode(response.body));
+  } else {
+    // 만약 요청이 실패하면, 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
+class CheckNickname {
+  var isSame;
+
+  CheckNickname({this.isSame,});
+
+  factory CheckNickname.fromJSON(Map<String, dynamic> json) {
+    return CheckNickname(
+      isSame: json['checkNickname'],
+    );
+  }
+}
+
 class SetNicknamePage extends StatefulWidget {
   @override
   _SetNicknamePageState createState() => _SetNicknamePageState();
@@ -58,10 +88,12 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
   bool _isChecked1 = false; //이용약관
   bool _isChecked2 = false; //개인정보 처리
   bool _isNamed = false; //닉네임을 입력했는지
+  bool _isSame = false; //닉네임 중복
+
+  late Future<CheckNickname> checkN;
+  late Future<Nickname> nickname;
 
   final _nickName = TextEditingController();
-
-  Future<Nickname>? nickname;
 
   @override
   void initState() {
@@ -111,16 +143,16 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        children: [
-                          Text('  닉네임을 설정해주세요:)',style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                            color: themeColor2,
-                            fontFamily: "Barun",
-                          ),),
-                        ],
-                      ),
+                      // Column(
+                      //   children: [
+                      //     Text('  닉네임을 설정해주세요:)',style: TextStyle(
+                      //       fontSize: 16.sp,
+                      //       fontWeight: FontWeight.w500,
+                      //       color: themeColor2,
+                      //       fontFamily: "Barun",
+                      //     ),),
+                      //   ],
+                      // ),
                       SizedBox(height: 10,),
 
                       //닉네임 받기
@@ -129,14 +161,38 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         controller: _nickName,
                         textInputAction: TextInputAction.go,
                         onSubmitted: (value) {
+                          //한글자 이상 입력했다면
                           if(_nickName.text.length >= 1) {
-                            setState(() {
-                              _isNamed = true;
-                            });
-                          } else{
-                            setState(() {
-                              _isNamed = false;
-                            });
+
+
+                            FutureBuilder<CheckNickname>(
+                              future: checkNickname(_nickName.text),
+                              builder: (context, snapshot) {
+                                if(snapshot.hasData){
+                                  print('int:'+snapshot.data.toString());
+                                  //중복
+                                  if(snapshot.data == 1) {
+                                    setState(() {
+                                      _isNamed = false;
+                                      _isSame = true;
+                                    });
+                                  } else { //중복아님
+                                    setState(() {
+                                      _isNamed = true;
+                                      _isSame = false;
+                                    });
+                                  }
+                                  return Center();
+                                } else {
+                                  print('실패');
+                                  return Center();
+                                }
+                              },
+                            );
+
+                            // //중복체크 요청 보내기
+                            // var _isSameInt = checkNickname(_nickName.text);
+
                           }
                           print("${_nickName.text}");
                         },
@@ -146,6 +202,28 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
                         cursorHeight: 20,
                         decoration: InputDecoration(
+                          errorText: _isSame ? '닉네임이 중복되었습니다.' : '닉네임을 설정해주세요:)',
+                          errorStyle: _isSame ?
+                            TextStyle(
+                              color: Colors.red[400],
+                              fontSize: 15.sp,
+                              fontFamily: 'Barun'
+                            ) :
+                          TextStyle(
+                            color: themeColor2,
+                            fontSize: 15.sp,
+                            fontFamily: 'Barun'
+                          ),
+                          errorBorder: _isSame ? null : OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: themeColor2),
+                          ),
+                          focusedErrorBorder: _isSame ? null : OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: themeColor2, width: 2),
+                          ),
+
+
                           counterStyle: TextStyle(
                             color: themeColor1.withOpacity(0.75),
                             fontSize: 13.sp,
@@ -167,9 +245,6 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: themeColor2),
                           ),
-                          //counterStyle: TextStyle(
-                          //  color: themeColor2,
-                          //),
                         ),
                       ),
 
