@@ -74,6 +74,25 @@ exports.getRecomment = async (req, res) => {
     })
 }
 
+exports.getUserRecomments = async (req, res) => {
+	Recomment.findAll({
+		include:[
+			{
+				model: User,
+				attributes: ['nickname', 'named_type']
+			}
+		],
+		where:{
+			[Op.and]:[
+				{user_id: req.query.userId},
+				{deleted_status: 0}
+			]
+		}
+	}).then(result => {
+		res.json(result);
+	});
+}
+
 exports.updateRecomment = async (req, res) => {
     Recomment.update({
         content : req.body.content

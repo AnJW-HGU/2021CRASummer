@@ -49,6 +49,24 @@ exports.getComments = async (req, res) => {
 	});
 }
 
+exports.getUserComments = async (req, res) => {
+	Comment.findAll({
+		include:[
+			{
+				model: User,
+				attributes: ['nickname', 'named_type']
+			}
+		],
+		where: {
+			[Op.and]:[
+				{user_id: req.query.userId},
+				{deleted_status: 0}
+			]
+		}
+	}).then(result => {
+		res.json(result);
+	});
+}
 
 // comment/<id>
 exports.getComment = async (req, res) => {

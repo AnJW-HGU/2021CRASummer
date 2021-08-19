@@ -70,6 +70,12 @@ exports.getPreferredPosts = async (req, res) => {
 			p_sResult[p_s] = result[p_s].dataValues.classification_id;
 		}
 		Post.findAll({
+			include: [
+				{
+					model: Classification,
+					attributes: ['과목명', '분반']
+				}
+			],
 			where: {
 				[Op.and]:[
 					{classification_id: p_sResult},
@@ -82,6 +88,25 @@ exports.getPreferredPosts = async (req, res) => {
 	})
 }
 			
+exports.getUserPosts = async (req, res) => {
+	Post.findAll({
+		include:[
+			{
+				model: Classification,
+				attributes: ['과목명', '분반']
+			}
+		],
+		where: {
+			[Op.and]:[
+				{user_id: req.query.userId},
+				{deleted_status: 0}
+			]
+		}
+	}).then(result => {
+		res.json(result);
+	});
+}
+
 exports.searchPosts = async (req, res) => {
 	Post.findAll({
 		include:[
