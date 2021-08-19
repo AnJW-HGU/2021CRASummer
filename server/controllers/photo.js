@@ -3,6 +3,34 @@ const path = require('path');
 const multer = require('multer');
 var { v4 : uuidv4 } = require('uuid');
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname + '/../src/images'));
+    },
+    filename: function (req, file, cb) {
+        cb(null, uuidv4() + '-' + file.originalname);
+   }
+});
+
+const fileFilter = function (req,file,cb) {
+    let typeArray = file.mimetype.split('/');
+    let fileType = typeArray[1];
+    if (fileType == 'jpg' || fileType == 'jpeg' || fileType == 'png' || fileType == 'gif') {
+        cb(null, true);
+    } else {
+        req.fileValidationError = "jpg, jpeg, png, gif 파일만 업로드 가능합니다."
+    }
+}
+
+exports.uploadFile = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024
+    }
+}).array('photos');
+
+
 var which_id;
 const setIdType = async (req) => {
     if (req.body.type == 'post') {
@@ -15,16 +43,6 @@ const setIdType = async (req) => {
         console.log("no match type");
     }
 }
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname + '/../src/images'));
-    },
-    filename: function (req, file, cb) {
-        cb(null, uuidv4() + '.jpg');
-   }
-});
-exports.uploadFile = multer({ storage: storage }).array('photos');
 
 // photo/
 exports.createPhoto = async (req, res, next) => {
@@ -51,8 +69,14 @@ exports.createPhoto = async (req, res, next) => {
 // TODO : implement the element below
 exports.getPhotos = async (req, res) => {
     setIdType(req);
-    Photo.findAll({[which_id]:req.body.id},(data)=>{
-        res.json({message: "GET photo in id"});
+
+    Photo.findAll({
+        [which_id]:req.body.id
+    }).then(result => {
+
+        console.log(result.dataValues.saved_file_name);
+        var photoData = fs.readFileSync(__dirname + '/../src/images/' + filename);
+        // res.json(result.dataValues.nickname)
     })
 }
 
