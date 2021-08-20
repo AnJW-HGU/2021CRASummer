@@ -14,7 +14,7 @@ exports.createPost = async (req, res) => {
         content : req.body.content,                        // 내용
 		category: req.body.category,
         adopted_status: 0,                             // 채택 여부	   
-		deleted_status: 0
+		deleted_status: 0,
     }).then(result => {
 	    if(result)
 	        res.json(result)
@@ -29,36 +29,72 @@ exports.createPost = async (req, res) => {
 }
 
 exports.getPosts = async (req, res) => {
-	if(req.query.category === 'all'){
+//	if(req.query.category === 'all'){
+//		Post.findAll({
+//			include:[
+//				{
+//					model: Classification,
+//					attributes: ['과목명', '분반']
+//				}
+//			],
+//			where:{deleted_status: 0},
+//			}).then(result => {
+//			res.json(result);
+//		});
+//	} else {
+//		Post.findAll({
+//			include:[
+//				{
+//					model: Classification,
+//					attributes: ['과목명', '분반']
+//				}
+//			],
+//			where:{
+//				[Op.and]:[
+//					{deleted_status: 0},
+//					{category: req.query.category}
+//				]}
+//			}).then(result => {
+//			res.json(result);
+//		});
+//	}
+	var clResult = [];
+	Classification.findAll({
+		where: {
+			[Op.or]:[
+				{
+					개설정보: {
+						[Op.like]: "%"+req.query.category+"%"
+					}
+				},
+				{
+					교양: {
+						[Op.like]: "%"+req.query.category+"%"
+					}
+				}
+			]
+		}
+	}).then(result => {
+		for(cl in result){
+		clResult[cl] = result[cl].dataValues.id;
+		}
 		Post.findAll({
-			include:[
+			include: [
 				{
 					model: Classification,
 					attributes: ['과목명', '분반']
 				}
 			],
-			where:{deleted_status: 0},
-			}).then(result => {
-			res.json(result);
-		});
-	} else {
-		Post.findAll({
-			include:[
-				{
-					model: Classification,
-					attributes: ['과목명', '분반']
-				}
-			],
-			where:{
+			where: {
 				[Op.and]:[
-					{deleted_status: 0},
-					{category: req.query.category}
-				]}
-			}).then(result => {
-			res.json(result);
+					{classification_id: clResult},
+					{deleted_status: 0}
+				]
+			}
+		}).then(result2 => {
+			res.json(result2);
 		});
-	}
-
+	});
 }
 
 exports.getPreferredPosts = async (req, res) => {

@@ -41,10 +41,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false,
         },
-		category: {
-			type: DataTypes.STRING(50),
-			allowNull: false
-		},
         comments_count: {
             type: DataTypes.INTEGER,
             allowNull: false,
