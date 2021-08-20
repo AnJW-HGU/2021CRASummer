@@ -1,4 +1,9 @@
 const { Recomment } = require('../models/index');
+const { User } = require('../models');
+const { Post } = require('../models');
+const { Comment } = require('../models');
+const sequelize = require('sequelize');
+const Op = sequelize.Op;
 
 // recomment
 exports.createRecomment = async (req, res) => {
@@ -9,30 +14,83 @@ exports.createRecomment = async (req, res) => {
         adopted_status : 0,
         deleted_status: 0,
     }).then(result => {
-        res.json(result);
+        if(result)
+			res.json(result);
+		else 
+			res.json({"result":0})
     });
+	Comment.findOne({
+		where: {id: req.body.commentId}
+	}).then(result => {
+		Post.increment({
+			comments_count: 1
+		},{
+			where: {id: result.post_id}
+		})
+	});
+	User.increment({
+		comments_count: 1
+	},{
+		where: {id: req.body.userId}
+	});
 }
 
-// exports.getRecomments = async (req, res) => {
-    
-// }
-
-// exports.updateRecomments = async (req, res) => {
-
-// }
-
-// exports.deleteRecomments = async (req, res) => {
-
-// } 
+exports.getRecomments = async (req, res) => {
+	Recomment.findAll({
+		include:[
+			{
+				model:	User,
+				attributes: ['nickname','named_type']
+			}
+		],
+		where: {
+			[Op.and]:[
+				{comment_id: req.query.commentId},
+				{deleted_status: 0}
+			]
+		}
+	}).then(result => {
+		res.json(result)
+	});
+}
 
 // recomment/<id>
 exports.getRecomment = async (req, res) => {
     Recomment.findOne({
-        where: { id: req.params.recommentId }
+		include:[
+			{
+				model: User,
+				attributes: ['nickname', 'named_type']
+			}
+		],
+        where:{
+			[Op.and]:[
+				{id: req.params.recommentId},
+				{deleted_status: 0}
+			]
+		}
     }).then(result => {
-        console.log(result.dataValues.content);
-        res.json(result.dataValues.content)
+        res.json(result)
     })
+}
+
+exports.getUserRecomments = async (req, res) => {
+	Recomment.findAll({
+		include:[
+			{
+				model: User,
+				attributes: ['nickname', 'named_type']
+			}
+		],
+		where:{
+			[Op.and]:[
+				{user_id: req.query.userId},
+				{deleted_status: 0}
+			]
+		}
+	}).then(result => {
+		res.json(result);
+	});
 }
 
 exports.updateRecomment = async (req, res) => {
@@ -41,7 +99,10 @@ exports.updateRecomment = async (req, res) => {
     },{
         where: { id: req.params.recommentId }
     }).then(result => {
-        res.json(result);
+		if(result)
+			res.json(result);
+		else
+			res.json({"result":0})
     });
 }
 
@@ -50,9 +111,30 @@ exports.deleteRecomment = async (req, res) => {
         deleted_status : 1
     },{
         where: { id: req.params.recommentId }
-    }).then(result => {
-        res.json(result);
-    });
+    })
+	Recomment.findOne({
+		where: {id: req.params.recommentId}
+	}).then(result => {
+		User.increment({
+			comments_count: -1
+		},{
+			where: {id: result.user_id}
+		});
+		Comment.findOne({
+			where: {id: result.comment_id}
+		}).then(result => {
+			Post.increment({
+				comments_count: -1
+			},{
+				where: {id: result.post_id}
+			}).then(result => {
+				if(result)
+					res.json(result)
+				else
+					res.json({"result":0})
+				});
+			});
+		});
 }
 
 

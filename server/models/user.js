@@ -16,6 +16,24 @@ module.exports = (sequelize, DataTypes) => {
             this.hasMany(models.Photo, {
                 foreignKey: 'user_id'
             });
+			this.hasMany(models.Report, {
+                foreignKey: 'user_id'
+            });
+			this.hasMany(models.Inquiry, {
+                foreignKey: 'user_id'
+			});
+			this.hasMany(models.Announcement, {
+                foreignKey: 'user_id'
+            });
+			this.hasMany(models.Notification, {
+                foreignKey: 'user_id'
+            });
+			this.hasMany(models.Recommend, {
+                foreignKey: 'user_id'
+			});
+			this.hasMany(models.Preferred_subject, {
+				foreignKey: 'user_id'
+            });
         }
     };
     User.init( {
@@ -55,6 +73,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 0
         },
+        adopts_count: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
+        },
         reports_count: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -77,17 +100,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0
         },
-        resign_date:  {
-            type: DataTypes.DATE,
-            defaultValue: null
-        },
     }, {
         sequelize,
         modelName: 'User',
         tableName: 'Users',
         createdAt: 'singup_date',
-        updatedAt: false,
+        updatedAt: 'resign_date',
     });
   return User;
 };
-
