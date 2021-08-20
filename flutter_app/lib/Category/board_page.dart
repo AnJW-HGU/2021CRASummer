@@ -321,12 +321,9 @@ class _BoardPageState extends State<BoardPage> {
                 onTap: () {
                   Get.to(PostPage(), arguments: [_postsDataList[index].posts_id, _postsDataList[index].posts_userId]);
                 },
-                child: Container(
-                  padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
-                  child: _makePostTile(_postsDataList[index].posts_subject, _postsDataList[index].posts_title,
-                      _postsDataList[index].posts_content, _postsDataList[index].posts_commentsC,
-                      _postsDataList[index].posts_writtenDate, _postsDataList[index].posts_adoptedStatus),
-                ),
+                child: _makePostTile(_postsDataList[index].posts_subject, _postsDataList[index].posts_title,
+                    _postsDataList[index].posts_content, _postsDataList[index].posts_commentsC,
+                    _postsDataList[index].posts_writtenDate, _postsDataList[index].posts_adoptedStatus),
               );
             }
 
@@ -354,6 +351,7 @@ class _BoardPageState extends State<BoardPage> {
 
   Widget _makePostTile(inSub, inTitle, inContent, inCount, inDate, inAdopted) {
     return Container(
+      padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
@@ -363,7 +361,7 @@ class _BoardPageState extends State<BoardPage> {
             style: TextStyle(
               color: themeColor1,
               fontFamily: "Barun",
-              fontSize: 15.sp,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -386,6 +384,74 @@ class _BoardPageState extends State<BoardPage> {
               fontSize: 14.sp,
               fontWeight: FontWeight.w300,
             ),
+          ),
+
+          Padding(padding: EdgeInsets.only(bottom: 5)),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Padding(
+
+                    //comment 아이콘
+                    padding: EdgeInsets.only(left:0, right:3.w, top:0, bottom:0),
+                    child: Icon(
+                      Icons.comment_outlined,
+                      size: 15.sp,
+                      color: grayColor1,
+                    ),
+                  ),
+
+                  //comment 수
+                  Padding(
+                    padding:EdgeInsets.all(0),
+                    child: Text(
+                      inCount.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: grayColor1,
+                        fontFamily: "barun",
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+
+                  // 채택여부 -> 이건 어차피 댓글로 보여지니까
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 5.w),
+                  //   child: snapshot.data!.post_adopted_status ?
+                  //   Icon(
+                  //     Icons.star_rounded,
+                  //     size: 19.sp,
+                  //     color: grayColor1,
+                  //   ) :
+                  //   Icon(
+                  //     Icons.star_outline_rounded,
+                  //     size: 19.sp,
+                  //     color: grayColor1,
+                  //   ),
+                  // ),
+                ],
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                child: Text(
+                  inDate,
+                  style: TextStyle(
+                    color: grayColor1,
+                    fontFamily: "barun",
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+
+            ],
           ),
         ],
       ),

@@ -186,15 +186,14 @@ class _SubSearchPageState extends State<SubSearchPage> {
             ),
           ),
           body: SafeArea(
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: Container(
-                  child: _isSearching ? CircularProgressIndicator() :
-                        _subSearchitem.isEmpty ? _initSubSearch() : _makeSubList(),
-                ),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Center(
+                child: _isSearching ? CircularProgressIndicator() :
+                      _subSearchitem.isEmpty ? _initSubSearch() : _makeSubList(),
               ),
             ),
           ),
@@ -204,34 +203,33 @@ class _SubSearchPageState extends State<SubSearchPage> {
   }
 
   Widget _initSubSearch() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            "강의가 존재하지 않아요 :<"
-            "\n과목 검색하는 방법:",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              height: 5.h,
-              color: themeColor1,
-              fontFamily: "Barun",
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
+    return Center(
+      child: Container(
+        child: Column(
+          children: [
+            Text(
+              "강의가 존재하지 않아요 :<"
+              "\n과목 검색하는 방법:",
+              style: TextStyle(
+                height: 5.h,
+                color: themeColor1,
+                fontFamily: "Barun",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          Text(
-            "예) 스, 스터디, 스터디 투게더",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              // height: 10.h,
-              color: themeColor1,
-              fontFamily: "Barun",
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
+            Text(
+              "예) 스, 스터디, 스터디 투게더",
+              style: TextStyle(
+                // height: 10.h,
+                color: themeColor1,
+                fontFamily: "Barun",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
