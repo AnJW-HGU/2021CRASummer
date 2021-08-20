@@ -7,7 +7,9 @@ router.post('/',userController.createUser);
 
 // nickname
 router.post('/:userId/nickname', userController.createNickname); // request : { nickName: hyunseo} , receive : req.body === hyunseo
-router.get('/:userId/nickname', userController.getNickname);
+router.get('/:userId', userController.getUser);
+router.get('/', userController.getUsers);
+router.get('/nickname/duplicate', userController.checkNickname);
 router.put('/:userId/nickname', userController.updateNickname); // request : { nickName: hyunseo} , receive : req.body === hyunseo
 router.delete('/:userId/nickname/', userController.deleteNickname);
 

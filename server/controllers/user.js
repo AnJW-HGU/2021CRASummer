@@ -2,32 +2,41 @@ const { User } = require('../models/index');
 
 // nickname
 exports.createNickname = async (req, res) => {
-	User.findAll({
-		where: {nickname: req.body.nickname}
-	}).then(result => {
-		if(result[0] !== undefined){
-			console.log(result)
-			res.json({"duplicate":1})
-		} else {
-			User.update({
-			  nickname : req.body.nickname
-			  },{
-				 where: { id: req.params.userId }
-			 }).then(result => {
-			 res.json(result);
-		    });		
-		}
-	});
+	User.update({
+	  nickname : req.body.nickname			  
+	},{
+		 where: { id: req.params.userId }
+	 }).then(result => {
+		 res.json(result);
+    });		
 } 
 
-exports.getNickname = async (req, res) => {
+exports.checkNickname = async (req, res) => {
+	User.findAll({
+		where: {nickname: req.query.nickname}
+	}).then(result => {
+		if(result[0] !== undefined){
+			res.json({"duplicate":1})
+		} else {
+			res.json({"duplicate":0});
+		}
+	});
+}
+
+exports.getUsers = async (req, res) => {
+	User.findAll().then(result => {
+		res.json(result);
+	});
+}
+
+exports.getUser = async (req, res) => {
     User.findOne({
         where: { id: req.params.userId }
     }).then(result => {
-        console.log(result.dataValues.nickname);
-        res.json(result.dataValues.nickname)
+        res.json(result)
     })
 } 
+
 
 exports.updateNickname = async (req, res) => {
 	User.findAll({
