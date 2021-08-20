@@ -48,18 +48,17 @@ class Nickname {
 
 Future<CheckNickname> checkNickname(String nickname_nickname) async {
   final url = '0c5f29c1-526c-4b53-af83-ce20fecb0819.mock.pstmn.io';
-  final path = '/checkNickname/';
+  final path = '/checkNickname';
   var params = {
     'nickname' : nickname_nickname,
   };
-
-  var response = await http.get(
-    Uri.http(url, path, params),
-  );
+  //jsonEncode(utf8.encode(nickname_nickname));
+  
+  var response = await http.get(Uri.http(url, path, params));
 
   if (response.statusCode == 200) {
     print('a');
-    return CheckNickname.fromJSON(json.decode(response.body));
+    return await CheckNickname.fromJSON(json.decode(response.body));
   } else {
     // 만약 요청이 실패하면, 에러를 던집니다.
     throw Exception('Failed to load post');
@@ -73,7 +72,7 @@ class CheckNickname {
 
   factory CheckNickname.fromJSON(Map<String, dynamic> json) {
     return CheckNickname(
-      isSame: json['checkNickname'],
+      isSame: json["checkNickname"],
     );
   }
 }
@@ -90,14 +89,15 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
   bool _isNamed = false; //닉네임을 입력했는지
   bool _isSame = false; //닉네임 중복
 
-  late Future<CheckNickname> checkN;
-  late Future<Nickname> nickname;
+  //Future<CheckNickname>? checkN;
+  Future<Nickname>? nickname;
 
   final _nickName = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    //checkN = checkNickname(_nickName.text);
   }
 
   @override
@@ -160,46 +160,51 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         //autofocus: true,
                         controller: _nickName,
                         textInputAction: TextInputAction.go,
-                        onSubmitted: (value) {
+                        onSubmitted: (value) async {
+
+
                           //한글자 이상 입력했다면
                           if(_nickName.text.length >= 1) {
-
-
-                            FutureBuilder<CheckNickname>(
-                              future: checkNickname(_nickName.text),
-                              builder: (context, snapshot) {
-                                if(snapshot.hasData){
-                                  print('int:'+snapshot.data.toString());
-                                  //중복
-                                  if(snapshot.data == 1) {
-                                    setState(() {
-                                      _isNamed = false;
-                                      _isSame = true;
-                                    });
-                                  } else { //중복아님
-                                    setState(() {
-                                      _isNamed = true;
-                                      _isSame = false;
-                                    });
-                                  }
-                                  return Center();
-                                } else {
-                                  print('실패');
-                                  return Center();
-                                }
-                              },
-                            );
-
-                            // //중복체크 요청 보내기
-                            // var _isSameInt = checkNickname(_nickName.text);
-
+                            setState(() {
+                                    _isNamed = true;
+                            });
                           }
+
+                          //   FutureBuilder<CheckNickname>(
+                          //     future: checkNickname(_nickName.text),
+                          //     builder: (context, snapshot) {
+                          //       if (snapshot.hasData){
+                          //         print('${snapshot.data!.isSame}');
+                          //         return Text('${snapshot.data!.isSame}');
+                          //       } else if (snapshot.hasError){
+                          //         print('${snapshot.error}');
+                          //         return Text('${snapshot.error}');
+                          //       }
+                          //       print("Await for data");
+                          //       return Text("Await for data");
+                          //     }
+                          //   );
+                          //
+                          //   var _isSameInt = await checkNickname(_nickName.text);
+                          //   print(_isSameInt);
+                          //   if(_isSameInt == 1) { //중복
+                          //     setState(() {
+                          //       _isNamed = false;
+                          //       _isSame = true;
+                          //     });
+                          //   } else {
+                          //     setState(() {
+                          //       _isNamed = true;
+                          //       _isSame = false;
+                          //     });
+                          //   }
+                          // }
                           print("${_nickName.text}");
                         },
                         textAlign: TextAlign.center,
                         //닉네임 문자 제한
                         maxLength: 8,
-                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
+                        //inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
                         cursorHeight: 20,
                         decoration: InputDecoration(
                           errorText: _isSame ? '닉네임이 중복되었습니다.' : '닉네임을 설정해주세요:)',

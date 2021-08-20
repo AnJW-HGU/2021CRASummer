@@ -14,28 +14,56 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 import 'Login/login_page.dart';
 
-Future<Splash> fetchSplash() async {
-  var response = await http.get(Uri.parse('https://0c5f29c1-526c-4b53-af83-ce20fecb0819.mock.pstmn.io/splash?user_id=000000'));
+Future<Splash_T> GetToken() async {
+  var response = await http.get(Uri.parse('http://128.199.139.159:3000/auth/check'));
 
   if (response.statusCode == 200) {
     // 만약 서버로의 요청이 성공하면, JSON을 파싱합니다.
-    return await Future.delayed(Duration(seconds: 1), () => Splash.fromJson(json.decode(response.body)));
+    return await Future.delayed(Duration(seconds: 1), () => Splash_T.fromJson(json.decode(response.body)));
   } else {
     // 만약 요청이 실패하면, 에러를 던집니다.
     throw Exception('Failed to load post');
   }
 }
 
-class Splash {
-  var splash_id;
-  var splash_is_logined;
+class Splash_T {
+  var splash_token;
 
-  Splash({this.splash_id, this.splash_is_logined});
+  Splash_T({this.splash_token});
 
-  factory Splash.fromJson(Map<String, dynamic> json) {
-    return Splash(
-      splash_id: json["id"],
-      splash_is_logined: json["is_logined"],
+  factory Splash_T.fromJson(Map<String, dynamic> json) {
+    return Splash_T(
+      splash_token: json["token"],
+    );
+  }
+}
+
+Future<Splash_Id> GetUserId(String token) async {
+  final url = '128.199.139.159:3000';
+  final path = '/auth/load';
+  var params = {
+    'token' : token,
+  };
+
+  var response = await http.get(Uri.http(url, path, params));
+
+  if (response.statusCode == 200) {
+    // 만약 서버로의 요청이 성공하면, JSON을 파싱합니다.
+    return await Splash_Id.fromJson(json.decode(response.body));
+  } else {
+    // 만약 요청이 실패하면, 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
+class Splash_Id {
+  var splash_userid;
+
+  Splash_Id({this.splash_userid});
+
+  factory Splash_Id.fromJson(Map<String, dynamic> json) {
+    return Splash_Id(
+        splash_userid: json["user_id"]
     );
   }
 }
@@ -46,12 +74,15 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
-  late Future<Splash> splash;
+  late Future<Splash_T> splash_t;
+  late Future<Splash_Id> splash_id;
 
   late AnimationController _controller;
   late Animation<double> _animation;
 
-  //bool _isLoggedIn = false;
+  //bool _isLoggedIn = true;
+  String _token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwNzU2NDE0NTkyMjQyMTI0MjU3MSIsImlhdCI6MTYyOTQ0OTM3MiwiZXhwIjoxNjI5NDUyOTcyLCJpc3MiOiJzdHVkeV90b2dldGhlciJ9.jVCVePKIg2NptBMNx81CaZmWFJ9QaxzdIiThxq7FqsQ";
+  var _userId;
 
   void initState() {
     _controller = AnimationController(
@@ -62,7 +93,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
     _controller.forward();
     super.initState();
-    splash = fetchSplash();
+    splash_t = GetToken();
+    splash_id = GetUserId(_token);
   }
 
   @override
@@ -73,6 +105,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   Future MainPage(bool _isLoggedIn) async {
     await Future.delayed(Duration(seconds: 0), () => Navigator.pop(context));
+    print('로그인 : '+_isLoggedIn.toString());
     return Navigator.push(
         context,
         MaterialPageRoute(
@@ -96,8 +129,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   Widget _splashPageBody() {
     return Scaffold(
-      body: FutureBuilder<Splash>(
-        future: splash,
+      body: FutureBuilder<Splash_T>(
+        future: splash_t,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData == false) {
             return Column(
@@ -120,7 +153,33 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           } else if (snapshot.hasError) {
             return Text('에러');
           } else{
-            MainPage(snapshot.data!.splash_is_logined);
+            if(snapshot.data!.splash_token is String) {
+              _token = snapshot.data!.splash_token;
+              print(_token);
+
+              FutureBuilder<Splash_Id>(
+                future: splash_id,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData == false) {
+                    return Column();
+                  } else if (snapshot.hasError) {
+                    return Text('에러');
+                  } else {
+                    _userId = snapshot.data!.splash_userid;
+                    print(_userId);
+                    return Center();
+                  }
+                },
+              );
+
+
+              MainPage(true);
+            } else {
+              MainPage(false);
+            }
+
+
+
             return Center();
           }
         },

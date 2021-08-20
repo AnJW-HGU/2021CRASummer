@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     //백으로 요청 보내기
     Future<String> fetch() async{
-      var res = await http.get(Uri.parse('http://128.199.139.159.nip.io:3000/auth'));
+      var res = await http.get(Uri.parse('http://128.199.139.159:3000/auth'));
       print(res.body);
       return await res.body.toString();
     }
@@ -108,32 +108,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-
-
-                    /*fetch().then((String value) => {
+                    fetch().then((String value) => {
                       html_data = value,
                       isloading = false,
                       print("확인용: " + html_data),
                       print("확인용: " + isloading.toString()),
-                    });*/
+                    });
+                    if (isloading == false) {
+                      _launchURL(context);
+                    };
 
-
-                    /*if (isloading == false) {
-                      GoogleSignIn(
-                        scopes: [
-                          'email',
-                          html_data,
-                        ],
-                      );*/
-                      //new Html(
-                       // data: ,
-                      //);
-
-                      //if (isloading == false) {
-                      //  _launchURL(context);
-                      //};
-
-                    Get.to(SetNicknamePage(), arguments: "22000000",); //user_id
+                    //Get.to(SetNicknamePage(), arguments: "22000000",); //user_id
                   },
                   //버튼 안에 text
                   label: Text("      구글로 회원가입        ", style: TextStyle(
@@ -158,6 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
 
   void _launchURL(BuildContext context) async {
+    print('open _launchURL');
     try {
       await launch(
         html_data,
