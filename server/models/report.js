@@ -24,7 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false
-  },
+	},
+	type: {
+		type: DataTypes.STRING(10),
+		allowNull: false
+	},
     content: {
       type: DataTypes.TEXT,
       allowNull: false
