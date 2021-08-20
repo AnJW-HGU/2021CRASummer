@@ -89,6 +89,18 @@ class _SearchPageState extends State<SearchPage> {
   var _isSearchLoading = false.obs;
   var _hasMoreSearchPosts = false.obs;
 
+  @override
+  void initState() {
+    super.initState();
+
+    this._scroll.value.addListener(() {
+      if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
+          this._hasMoreSearchPosts.value) {
+        _searchPosts("${_search.text}");
+      }
+    });
+  }
+
   _searchPosts(inSearchWord) async {
     _isSearchLoading.value = true;
     List<SearchPosts> _newSearchPostDataList = await fetchSearchPosts(inSearchWord);
@@ -159,6 +171,7 @@ class _SearchPageState extends State<SearchPage> {
                   // prefixIcon: Icon(Icons.search_rounded, color: themeColor1,),
                   suffixIcon: IconButton(
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
                       _search.clear();
                       setState(() {
                         _isNotSubmitted = true;
@@ -237,6 +250,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Obx(()
         => ListView.separated(
               controller: _scroll.value,
+              itemCount: _searchPostsDataList.length + 1,
               itemBuilder: (_, index) {
                 if (index < _searchPostsDataList.length) {
                   return GestureDetector(
@@ -255,7 +269,7 @@ class _SearchPageState extends State<SearchPage> {
                 else if (_hasMoreSearchPosts.value || _isSearchLoading.value) {
                   return Center(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 100.h),
+                      padding: EdgeInsets.only(top: 20.h),
                         child: CircularProgressIndicator(),
                     ),
                   );
@@ -273,7 +287,6 @@ class _SearchPageState extends State<SearchPage> {
                 );
               },
               separatorBuilder: (_, index) => Divider(),
-              itemCount: _searchPostsDataList.length + 1,
           ),
         ),
       ),
@@ -287,15 +300,34 @@ class _SearchPageState extends State<SearchPage> {
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          Text(
-            inSub,
-            style: TextStyle(
-              color: themeColor1,
-              fontFamily: "Barun",
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w400,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                inSub,
+                style: TextStyle(
+                  color: themeColor1,
+                  fontFamily: "Barun",
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+
+              // 채택여부
+              Padding(
+                padding: EdgeInsets.only(right: 5.w),
+                child: inAdopted ?
+                Icon(
+                  Icons.check_rounded,
+                  size: 19.sp,
+                  color: themeColor1,
+                ) :
+                null,
+              ),
+            ],
           ),
+
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
             inTitle,
@@ -305,6 +337,7 @@ class _SearchPageState extends State<SearchPage> {
               fontWeight: FontWeight.w500,
             ),
           ),
+
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
             inContent,
@@ -323,6 +356,19 @@ class _SearchPageState extends State<SearchPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Padding(
+                padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                child: Text(
+                  inDate,
+                  style: TextStyle(
+                    color: grayColor2,
+                    fontFamily: "barun",
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+
               Row(
                 children: [
                   Padding(
@@ -350,38 +396,8 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ),
                   ),
-
-                  // 채택여부 -> 이건 어차피 댓글로 보여지니까
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: 5.w),
-                  //   child: snapshot.data!.post_adopted_status ?
-                  //   Icon(
-                  //     Icons.star_rounded,
-                  //     size: 19.sp,
-                  //     color: grayColor1,
-                  //   ) :
-                  //   Icon(
-                  //     Icons.star_outline_rounded,
-                  //     size: 19.sp,
-                  //     color: grayColor1,
-                  //   ),
-                  // ),
                 ],
               ),
-
-              Padding(
-                padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
-                child: Text(
-                  inDate,
-                  style: TextStyle(
-                    color: grayColor1,
-                    fontFamily: "barun",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),
-
             ],
           ),
         ],

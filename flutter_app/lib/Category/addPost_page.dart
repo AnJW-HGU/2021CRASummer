@@ -173,6 +173,7 @@ class _AddPostPageState extends State<AddPostPage> {
           ),
           body: SafeArea(
             child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 FocusScope.of(context).unfocus();
               },
