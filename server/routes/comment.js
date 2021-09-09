@@ -4,10 +4,8 @@ const commentController = require('../controllers/comment');
 
 // comment
 router.post('/', commentController.createComment);
-// router.get('/', commentController.getComments);
-// router.put('/', commentController.updateComments);
-// router.delete('/', commentController.deleteComments);
-
+router.get('/', commentController.getComments);
+router.get('/user', commentController.getUserComments);
 // comment/<id>
 router.post('/:commentId',); // throw 405 error
 router.get('/:commentId', commentController.getComment);

@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.Comment, {
                 foreignKey: 'comment_id'
             });
-            //this.belongsTo(models.Inquiry, {
-            //          foreignKey: 'inquiry_id'
-            //});
+            this.belongsTo(models.Inquiry, {
+                      foreignKey: 'inquiry_id'
+            });
             this.belongsTo(models.User, {
                 foreignKey: 'user_id'
             });
@@ -33,17 +33,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        size: {
-            type: DataTypes.BLOB,
-            allowNull: false,
-        },
         saved_path: {
             type: DataTypes.STRING(255),
             allowNull: false,
-        },
-        deleted_date: {
-            type: DataTypes.DATE,
-            allowNull: true
         },
         deleted_status: {
             type: DataTypes.TINYINT(1),

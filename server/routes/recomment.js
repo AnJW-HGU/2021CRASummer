@@ -4,10 +4,8 @@ const recommentController = require('../controllers/recomment');
 
 // recomment
 router.post('/', recommentController.createRecomment); // get userid and content of the comment with body
-// router.get('/', recommentController.getRecomments);
-// router.put('/', recommentController.updateRecomments);
-// router.delete('/', recommentController.deleteRecomments);
-
+router.get('/', recommentController.getRecomments);
+router.get('/user', recommentController.getUserRecomments);
 // reomment/<id>
 // router.post(); // trow error
 router.get('/:recommentId', recommentController.getRecomment);

@@ -4,7 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     class Recomment extends Model {
         static associate(models) {
             // define association here
-            this.belongsTo(models.Comment, {
+            this.hasMany(models.Report, {
+                foreignKey: 'recomment_id'
+            });
+			this.belongsTo(models.Comment, {
                 foreignKey: 'comment_id'
             });
             this.belongsTo(models.User, {
@@ -27,15 +30,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: false,
-        },
-        deleted_date:  {
-            type: DataTypes.DATE,
-            allowNull: true,
-        },
-        adopted_status: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            default: 0
         },
         deleted_status: {
             type: DataTypes.INTEGER,

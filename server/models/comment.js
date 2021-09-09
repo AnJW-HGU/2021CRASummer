@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
             this.hasMany(models.Photo, {
                 foreignKey: 'comment_id'
             });
+            this.hasMany(models.Report, {
+                foreignKey: 'comment_id'
+            });
+			this.hasMany(models.Recommend, {
+                foreignKey: 'comment_id'
+            });
             this.belongsTo(models.Post, {
                 foreignKey: 'post_id'
             });
@@ -29,20 +35,17 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        recommends_count: {
+		recommends_count: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: false,
+            default: 0,
         },
         reports_count: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: false,
             default: 0,
-        },
-        deleted_date: {
-            type: DataTypes.DATE,
-            allowNull: true,
         },
         adopted_status: {
             type: DataTypes.TINYINT(1),

@@ -3,37 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'dart:async';
 import 'dart:ui';
 
 import 'package:studytogether/main.dart';
 
-// class AddPost {
-//   String? postClassifi;
-//   String? postUser;
-//   String? postImage;
-//   String? postTitle;
-//   String? postContent;
-//
-//   AddPost (inTitle, inContent) {
-//     postClassifi = '011220';
-//     postUser = '200404';
-//     postImage = '0';
-//     postTitle = inTitle;
-//     postContent = inContent;
-//   }
-//
-//   //jsonEncode 함수 있어서 메소드를 부를 필요는 없음
-//   Map<String, dynamic> toJson() =>
-//       {
-//         'classification_id': postClassifi,
-//         'user_id': postUser,
-//         'image_id': postImage,
-//         'title': postTitle,
-//         'content': postContent
-//       };
-// }
+import 'myBoard_page.dart';
 
+// Subject Search 결과 데이터 가져오기
+List<SubSearch> SubSearchfromJson (json) {
+  List<SubSearch> result = [];
+  json.forEach((item) {
+    result.add(SubSearch(item["id"], item["subject"], item["professor_name"]));
+  });
+  return result;
+}
+
+Future<List<SubSearch>> fetchSubSearch(inSearchKeyword) async {
+  // Map <String, dynamic> queryParams = {
+  //   "searchKeyword" : inSearchKeyword
+  // };
+  var subSearchUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/subject?searchKeyword="+inSearchKeyword;
+  var response = await http.get(Uri.parse(subSearchUrl));
+
+  if (response.statusCode == 200) {
+    return SubSearchfromJson(json.decode(response.body));
+  } else {
+    throw Exception("Failed to load subject");
+  }
+}
+
+// Subject Search 데이터 형식
+class SubSearch {
+  var subSearch_id;
+  var subSearch_subject;
+  var subSearch_professor;
+
+  SubSearch(
+      this.subSearch_id,
+      this.subSearch_subject,
+      this.subSearch_professor,
+      );
+}
 
 class SubSearchPage extends StatefulWidget {
   const SubSearchPage({Key? key}) : super(key: key);
@@ -43,8 +56,17 @@ class SubSearchPage extends StatefulWidget {
 }
 
 class _SubSearchPageState extends State<SubSearchPage> {
+  List<SubSearch> _subSearchDataList = <SubSearch>[].obs;
+
+  var _scroll = ScrollController().obs;
+
+  var _maxSubSearch = 20; // 찾은 과목 총 개수
+  var _isSubLoading = false.obs;
+  var _hasMoreSub = false.obs;
+
 
   final _userId = ""; // 유저 아이디
+  final _idSelect = ""; // 선택한 과목의 id
   final _subSelect = ""; // 선택한 과목
   final _proSelect = ""; // 선택한 과목의 교수님
 
@@ -67,22 +89,6 @@ class _SubSearchPageState extends State<SubSearchPage> {
     "교수", "교수?", "교수수", "옥수수",
   ].obs;
 
-
-  // _SubSearchPageState() {
-  //   _subSearch.addListener(() {
-  //     if (_subSearch.text.isEmpty) {
-  //       setState(() {
-  //         _filterText = "";
-  //       });
-  //     }
-  //     else {
-  //       setState(() {
-  //         _filterText = _subSearch.text;
-  //       });
-  //     }
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -97,27 +103,6 @@ class _SubSearchPageState extends State<SubSearchPage> {
     _subSearchFilter.dispose();
     super.dispose();
   }
-
-  // void _addPost(inTitle, inContent) async {
-  //   String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/";
-  //   AddPost _addPost = AddPost(inTitle, inContent);
-  //
-  //   print(await apiRequest(url, _addPost));
-  // }
-  //
-  // Future<String> apiRequest(url, _post) async {
-  //   HttpClient httpClient = new HttpClient();
-  //   HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
-  //   request.headers.set('content-type', 'application/json');
-  //   request.add (utf8.encode(jsonEncode(_post)));
-  //   HttpClientResponse response = await request.close();
-  //
-  //   // todo - you should check the response.statusCode
-  //   // String reply = await response.transform(utf8.decoder).join();
-  //   String reply = "작성되었습니다.";
-  //   httpClient.close(); // 이때 요청함
-  //   return reply;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +242,9 @@ class _SubSearchPageState extends State<SubSearchPage> {
       itemBuilder: (context, index) {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => Get.back(),
+          onTap: () {
+            Get.back();
+          },
           child: Container(
             // padding: EdgeInsets.only(top: 10, bottom: 5, left: 25.w, right: 20.w,),
             child: Padding(
