@@ -321,12 +321,9 @@ class _BoardPageState extends State<BoardPage> {
                 onTap: () {
                   Get.to(PostPage(), arguments: [_postsDataList[index].posts_id, _postsDataList[index].posts_userId]);
                 },
-                child: Container(
-                  padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
-                  child: _makePostTile(_postsDataList[index].posts_subject, _postsDataList[index].posts_title,
-                      _postsDataList[index].posts_content, _postsDataList[index].posts_commentsC,
-                      _postsDataList[index].posts_writtenDate, _postsDataList[index].posts_adoptedStatus),
-                ),
+                child: _makePostTile(_postsDataList[index].posts_subject, _postsDataList[index].posts_title,
+                    _postsDataList[index].posts_content, _postsDataList[index].posts_commentsC,
+                    _postsDataList[index].posts_writtenDate, _postsDataList[index].posts_adoptedStatus),
               );
             }
 
@@ -354,20 +351,41 @@ class _BoardPageState extends State<BoardPage> {
 
   Widget _makePostTile(inSub, inTitle, inContent, inCount, inDate, inAdopted) {
     return Container(
+      padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          Text(
-            inSub,
-            style: TextStyle(
-              color: themeColor1,
-              fontFamily: "Barun",
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400,
-            ),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                inSub,
+                style: TextStyle(
+                  color: themeColor1,
+                  fontFamily: "Barun",
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+
+              // 채택여부
+              Padding(
+                padding: EdgeInsets.only(right: 5.w),
+                child: inAdopted ?
+                Icon(
+                  Icons.check_rounded,
+                  size: 19.sp,
+                  color: themeColor1,
+                ) :
+                null,
+              ),
+            ],
           ),
-          Padding(padding: EdgeInsets.only(bottom: 5)),
+
+          Padding(padding: EdgeInsets.only(bottom: 5.h)),
           Text(
             inTitle,
             style: TextStyle(
@@ -376,6 +394,7 @@ class _BoardPageState extends State<BoardPage> {
               fontWeight: FontWeight.w500,
             ),
           ),
+
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
             inContent,
@@ -386,6 +405,59 @@ class _BoardPageState extends State<BoardPage> {
               fontSize: 14.sp,
               fontWeight: FontWeight.w300,
             ),
+          ),
+
+          Padding(padding: EdgeInsets.only(bottom: 5)),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+                child: Text(
+                  inDate,
+                  style: TextStyle(
+                    color: grayColor2,
+                    fontFamily: "barun",
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+
+              Row(
+                children: [
+
+                  Padding(
+
+                    //comment 아이콘
+                    padding: EdgeInsets.only(left:0, right:3.w, top:0, bottom:0),
+                    child: Icon(
+                      Icons.comment_outlined,
+                      size: 15.sp,
+                      color: grayColor1,
+                    ),
+                  ),
+
+                  //comment 수
+                  Padding(
+                    padding:EdgeInsets.all(0),
+                    child: Text(
+                      inCount.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: grayColor1,
+                        fontFamily: "barun",
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ],
           ),
         ],
       ),

@@ -13,39 +13,41 @@ import 'package:studytogether/main.dart';
 import 'myBoard_page.dart';
 
 // Subject Search 결과 데이터 가져오기
-List<SubSearch> SubSearchfromJson (json) {
-  List<SubSearch> result = [];
+List<SearchSubs> SearchSubsfromJson(json) {
+  List<SearchSubs> result = [];
   json.forEach((item) {
-    result.add(SubSearch(item["id"], item["subject"], item["professor_name"]));
+    result.add(SearchSubs(item["id"], item["subject"], item["professor_name"]));
   });
   return result;
 }
 
-Future<List<SubSearch>> fetchSubSearch(inSearchKeyword) async {
-  // Map <String, dynamic> queryParams = {
-  //   "searchKeyword" : inSearchKeyword
-  // };
-  var subSearchUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/subject?searchKeyword="+inSearchKeyword;
-  var response = await http.get(Uri.parse(subSearchUrl));
+Future<List<SearchSubs>> fetchSearchSubs(inSearchword) async {
+  var searchSubsUrl =
+      "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/classification/search?";
+  Map<String, String> queryParams = {"searchKeyword": inSearchword};
+  String queryString = Uri(queryParameters: queryParams).query;
+
+  var requestUrl = searchSubsUrl + "?" + queryString;
+  var response = await http.get(Uri.parse(requestUrl));
 
   if (response.statusCode == 200) {
-    return SubSearchfromJson(json.decode(response.body));
+    return SearchSubsfromJson(json.decode(response.body));
   } else {
     throw Exception("Failed to load subject");
   }
 }
 
 // Subject Search 데이터 형식
-class SubSearch {
-  var subSearch_id;
-  var subSearch_subject;
-  var subSearch_professor;
+class SearchSubs {
+  var searchSubs_id;
+  var searchSubs_subject;
+  var searchSubs_professor;
 
-  SubSearch(
-      this.subSearch_id,
-      this.subSearch_subject,
-      this.subSearch_professor,
-      );
+  SearchSubs(
+    this.searchSubs_id,
+    this.searchSubs_subject,
+    this.searchSubs_professor,
+  );
 }
 
 class SubSearchPage extends StatefulWidget {
@@ -56,51 +58,49 @@ class SubSearchPage extends StatefulWidget {
 }
 
 class _SubSearchPageState extends State<SubSearchPage> {
-  List<SubSearch> _subSearchDataList = <SubSearch>[].obs;
-
-  var _scroll = ScrollController().obs;
-
-  var _maxSubSearch = 20; // 찾은 과목 총 개수
-  var _isSubLoading = false.obs;
-  var _hasMoreSub = false.obs;
-
-
   final _userId = ""; // 유저 아이디
   final _idSelect = ""; // 선택한 과목의 id
   final _subSelect = ""; // 선택한 과목
   final _proSelect = ""; // 선택한 과목의 교수님
 
-  final _subSearchFilter = TextEditingController();
+  var _isNotSubmitted = true;
 
-  bool _isSearching = false;
+  final _search = TextEditingController();
+  var _scroll = ScrollController().obs;
 
-  var _subSearchitem = <String> [];
-  var _proSearchitem = <String> [];
+  List<SearchSubs> _searchSubsDataList = <SearchSubs>[].obs;
 
-  var _subList = <String>[
-    "데이타 구조", "데이타 프로그래밍", "데이타 언어", "데2",
-    "데이타", "데이타 강형", "데이타 지원", "데이터 모음",
-    "데이타인데요", "성경", "재이수", "재수",
-  ].obs;
-
-  var _proList = <String>[
-    "강형", "소은", "고은", "현서",
-    "햄찌", "햄햄", "지원", "도비",
-    "교수", "교수?", "교수수", "옥수수",
-  ].obs;
+  var _maxSearchSub = 20; // 찾은 과목 총 개수
+  var _isSearchLoading = false.obs;
+  var _hasMoreSearchSubs = false.obs;
 
   @override
   void initState() {
     super.initState();
-    _subSearchitem.clear();
-    _proSearchitem.clear();
-    this._isSearching = false;
+
+    this._scroll.value.addListener(() {
+      if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
+          this._hasMoreSearchSubs.value) {
+        _searchPosts("${_search.text}");
+      }
+    });
+  }
+
+  _searchPosts(inSearchWord) async {
+    _isSearchLoading.value = true;
+    List<SearchSubs> _newSearchSubsDataList =
+        await fetchSearchSubs(inSearchWord);
+    setState(() {
+      _searchSubsDataList.addAll(_newSearchSubsDataList);
+    });
+    _isSearchLoading.value = false;
+    _hasMoreSearchSubs.value = _searchSubsDataList.length < _maxSearchSub;
   }
 
   @override
   void dispose() {
     // 위젯이 dispose 또는 dismiss 될 때 컨트롤러를 clean up!
-    _subSearchFilter.dispose();
+    _search.dispose();
     super.dispose();
   }
 
@@ -109,11 +109,8 @@ class _SubSearchPageState extends State<SubSearchPage> {
     return ScreenUtilInit(
       designSize: Size(411.4, 683.4),
       builder: () {
-
-
         return Scaffold(
           backgroundColor: Colors.white,
-
           appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0.0,
@@ -124,15 +121,19 @@ class _SubSearchPageState extends State<SubSearchPage> {
                 keyboardType: TextInputType.text,
                 textAlignVertical: TextAlignVertical.bottom,
                 // textInputAction: TextInputAction.go,
-                controller: _subSearchFilter,
-                onSubmitted: (text) {
-                  setState(() {
-                    _subSearchitem.clear();
-                    _proSearchitem.clear();
-                    _isSearching ? Center(child: CircularProgressIndicator()) :
-                    _getSubData();
-                  });
-
+                controller: _search,
+                onSubmitted: (value) {
+                  if (_search.text.length > 0) {
+                    setState(() {
+                      _isNotSubmitted = false;
+                    });
+                    print("${_search.text}");
+                    _searchPosts("${_search.text}");
+                  } else {
+                    setState(() {
+                      _isNotSubmitted = true;
+                    });
+                  }
                 },
                 // 과목 검색하기
                 decoration: InputDecoration(
@@ -141,27 +142,28 @@ class _SubSearchPageState extends State<SubSearchPage> {
                       borderSide: new BorderSide(
                         color: themeColor1,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(15))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
                   focusedBorder: OutlineInputBorder(
                       borderSide: new BorderSide(
                         color: themeColor1,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(15))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
 
                   // prefixIcon: Icon(Icons.search_rounded, color: themeColor1,),
                   suffixIcon: IconButton(
                     onPressed: () {
-                      _subSearchFilter.clear();
+                      FocusScope.of(context).unfocus();
+                      _search.clear();
                       setState(() {
-                        _subSearchitem.clear();
-                        _proSearchitem.clear();
+                        _isNotSubmitted = true;
+                        _searchSubsDataList.clear();
                       });
-                      // FocusScope.of(context).unfocus();
-                      },
+                    },
                     padding: EdgeInsets.all(0.0),
-                    icon: Icon(Icons.clear , color: themeColor1,),
+                    icon: Icon(
+                      Icons.clear,
+                      color: themeColor1,
+                    ),
                   ),
 
                   hintText: "강의명 또는 교수명을 입력하세요.",
@@ -186,15 +188,18 @@ class _SubSearchPageState extends State<SubSearchPage> {
             ),
           ),
           body: SafeArea(
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: Container(
-                  child: _isSearching ? CircularProgressIndicator() :
-                        _subSearchitem.isEmpty ? _initSubSearch() : _makeSubList(),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 15.w,
+                  right: 15.w,
                 ),
+                child: _isNotSubmitted ? _notSubmittedPage() : _searchSub(),
               ),
             ),
           ),
@@ -203,112 +208,145 @@ class _SubSearchPageState extends State<SubSearchPage> {
     );
   }
 
-  Widget _initSubSearch() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            "강의가 존재하지 않아요 :<"
-            "\n과목 검색하는 방법:",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              height: 5.h,
-              color: themeColor1,
-              fontFamily: "Barun",
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
+  Widget _notSubmittedPage() {
+    return Center(
+      child: Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 100.h),
+              child: Text(
+                "과목이 존재하지 않아요 :<",
+                style: TextStyle(
+                  color: themeColor1,
+                  fontFamily: "Barun",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-          ),
-          Text(
-            "예) 스, 스터디, 스터디 투게더",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              // height: 10.h,
-              color: themeColor1,
-              fontFamily: "Barun",
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: Text(
+                "과목 검색하는 방법 :",
+                style: TextStyle(
+                  color: themeColor1,
+                  fontFamily: "Barun",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.only(top: 0.h),
+              child: Text(
+                "스터디, 스, 스터디투게더",
+                style: TextStyle(
+                  color: themeColor1,
+                  fontFamily: "Barun",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _makeSubList() {
-    return ListView.separated(
-      itemCount: _subSearchitem.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            Get.back();
-          },
-          child: Container(
-            // padding: EdgeInsets.only(top: 10, bottom: 5, left: 25.w, right: 20.w,),
-            child: Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 10, left: 25.w, right: 25.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${_subSearchitem[index]}",
-                        style: TextStyle(
-                          color: themeColor1,
-                          fontFamily: "Barun",
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(bottom: 5)),
-                      Text(
-                        "${_proSearchitem[index]}",
-                        style: TextStyle(
-                          color: grayColor1,
-                          fontFamily: "Barun",
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+  Widget _searchSub() {
+    return Center(
+      child: Container(
+        child: Obx(
+          () => ListView.separated(
+            controller: _scroll.value,
+            itemCount: _searchSubsDataList.length + 1,
+            itemBuilder: (_, index) {
+              if (index < _searchSubsDataList.length) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: _makeSearchSub(
+                      _searchSubsDataList[index].searchSubs_subject,
+                      _searchSubsDataList[index].searchSubs_professor),
+                );
+              }
+
+              else if (_hasMoreSearchSubs.value || _isSearchLoading.value) {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20.h),
+                    child: CircularProgressIndicator(),
                   ),
-                  Icon(
-                    Icons.check_rounded,
-                    color: themeColor1,
-                  )
-                ],
-              ),
+                );
+              }
+
+              return Container(
+                child: IconButton(
+                  onPressed: () {
+                    _isSearchLoading.value = true;
+                    _searchSubsDataList.clear();
+                    _searchPosts("${_search.text}");
+                  },
+                  icon: Icon(Icons.arrow_upward_rounded),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => Divider(
+              color: grayColor2,
+              thickness: 1,
             ),
           ),
-        );
-      },
-      separatorBuilder: (context, index) =>
-          Divider(
-            color: grayColor2,
-            thickness: 1,
-            indent: 20.w,
-            endIndent: 20.w,
-          ),
+        ),
+      ),
     );
   }
+}
 
-  void _getSubData() async {
-    _isSearching = true;
-    await Future.delayed(Duration(seconds: 1));
-
-    if (_subList.isNotEmpty == true) {
-      setState(() {
-        _subSearchitem.addAll(_subList);
-        _proSearchitem.addAll(_proList);
-      });
-    }
-    setState(() {
-      _isSearching = false;
-    });
-  }
+Widget _makeSearchSub(inSubject, inProfessor) {
+  return Container(
+    child: Container(
+// padding: EdgeInsets.only(top: 10, bottom: 5, left: 25.w, right: 20.w,),
+      child: Padding(
+        padding: EdgeInsets.only(top: 10, bottom: 10,),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  inSubject,
+                  style: TextStyle(
+                    color: themeColor1,
+                    fontFamily: "Barun",
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(bottom: 5)),
+                Text(
+                  inProfessor,
+                  style: TextStyle(
+                    color: grayColor1,
+                    fontFamily: "Barun",
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Icon(
+              Icons.check_rounded,
+              color: themeColor1,
+            )
+          ],
+        ),
+      ),
+    ),
+  );
 }
