@@ -133,4 +133,3 @@ class _OtherProfileState extends State<OtherProfile> {
     );
   }
 }
-

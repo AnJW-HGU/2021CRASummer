@@ -37,8 +37,8 @@ class _RankPageState extends State<RankPage> {
               centerTitle: true,
             ),
             body: _rankPageBody(),
-        );
-      }
+          );
+        }
     );
   }
 

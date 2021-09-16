@@ -102,26 +102,26 @@ class _PointPageState extends State<PointPage> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(30.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text("포인트에 대한 규칙 또는 방법?", style: TextStyle(fontFamily: "Barun", color: Colors.white),),
-                        Padding(
-                          padding: EdgeInsets.all(5.w),
-                        ),
-                        Text("얻을 수 있는 방법", style: TextStyle(fontFamily: "Barun", color: Colors.white),)
-                      ],
-                    ),
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(30.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("포인트에 대한 규칙 또는 방법?", style: TextStyle(fontFamily: "Barun", color: Colors.white),),
+                      Padding(
+                        padding: EdgeInsets.all(5.w),
+                      ),
+                      Text("얻을 수 있는 방법", style: TextStyle(fontFamily: "Barun", color: Colors.white),)
+                    ],
                   ),
-                ],
-              )
+                ),
+              ],
+            )
           ],
         )
       ],

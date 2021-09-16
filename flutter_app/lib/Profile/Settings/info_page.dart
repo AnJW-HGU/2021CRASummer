@@ -44,7 +44,7 @@ class _InfoPageState extends State<InfoPage> {
 
   final List<String> _subList = <String>[
     "분류", "분류에오", "분 류", "분류우",
-     // "분류", "분류에오", "분 류", "분류우",
+    // "분류", "분류에오", "분 류", "분류우",
     // "분류", "분류에오", "분 류", "분류우",
     // "분류", "분류에오", "분 류", "분류우",
     // "분류", "분류에오", "분 류", "분류우",
@@ -160,45 +160,45 @@ class _InfoPageState extends State<InfoPage> {
     return Container(
       child: Obx(
             () => Padding(
-              padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-              child: ListView.separated(
-                controller: scrollController.value,
-                itemBuilder: (_, index) {
-                  print(hasMore.value);
+          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+          child: ListView.separated(
+            controller: scrollController.value,
+            itemBuilder: (_, index) {
+              print(hasMore.value);
 
-                  if (index < _subData.length) {
-                    var subDatum = _subData[index];
-                    var titleDatum = _titleData[index];
-                    var contentDatum = _contentData[index];
+              if (index < _subData.length) {
+                var subDatum = _subData[index];
+                var titleDatum = _titleData[index];
+                var contentDatum = _contentData[index];
 
-                    return Container(
-                      child: _makeInfoTile("$subDatum", "$titleDatum", "$contentDatum"),
-                    );
-                  }
-                  if (hasMore.value || isLoading.value) {
-                    return Center(
-                        child: CircularProgressIndicator(),
-                    );
-                  }
-                  return Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Text('공지사항의 마지막 입니다'),
-                          IconButton(
-                            onPressed: () {
-                              reload();
-                            },
-                            icon: Icon(Icons.arrow_upward_rounded),
-                          ),
-                        ],
+                return Container(
+                  child: _makeInfoTile("$subDatum", "$titleDatum", "$contentDatum"),
+                );
+              }
+              if (hasMore.value || isLoading.value) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text('공지사항의 마지막 입니다'),
+                      IconButton(
+                        onPressed: () {
+                          reload();
+                        },
+                        icon: Icon(Icons.arrow_upward_rounded),
                       ),
-                    ),
-                  );
-                },
-                separatorBuilder: (_, index) => Divider(),
-                itemCount: _subData.length + 1,
+                    ],
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (_, index) => Divider(),
+            itemCount: _subData.length + 1,
           ),
         ),
       ),

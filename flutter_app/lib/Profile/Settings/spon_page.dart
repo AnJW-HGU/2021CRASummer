@@ -15,33 +15,33 @@ class _SponPageState extends State<SponPage> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(411.4, 683.4),
-      builder: () {
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              color: themeColor1,
-              icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
-            ),
-            title: Text(
-              "개발자 페이지",
-              style: TextStyle(
-                color: grayColor1,
-                fontFamily: "Barun",
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w400,
+        designSize: Size(411.4, 683.4),
+        builder: () {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                color: themeColor1,
+                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
               ),
+              title: Text(
+                "개발자 페이지",
+                style: TextStyle(
+                  color: grayColor1,
+                  fontFamily: "Barun",
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              elevation: 0,
             ),
-            backgroundColor: Colors.white,
-            centerTitle: true,
-            elevation: 0,
-          ),
-          body: _SponPageBody(),
-        );
-      }
+            body: _SponPageBody(),
+          );
+        }
     );
   }
 
