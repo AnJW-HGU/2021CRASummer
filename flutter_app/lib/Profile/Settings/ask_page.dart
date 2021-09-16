@@ -4,15 +4,42 @@ import 'package:studytogether/main.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+
+class AddInquiry {
+  int? inquiryId;
+  var inquiryKind;
+  var inquiryTitle;
+  var inquiryContent;
+
+  AddInquiry(inKind, inTitle, inContent) {
+    inquiryId = 1;
+    inquiryKind = inKind;
+    inquiryTitle = inTitle;
+    inquiryContent = inContent;
+  }
+
+  Map<String, dynamic> toJson() => {
+    'postId': inquiryId,
+    'kind': inquiryKind,
+    'title': inquiryTitle,
+    'content': inquiryContent
+  };
+}
+
 class AskPage extends StatefulWidget {
+  const AskPage({Key? key}) : super(key: key);
+
   @override
   _AskPageState createState() => _AskPageState();
 }
 
 class _AskPageState extends State<AskPage> {
-  final List<String> _valueList = ['종류','네임드 신청', '신고', '건의사항', '버그', '기타'];
-  String _selectedValue = '종류';
-  String _initialValue = '종류';
+  final List<String> _valueList = ['-----종류-----', '네임드 신청', '신고', '건의사항', '버그', '기타'];
+  String _selectedValue = '-----종류-----';
+  String _initialValue = '-----종류-----';
   final _addTitle = TextEditingController();
   final _addContent = TextEditingController();
 
@@ -29,6 +56,29 @@ class _AskPageState extends State<AskPage> {
     super.dispose();
   }
 
+  _addInquiry(inKind, inTitle, inContent) async {
+    String inquiryUrl =
+        'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/new_request?user_id=1';
+    AddInquiry _addInquiry = AddInquiry(inKind, inTitle, inContent);
+
+    return (await apiRequest(inquiryUrl, _addInquiry));
+  }
+
+  apiRequest(url, _inquiry) async {
+    var body = utf8.encode(jsonEncode(_inquiry));
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{'Content-type': 'application/json'},
+      body: body,
+    );
+
+    String reply = "문의 작성에 실패하였습니다.";
+    if (response.statusCode == 200) {
+      reply = response.body;
+    }
+    return reply;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -41,10 +91,13 @@ class _AskPageState extends State<AskPage> {
                   Get.back();
                 },
                 color: themeColor1,
-                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 15.w,
+                ),
               ),
               title: Text(
-                  "문의하기",
+                "문의하기",
                 style: TextStyle(
                   fontFamily: "Barun",
                   fontSize: 15.sp,
@@ -55,162 +108,201 @@ class _AskPageState extends State<AskPage> {
               backgroundColor: Colors.white,
               actions: [
                 TextButton(
-                  child: Text("완료",
+                  child: Text(
+                    "완료",
                     style: TextStyle(
                       fontFamily: "Barun",
                       fontSize: 14.sp,
                       color: _isButtonAbled ? themeColor1 : grayColor1,
                     ),
                   ),
-                  onPressed : _isButtonAbled ? _isButtonDialog
+                  onPressed: _isButtonAbled
+                      ? () async {
+                    Get.back();
+                    String result = await _addInquiry(
+                        "${_selectedValue.toString()}",
+                        "${_addTitle.text}",
+                        "${_addContent.text}");
+                    if (result == "OK") {
+                      result = "작성이 완료되었습니다.";
+                    } else {
+                      result = "작성에 실패하였습니다.";
+                    }
+                    Get.showSnackbar(
+                      GetBar(
+                        message: result,
+                        duration: Duration(seconds: 1),
+                        snackPosition: SnackPosition.TOP,
+                        maxWidth: 400.w,
+                        backgroundColor: themeColor2,
+                        borderRadius: 5,
+                        barBlur: 0,
+                      ),
+                    );
+                  }
                       : _isButtonDialog,
                 )
               ],
             ),
             body: SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    // 드롭박스
-                    Container(
-                      padding: EdgeInsets.only(top: 20, left: 20.w, right: 20.w),
-                      child: DropdownButton(
-                        style: TextStyle(
-                          fontFamily: "Barun",
-                          fontSize: 16.sp,
-                          color: Colors.black,
-                        ),
-                        isExpanded: true,
-                        value: _selectedValue,
-                        items: _valueList.map(
-                                (value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                        onChanged: (value) {
-                          _selectedValue = value.toString();
-                          if(_selectedValue.compareTo(_initialValue) == 0){
-                            setState(() {
-                              _isList = false;
-                            });
-                          }else {
-                            setState(() {
-                              _selectedValue = value.toString();
-                              _isList = true;
-                              if(_isList == true && _isTitle == true && _isContent == true) {
-                                setState(() {
-                                  _isButtonAbled = true;
-                                });
-                              }
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
-                      },
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Container(
-                                padding: EdgeInsets.only(left: 20.w, right: 20.w),
-                                child: Column(
-                                  children: [
-                                    // 제목 적는 곳
-                                    TextField(
-                                      controller: _addTitle,
-                                      onChanged: (value) {
-                                        if(_addTitle.text.length >= 1) {
-                                          setState(() {
-                                            _isTitle = true;
-                                          });
-                                          if(_isList == true && _isTitle == true && _isContent == true) {
-                                            setState(() {
-                                              _isButtonAbled = true;
-                                            });
-                                          }
-                                        } else {
-                                          setState(() {
-                                            _isTitle = false;
-                                            _isButtonAbled = false;
-                                          });
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                        border: UnderlineInputBorder(),
-                                        hintText: "제목을 입력해주세요.",
-                                        hintStyle: TextStyle(
-                                          fontFamily: "Barun",
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    // 내용 적는 곳
-                                    Container(
-                                      child: TextField(
-                                        controller: _addContent,
-                                        onChanged: (value) {
-                                          if (_addContent.text.length >= 1) {
-                                            setState(() {
-                                              _isContent = true;
-                                            });
-                                            if (_isList == true && _isTitle == true && _isContent == true) {
-                                              setState(() {
-                                                _isButtonAbled = true;
-                                              });
-                                            }
-                                          }else {
-                                            setState(() {
-                                              _isContent = false;
-                                              _isButtonAbled = false;
-                                            });
-                                          }
-                                        },
-                                        keyboardType: TextInputType.multiline,
-                                        maxLines: null,
-                                        decoration: InputDecoration(
-                                          hintText: "내용을 입력해주세요.",
-                                          border: InputBorder.none,
-                                          hintStyle: TextStyle(
-                                            fontFamily: "Barun",
-                                            fontSize: 15.sp,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          // 드롭박스
+                          Container(
+                            padding: EdgeInsets.only(top: 20, left: 20.w, right: 20.w),
+                            child: DropdownButton(
+                              style: TextStyle(
+                                fontFamily: "Barun",
+                                fontSize: 16.sp,
+                                color: themeColor2,
+                              ),
+                              isExpanded: true,
+                              value: _selectedValue,
+                              items: _valueList.map((value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                _selectedValue = value.toString();
+                                if (_selectedValue.compareTo(_initialValue) == 0) {
+                                  setState(() {
+                                    _isList = false;
+                                  });
+                                } else {
+                                  setState(() {
+                                    _selectedValue = value.toString();
+                                    _isList = true;
+                                    if (_isList == true &&
+                                        _isTitle == true &&
+                                        _isContent == true) {
+                                      setState(() {
+                                        _isButtonAbled = true;
+                                      });
+                                    }
+                                  });
+                                }
+                              },
                             ),
-                            // 문의하기 신청 작성시 규칙
-                            Container(
-                              padding: EdgeInsets.only(top: 15, left: 20.w, right: 20.w),
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "<문의하기-네임드 신청 작성 시 규칙>"
-                                    "\n\n"
-                                    "1. 네임드 신청\n"
-                                    "\t- 해당 학부 게시글에서 채택된 답변이 30개 이상인 경우\n"
-                                    "\t- 해당 학부 교수님이신 경우\n\n",
-                                style: TextStyle(
-                                  color: grayColor2,
-                                  fontFamily: "Barun",
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                                textAlign: TextAlign.justify,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).unfocus();
+                            },
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Container(
+                                      padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                                      child: Column(
+                                        children: [
+                                          // 제목 적는 곳
+                                          TextField(
+                                            controller: _addTitle,
+                                            onChanged: (value) {
+                                              if (_addTitle.text.length >= 1) {
+                                                setState(() {
+                                                  _isTitle = true;
+                                                });
+                                                if (_isList == true &&
+                                                    _isTitle == true &&
+                                                    _isContent == true) {
+                                                  setState(() {
+                                                    _isButtonAbled = true;
+                                                  });
+                                                }
+                                              } else {
+                                                setState(() {
+                                                  _isTitle = false;
+                                                  _isButtonAbled = false;
+                                                });
+                                              }
+                                            },
+                                            decoration: InputDecoration(
+                                              border: UnderlineInputBorder(),
+                                              hintText: "제목을 입력해주세요.",
+                                              hintStyle: TextStyle(
+                                                fontFamily: "Barun",
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: grayColor1,
+                                              ),
+                                            ),
+                                          ),
+                                          // 내용 적는 곳
+                                          Container(
+                                            child: TextField(
+                                              controller: _addContent,
+                                              onChanged: (value) {
+                                                if (_addContent.text.length >= 1) {
+                                                  setState(() {
+                                                    _isContent = true;
+                                                  });
+                                                  if (_isList == true &&
+                                                      _isTitle == true &&
+                                                      _isContent == true) {
+                                                    setState(() {
+                                                      _isButtonAbled = true;
+                                                    });
+                                                  }
+                                                } else {
+                                                  setState(() {
+                                                    _isContent = false;
+                                                    _isButtonAbled = false;
+                                                  });
+                                                }
+                                              },
+                                              keyboardType: TextInputType.multiline,
+                                              maxLines: null,
+                                              decoration: InputDecoration(
+                                                hintText: "내용을 입력해주세요.",
+                                                border: InputBorder.none,
+                                                hintStyle: TextStyle(
+                                                    fontFamily: "Barun",
+                                                    fontSize: 15.sp,
+                                                    color: grayColor1
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                  // 문의하기 신청 작성시 규칙
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        top: 15, left: 20.w, right: 20.w),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "<문의하기-네임드 신청 작성 시 규칙>"
+                                          "\n\n"
+                                          "1. 네임드 신청\n"
+                                          "\t- 해당 학부 게시글에서 채택된 답변이 30개 이상인 경우\n"
+                                          "\t- 해당 학부 교수님이신 경우\n\n",
+                                      style: TextStyle(
+                                        color: grayColor2,
+                                        fontFamily: "Barun",
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
+                    )
+                )
             ),
           );
         });
@@ -249,8 +341,7 @@ class _AskPageState extends State<AskPage> {
       //     ),
       //   ),
       // );
-    }
-    else if (_isTitle != true) {
+    } else if (_isTitle != true) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -284,8 +375,7 @@ class _AskPageState extends State<AskPage> {
       //     ),
       //   ),
       // );
-    }
-    else if (_isContent != true) {
+    } else if (_isContent != true) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -319,7 +409,7 @@ class _AskPageState extends State<AskPage> {
       //     ),
       //   ),
       // );
-    }else if (_isButtonAbled){
+    } else if (_isButtonAbled) {
       Get.defaultDialog(
           title: "문의 확인",
           content: Text("문의를 보내시겠습니까 ?"),
@@ -338,10 +428,7 @@ class _AskPageState extends State<AskPage> {
                 Get.back();
               },
             ),
-          ]
-      );
+          ]);
     }
   }
 }
-
-

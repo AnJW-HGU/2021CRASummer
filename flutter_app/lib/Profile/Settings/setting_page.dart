@@ -10,6 +10,7 @@ import 'info_page.dart';
 import 'privacyRule_page.dart';
 import 'spon_page.dart';
 import 'useRule_page.dart';
+import 'package:studytogether/Profile/myProfile_page.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -67,66 +68,66 @@ class _SettingPageState extends State<SettingPage> {
         designSize: Size(411.4, 683.4),
         builder: () {
           return Scaffold(
-            backgroundColor: themeColor4,
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                color: Colors.white,
-                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
-              ),
-
-              backgroundColor: themeColor1,
-              title: Text(
-                '설정',
-                style: TextStyle(
-                    fontFamily: "Barun",
-                    color: Colors.white,
-                    fontSize: 15.sp
+              backgroundColor: themeColor4,
+              appBar: AppBar(
+                leading: IconButton(
+                  onPressed: () {
+                    Get.off(() => MyProfilePage());
+                  },
+                  color: Colors.white,
+                  icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
                 ),
+
+                backgroundColor: themeColor1,
+                title: Text(
+                  '설정',
+                  style: TextStyle(
+                      fontFamily: "Barun",
+                      color: Colors.white,
+                      fontSize: 15.sp
+                  ),
+                ),
+                centerTitle: true,
               ),
-              centerTitle: true,
-            ),
-            body: FutureBuilder<User>(
-              future: user,
-              builder: (context, snapshot) {
-                if(snapshot.data != null){
-                  return ListView(
-                    children: <Widget>[
-                      _listTile_nickName("닉네임", EditNicknamePage(), snapshot.data!.user_nickname),
-                      _listTile_noPage("테마 색상"),
-                      _listTile_alarm("푸쉬알림 설정"),
-                      Padding(padding: EdgeInsets.all(2.0)),
-                      _listTile("공지사항", InfoPage()),
-                      _listTile("문의하기", AskPage()),
-                      _listTile_appVersion("앱 버전"),
-                      _listTile("개발자 페이지", SponPage()),
-                      Padding(padding: EdgeInsets.all(2.0)),
-                      _listTile("이용약관", UseRulePage()),
-                      _listTile("개인정보 처리방침", PrivacyRulePage()),
-                      _listTile_noPage("로그아웃"),
-                    ],
-                  );
-                }else if(snapshot.hasError){
-                  return Text("${snapshot.error}");
-                }
-                return Center(child: CircularProgressIndicator());
-              }
-            )
+              body: FutureBuilder<User>(
+                  future: user,
+                  builder: (context, snapshot) {
+                    if(snapshot.data != null){
+                      return ListView(
+                        children: <Widget>[
+                          _listTile_nickName("닉네임", snapshot.data!.user_nickname),
+                          _listTile_themeColor("테마 색상"),
+                          _listTile_alarm("푸쉬알림 설정"),
+                          Padding(padding: EdgeInsets.all(2.0)),
+                          _listTile("공지사항", InfoPage()),
+                          _listTile("문의하기", AskPage()),
+                          _listTile_appVersion("앱 버전"),
+                          _listTile("개발자 페이지", SponPage()),
+                          Padding(padding: EdgeInsets.all(2.0)),
+                          _listTile("이용약관", UseRulePage()),
+                          _listTile("개인정보 처리방침", PrivacyRulePage()),
+                          _listTile_noPage("로그아웃"),
+                        ],
+                      );
+                    }else if(snapshot.hasError){
+                      return Text("${snapshot.error}");
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  }
+              )
           );
         }
     );
   }
 
   // 닉네임 리스트
-  Widget _listTile_nickName(context, Next, _nickName){
+  Widget _listTile_nickName(context, _nickName){
     return ListTile(
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
       title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
       tileColor: Colors.white,
       onTap: () {
-        Get.to(Next, arguments: _nickName);
+        Get.off(() => EditNicknamePage(), arguments: _nickName);
       },
       trailing: Text(_nickName, style: TextStyle(fontFamily: "Barun", color: grayColor1,),),
     );
@@ -147,23 +148,23 @@ class _SettingPageState extends State<SettingPage> {
   // 알람설정 리스트
   Widget _listTile_alarm(context){
     return ListTile(
-      contentPadding: EdgeInsets.only(left:30.w, right:15.w),
-      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
-      tileColor: Colors.white,
-      onTap: () {
-      },
-      trailing: Switch(
-        value: isSwitched,
-        onChanged: (value) {
-          setState(() {
-            isSwitched = value;
-          });
+        contentPadding: EdgeInsets.only(left:30.w, right:15.w),
+        title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
+        tileColor: Colors.white,
+        onTap: () {
         },
-      )
+        trailing: Switch(
+          value: isSwitched,
+          onChanged: (value) {
+            setState(() {
+              isSwitched = value;
+            });
+          },
+        )
     );
   }
 
-   // 다음페이지로 넘어가는 리스트
+  // 다음페이지로 넘어가는 리스트
   Widget _listTile(context, Next){
     return ListTile(
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
@@ -173,9 +174,33 @@ class _SettingPageState extends State<SettingPage> {
         Get.to(Next);
       },
       trailing: Icon(
-        Icons.arrow_forward_ios_rounded,
-        size: 18.w
+          Icons.arrow_forward_ios_rounded,
+          size: 18.w
       ),
+    );
+  }
+
+  // 테마색상 리스트
+  Widget _listTile_themeColor(context){
+    return ListTile(
+      tileColor: Colors.white,
+      contentPadding: EdgeInsets.only(left:30.w, right:30.w),
+      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
+      trailing: Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 18.w
+      ),
+      onTap: () {
+        Get.showSnackbar(
+          GetBar(
+            message: "공사 중이에요! :>",
+            duration: Duration(seconds: 2),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: themeColor2,
+            barBlur: 0,
+          ),
+        );
+      },
     );
   }
 
@@ -193,6 +218,5 @@ class _SettingPageState extends State<SettingPage> {
   }
 
 }
-
 
 

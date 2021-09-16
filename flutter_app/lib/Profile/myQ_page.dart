@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:studytogether/Category/post_page.dart';
+
 Future<List<User_Post>> fetchUserPost() async {
   var userUrl =
       'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/get?user_id=123456';
@@ -27,21 +29,21 @@ class User_Post {
   var user_content;
 
   User_Post(
-    this.user_postId,
-    this.user_subject,
-    this.user_title,
-    this.user_content,
-  );
+      this.user_postId,
+      this.user_subject,
+      this.user_title,
+      this.user_content,
+      );
 
-  // 기존 것
-  // factory User.fromJson(Map<String, dynamic> json) {
-  //   return User(
-  //     user_postId: json['id'],
-  //     user_subject: json['subject'],
-  //     user_title: json['title'],
-  //     user_content: json['content']
-  //   );
-  // }
+// 기존 것
+// factory User.fromJson(Map<String, dynamic> json) {
+//   return User(
+//     user_postId: json['id'],
+//     user_subject: json['subject'],
+//     user_title: json['title'],
+//     user_content: json['content']
+//   );
+// }
 }
 
 List<User_Post> UserfromJson(json) {
@@ -62,7 +64,7 @@ class MyQPage extends StatefulWidget {
 }
 
 class _MyQPageState extends State<MyQPage> {
-  List<User_Post> _userDataList = [];
+  List<User_Post> _userPostDataList = [];
 
   var _maxUserPostInfo = 30;
 
@@ -85,7 +87,7 @@ class _MyQPageState extends State<MyQPage> {
 
     this.scrollController.value.addListener(() {
       if (this.scrollController.value.position.pixels ==
-              this.scrollController.value.position.maxScrollExtent &&
+          this.scrollController.value.position.maxScrollExtent &&
           this._hasMore.value) {
         _getUserPostInfo();
       }
@@ -98,21 +100,21 @@ class _MyQPageState extends State<MyQPage> {
     await Future.delayed(Duration(seconds: 2));
 
     setState(() {
-      _userDataList.addAll(_newUserPostDataList);
+      _userPostDataList.addAll(_newUserPostDataList);
     });
     _isLoading.value = false;
-    _hasMore.value = _userDataList.length < _maxUserPostInfo;
+    _hasMore.value = _userPostDataList.length < _maxUserPostInfo;
   }
 
   reload() async {
     _isLoading.value = true;
-    _userDataList.clear();
+    _userPostDataList.clear();
     _getUserPostInfo();
   }
 
   // 새로고침
   Future<Null> refresh() async {
-    _userDataList.clear();
+    _userPostDataList.clear();
     _isLoading.value = false;
     _hasMore.value = false;
     _getUserPostInfo();
@@ -153,17 +155,18 @@ class _MyQPageState extends State<MyQPage> {
               child: Container(
                 child: Obx(
                   // 질문 리스트
-                  () => Padding(
+                      () => Padding(
                     padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
                     child: ListView.separated(
                       controller: scrollController.value,
                       itemBuilder: (BuildContext _context, index) {
-                        if (index < _userDataList.length) {
+                        if (index < _userPostDataList.length) {
                           return Container(
-                            child: _makeInfoTile(
-                                "${_userDataList[index].user_subject}",
-                                "${_userDataList[index].user_title}",
-                                "${_userDataList[index].user_content}"),
+                              child: _makeInfoTile(
+                                "${_userPostDataList[index].user_subject}",
+                                "${_userPostDataList[index].user_title}",
+                                "${_userPostDataList[index].user_content}",
+                                "${_userPostDataList[index].user_postId}",)
                           );
                         }
                         if (_hasMore.value || _isLoading.value) {
@@ -189,7 +192,7 @@ class _MyQPageState extends State<MyQPage> {
                         );
                       },
                       separatorBuilder: (_, index) => Divider(),
-                      itemCount: _userDataList.length + 1,
+                      itemCount: _userPostDataList.length + 1,
                     ),
                   ),
                 ),
@@ -202,7 +205,7 @@ class _MyQPageState extends State<MyQPage> {
   }
 
   // 리스트 만드는 위젯젯
-  Widget _makeInfoTile(sub, title, content) {
+  Widget _makeInfoTile(sub, title, content, post_id_in) {
     return Container(
       child: ListTile(
         subtitle: Text(
@@ -221,6 +224,9 @@ class _MyQPageState extends State<MyQPage> {
             color: themeColor2,
           ),
         ),
+        onTap: () {
+          Get.to(PostPage(), arguments: post_id_in);
+        },
       ),
     );
   }
