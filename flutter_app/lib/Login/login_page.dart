@@ -14,6 +14,32 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:studytogether/splash_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+Future<void> initializeFirebase() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
+
+Future<UserCredential> signInWithGoogle() async {
+  print("b");
+  final GoogleSignInAccount? googleuser = await GoogleSignIn().signIn();
+
+  final GoogleSignInAuthentication googleAuth = await googleuser!.authentication;
+
+  final
+  OAuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+      accessToken: googleAuth.accessToken
+  );
+  Fluttertoast.showToast(msg: "Account created");
+  return await FirebaseAuth.instance.signInWithCredential(credential);
+}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -104,15 +130,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-                    fetch().then((String value) => {
-                      html_data = value,
-                      isloading = false,
-                      print("확인용: " + html_data),
-                      print("확인용: " + isloading.toString()),
-                    });
-                    if (isloading == false) {
-                      _launchURL(context);
-                    };
+                    print("a");
+                    signInWithGoogle();
+                    // fetch().then((String value) => {
+                    //   html_data = value,
+                    //   isloading = false,
+                    //   print("확인용: " + html_data),
+                    //   print("확인용: " + isloading.toString()),
+                    // });
+                    // if (isloading == false) {
+                    //   _launchURL(context);
+                    // };
 
 
 

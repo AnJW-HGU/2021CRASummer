@@ -87,10 +87,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   void initState() {
     _controller = AnimationController(
         duration: Duration(seconds: 2), vsync: this, value: 0.1);
-
     _animation =
         CurvedAnimation(parent: _controller, curve: Curves.bounceInOut);
-
     _controller.forward();
     super.initState();
     splash_t = GetToken();
@@ -171,15 +169,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   }
                 },
               );
-
-
               MainPage(true);
             } else {
               MainPage(false);
             }
-
-
-
             return Center();
           }
         },
