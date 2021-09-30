@@ -74,6 +74,8 @@ class _SubSearchPageState extends State<SubSearchPage> {
   var _isSearchLoading = false.obs;
   var _hasMoreSearchSubs = false.obs;
 
+  SearchSubs choiceSub = SearchSubs(null, null, null);
+
   @override
   void initState() {
     super.initState();
@@ -267,7 +269,12 @@ class _SubSearchPageState extends State<SubSearchPage> {
                 return GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Get.back();
+                    choiceSub = SearchSubs(
+                        _searchSubsDataList[index].searchSubs_id,
+                        _searchSubsDataList[index].searchSubs_subject,
+                        _searchSubsDataList[index].searchSubs_professor,
+                    );
+                    Get.back(result: choiceSub);
                   },
                   child: _makeSearchSub(
                       _searchSubsDataList[index].searchSubs_subject,

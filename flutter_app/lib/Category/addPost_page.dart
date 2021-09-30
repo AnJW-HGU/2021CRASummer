@@ -11,7 +11,10 @@ import 'package:http/http.dart' as http;
 import 'dart:ui';
 
 import 'package:studytogether/main.dart';
+import 'subSearch_page.dart';
 import '../Data/Post_data.dart';
+
+
 
 class AddPost {
   int? postClassifi;
@@ -51,7 +54,9 @@ class _AddPostPageState extends State<AddPostPage> {
   final addTitle = TextEditingController();
   final addContent = TextEditingController();
 
-  bool _isSub = true;
+  SearchSubs choiceSub = SearchSubs(null, null, null);
+
+  bool _isSub = false;
   bool _isTitle = false;
   bool _isContent = false;
   bool _isButtonAbled = false;
@@ -99,6 +104,34 @@ class _AddPostPageState extends State<AddPostPage> {
     // String reply = "작성되었습니다.";
     // httpClient.close(); // 이때 요청함
     return reply;
+  }
+
+  Widget _searchSubButton() {
+    return OutlinedButton.icon(
+        onPressed: () async {
+          choiceSub = await Get.to(() => SubSearchPage());
+          print("${choiceSub.searchSubs_professor}");
+          if (choiceSub.searchSubs_subject != null) {
+            setState(() {
+              _isSub = true;
+            });
+          }
+        },
+        icon: Icon(
+          Icons.add_rounded,
+          size: 17.w,
+          color: themeColor1,
+        ),
+        label: Text(
+          "과목을 선택해주세요.",
+          style: TextStyle(
+              color: grayColor1,
+              fontFamily: "Barun",
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400
+          ),
+        ),
+      );
   }
 
   @override
@@ -184,25 +217,9 @@ class _AddPostPageState extends State<AddPostPage> {
                     Container(
                       padding: EdgeInsets.only(top: 15, left: 20.w, right: 20.w),
                       alignment: Alignment.centerLeft,
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Get.to(() => SubSearchPage());
-                        },
-                        icon: Icon(
-                          Icons.add_rounded,
-                          size: 17.w,
-                          color: themeColor1,
-                        ),
-                        label: Text(
-                            "과목을 선택해주세요.",
-                          style: TextStyle(
-                            color: grayColor1,
-                            fontFamily: "Barun",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400
-                          ),
-                        ),
-                      ),
+                      child: _isSub? _makeChoiceSub(
+                          choiceSub.searchSubs_id, choiceSub.searchSubs_professor, choiceSub.searchSubs_subject)
+                          : _searchSubButton(),
                     ),
 
                     // 제목과 내용을 입력하는 필드
@@ -354,6 +371,97 @@ class _AddPostPageState extends State<AddPostPage> {
     );
   }
 
+  Widget _makeChoiceSub(subId, subProfessor, subSubject) {
+    return ElevatedButton.icon(
+      icon: Icon(
+        Icons.close_rounded,
+        size: 17.w,
+        color: themeColor4,
+      ),
+      label: Text(
+        subSubject+" - "+subProfessor,
+        style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Barun",
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w400
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: themeColor1,
+      ),
+
+      onPressed: () {
+        Get.defaultDialog(
+            barrierDismissible: false,
+            title: "",
+            titleStyle: TextStyle(
+              fontFamily: "Barun",
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w400,
+            ),
+
+            content: Column(
+              children: [
+                Text(
+                    subSubject+"["+subProfessor+"] 를(을)",
+                    style: TextStyle(
+                      fontFamily: "Barun",
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    )
+                ),
+                Text(
+                    "삭제하시겠습니까?",
+                    style: TextStyle(
+                      fontFamily: "Barun",
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    )
+                ),
+              ],
+            ),
+
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(
+                  "아니오",
+                  style: TextStyle(
+                    color: themeColor1,
+                    fontFamily: "Barun",
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isSub = false;
+                  });
+                  choiceSub = SearchSubs(null, null, null);
+                  Get.back();
+                },
+                child: Text(
+                  "예",
+                  style: TextStyle(
+                    color: themeColor1,
+                    fontFamily: "Barun",
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ]
+        );
+      },
+    );
+  }
+
   void _isButtonDialog () {
     if (_isSub != true) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -402,25 +510,6 @@ class _AddPostPageState extends State<AddPostPage> {
           duration: Duration(seconds: 1),
         ),
       );
-      // Get.defaultDialog(
-      //   barrierDismissible: true,
-      //   title: "",
-      //   titleStyle: TextStyle(
-      //     color: grayColor1,
-      //     fontFamily: "Barun",
-      //     fontSize: 15.sp,
-      //     fontWeight: FontWeight.w400,
-      //   ),
-      //   content: Text(
-      //     "내용을 입력해주세요\n",
-      //     style: TextStyle(
-      //       color: themeColor1,
-      //       fontFamily: "Barun",
-      //       fontSize: 17.sp,
-      //       fontWeight: FontWeight.w500,
-      //     ),
-      //   ),
-      // );
     }
 
   }
