@@ -109,6 +109,10 @@ class MyBoardPage extends StatefulWidget {
 }
 
 class _MyBoardPageState extends State<MyBoardPage> {
+
+  // refresh에 관해서
+  final _refreshMyBoard = false;
+
   // 선호 과목리스트
   List<PreferredSubject> _preferredSubjectDataList = <PreferredSubject>[].obs;
   late Future<List<PreferredSubject>> _preferredSubjects;
@@ -428,6 +432,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
   Widget _makeSub(inSubTitle) {
     return GestureDetector(
       onTap: () {
+        // 과목 삭제 눌렀을 때
         Get.defaultDialog(
           barrierDismissible: false,
           title: "",
@@ -531,6 +536,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
     );
   }
 
+  // 게시판에 게시글 띄우기
   Widget _makePost() {
     return Container(
       child: Obx(()
@@ -576,6 +582,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
     );
   }
 
+  // 게시판의 게시글 틀
   Widget _makePostTile(inSub, inTitle, inContent, inCount, inDate, inAdopted) {
     return Container(
       child: Column(
