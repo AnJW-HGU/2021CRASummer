@@ -23,7 +23,7 @@ List<SearchSubs> SearchSubsfromJson(json) {
 
 Future<List<SearchSubs>> fetchSearchSubs(inSearchword) async {
   var searchSubsUrl =
-      "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/classification/search?";
+      "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/classification/search";
   Map<String, String> queryParams = {"searchKeyword": inSearchword};
   String queryString = Uri(queryParameters: queryParams).query;
 

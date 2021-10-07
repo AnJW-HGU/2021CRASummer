@@ -72,7 +72,7 @@ class _AddPostPageState extends State<AddPostPage> {
 
   // Data
   _addPost(inTitle, inContent) async {
-    String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Create/";
+    String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post";
     AddPost _addPost = AddPost(inTitle, inContent);
 
     return (await apiRequest(url, _addPost));

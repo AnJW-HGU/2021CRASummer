@@ -11,9 +11,10 @@ import 'dart:ui';
 import 'package:studytogether/main.dart';
 
 
+final post_id = Get.arguments[0].toString();
+
 //POST의 데이터 가져오기
 Future<Post> fetchPost() async {
-  final post_id = Get.arguments[0].toString();
   // Map<String, dynamic> queryParams = {
   //   'postId' : post_id,
   // };
@@ -74,7 +75,7 @@ class Post {
 
 //Comment 작성
 _AddComment(inPostId, inUserId, inContent) async {
-  String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/Comment/";
+  String url = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/comments/";
   AddComment _addComment = AddComment(inPostId, inUserId, inContent);
 
   return (await apiRequest(url, _addComment));
@@ -129,7 +130,6 @@ List<Comment> CommentfromJson (json) {
 }
 
 Future<List<Comment>> fetchComment() async {
-  final post_id = Get.arguments[0].toString();
   var commentUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/comments"+"?postId="+post_id;
   // var commentUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/comments?postId=1";
   var response = await http.get(Uri.parse(commentUrl));
@@ -267,6 +267,22 @@ class Report {
 }
 
 
+// Post 삭제
+_DeletePost (userId, postId) async{
+  var deletePostUrl =
+      "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post";
+  Map<String, String> queryParams = {"id": postId};
+  String queryString = Uri(queryParameters: queryParams).query;
+
+  var requestUrl = deletePostUrl + "?" + queryString;
+  var response = await http.delete(Uri.parse(requestUrl));
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    return "FAIL";
+  }
+}
 
 ///////////////////////////////////////////////////////////////////
 
@@ -284,6 +300,7 @@ class _PostPageState extends State<PostPage> {
   List<Comment> _commentDataList = <Comment>[].obs;
 
   final userId=1;
+  final userPosted = false;
 
   final commentController = TextEditingController();
   final _scroll = ScrollController().obs;
@@ -398,11 +415,18 @@ class _PostPageState extends State<PostPage> {
               IconButton(
                 color: grayColor2,
                 icon: Icon(
-                  Icons.warning_rounded,
+                  Icons.more_vert,
                 ),
-                tooltip: "Declaration Button",
+                tooltip: "Post Menu Button",
                 iconSize: 25.w,
-                onPressed: () {},
+                onPressed: () {
+                  if (userPosted == true) {
+                    _postedMenu(post_id);
+                  }
+                  else {
+                    _unPostedMenu(post_id);
+                  }
+                },
               )
             ],
           ),
@@ -739,7 +763,7 @@ class _PostPageState extends State<PostPage> {
                                                         Padding(padding: EdgeInsets.all(5.w)),
 
                                                         // 댓글 신고
-                                                        _reportSome(_commentDataList[i].comment_id, "comment"),
+                                                        _reportButton(_commentDataList[i].comment_id),
                                                       ],
                                                     ),
                                                   ),
@@ -882,264 +906,178 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
+  void _postedMenu(inPostId) {
+    Get.defaultDialog(
+      backgroundColor: Colors.white.withOpacity(0.8),
+      barrierDismissible: false,
 
-  Widget _reportSome(inSomeId, inType) {
-    return InkWell(
-      onTap: () {
-        Get.defaultDialog(
-          backgroundColor: Colors.white.withOpacity(0.8),
-          barrierDismissible: false,
+      title: "",
+      titleStyle: TextStyle(
+        fontFamily: "Barun",
+        fontSize: 15.sp,
+        fontWeight: FontWeight.w500,
+      ),
 
-          title: "",
-          titleStyle: TextStyle(
-            fontFamily: "Barun",
-            fontSize: 15.sp,
-            fontWeight: FontWeight.w500,
-          ),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // 수정 기능
+          // GestureDetector(
+          //   behavior: HitTestBehavior.opaque,
+          //   onTap: () async {
+          //     Get.back();
+          //     String result = "수정되었습니다 :>";
+          //     Get.showSnackbar(
+          //       GetBar(
+          //         message: result,
+          //         duration: Duration(seconds: 1),
+          //         snackPosition: SnackPosition.TOP,
+          //         maxWidth: 400.w,
+          //         backgroundColor: themeColor2,
+          //         borderRadius: 5,
+          //         barBlur: 0,
+          //       ),
+          //     );
+          //   },
+          //   child: Container(
+          //     alignment: Alignment.center,
+          //     child: Text(
+          //       "수정",
+          //       style: TextStyle(
+          //         color: Colors.black,
+          //         fontFamily: "Barun",
+          //         fontSize: 17.sp,
+          //         fontWeight: FontWeight.w500,
+          //       ),
+          //     ),
+          //   ),
+          // ),
 
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+          Divider(color: grayColor2,),
 
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  Get.back();
-                  String result = await _AddReport(userId, inSomeId, inType, "아너코드 위반 게시물");
-                  if (result == "OK") {
-                    result = "신고가 완료되었습니다. :>";
-                  }
-                  Get.showSnackbar(
-                    GetBar(
-                      message: result,
-                      duration: Duration(seconds: 1),
-                      snackPosition: SnackPosition.TOP,
-                      maxWidth: 400.w,
-                      backgroundColor: themeColor2,
-                      borderRadius: 5,
-                      barBlur: 0,
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "아너코드 위반 게시물",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Barun",
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () async {
+              Get.back();
+              String result = await _DeletePost(userId, inPostId);
+              if (result == "OK") {
+                result = "삭제가 완료되었습니다. :>";
+              } else {
+                result = "삭제가 실패했습니다 :<";
+              }
+              Get.showSnackbar(
+                GetBar(
+                  message: result,
+                  duration: Duration(seconds: 1),
+                  snackPosition: SnackPosition.TOP,
+                  maxWidth: 400.w,
+                  backgroundColor: themeColor2,
+                  borderRadius: 5,
+                  barBlur: 0,
                 ),
-              ),
-
-              Divider(color: grayColor2,),
-
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  Get.back();
-                  String result = await _AddReport(userId, inSomeId, inType, "폭력적/혐오적인 게시물");
-                  if (result == "OK") {
-                    result = "신고가 완료되었습니다. :>";
-                  }
-                  Get.showSnackbar(
-                    GetBar(
-                      message: result,
-                      duration: Duration(seconds: 1),
-                      snackPosition: SnackPosition.TOP,
-                      maxWidth: 400.w,
-                      backgroundColor: themeColor2,
-                      borderRadius: 5,
-                      barBlur: 0,
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "폭력적/혐오적인 게시물",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Barun",
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-              Divider(color: grayColor2,),
-
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  Get.back();
-                  String result = await _AddReport(userId, inSomeId, inType, "상업/사기/조작 관련 게시물");
-                  if (result == "OK") {
-                    result = "신고가 완료되었습니다. :>";
-                  }
-                  Get.showSnackbar(
-                    GetBar(
-                      message: result,
-                      duration: Duration(seconds: 1),
-                      snackPosition: SnackPosition.TOP,
-                      maxWidth: 400.w,
-                      backgroundColor: themeColor2,
-                      borderRadius: 5,
-                      barBlur: 0,
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "상업/사기/조작 관련 게시물",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Barun",
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-              Divider(color: grayColor2,),
-
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  Get.back();
-                  String result = await _AddReport(userId, inSomeId, inType, "정치/어그로 관련 게시물");
-                  if (result == "OK") {
-                    result = "신고가 완료되었습니다. :>";
-                  }
-                  Get.showSnackbar(
-                    GetBar(
-                      message: result,
-                      duration: Duration(seconds: 1),
-                      snackPosition: SnackPosition.TOP,
-                      maxWidth: 400.w,
-                      backgroundColor: themeColor2,
-                      borderRadius: 5,
-                      barBlur: 0,
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "정치/어그로 관련 게시물",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Barun",
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-              Divider(color: grayColor2,),
-
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  Get.back();
-                  String result = await _AddReport(userId, inSomeId, inType, "성적인 게시물");
-                  if (result == "OK") {
-                    result = "신고가 완료되었습니다. :>";
-                  }
-                  Get.showSnackbar(
-                    GetBar(
-                      message: result,
-                      duration: Duration(seconds: 1),
-                      snackPosition: SnackPosition.TOP,
-                      maxWidth: 400.w,
-                      backgroundColor: themeColor2,
-                      borderRadius: 5,
-                      barBlur: 0,
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "성적인 게시물",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Barun",
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-              Divider(color: grayColor2,),
-
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  Get.back();
-                  String result = await _AddReport(userId, inSomeId, inType, "부적절한 게시물");
-                  if (result == "OK") {
-                    result = "신고가 완료되었습니다. :>";
-                  }
-                  Get.showSnackbar(
-                    GetBar(
-                      message: result,
-                      duration: Duration(seconds: 1),
-                      snackPosition: SnackPosition.TOP,
-                      maxWidth: 400.w,
-                      backgroundColor: themeColor2,
-                      borderRadius: 5,
-                      barBlur: 0,
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "부적절한 게시물",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Barun",
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-              Divider(color: grayColor2,),
-
-            ],
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back();
-              },
+              );
+            },
+            child: Container(
+              alignment: Alignment.center,
               child: Text(
-                "취소",
+                "삭제",
                 style: TextStyle(
-                  color: grayColor1,
+                  color: Colors.black,
                   fontFamily: "Barun",
-                  fontSize: 16.sp,
+                  fontSize: 17.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-          ]
-        );
+          ),
 
+          Divider(color: grayColor2,),
+        ]
+      ),
 
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(
+            "취소",
+            style: TextStyle(
+              color: grayColor1,
+              fontFamily: "Barun",
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ]
+    );
+  }
 
+  void _unPostedMenu(inPostId) {
+    Get.defaultDialog(
+        backgroundColor: Colors.white.withOpacity(0.8),
+        barrierDismissible: false,
+
+        title: "",
+        titleStyle: TextStyle(
+          fontFamily: "Barun",
+          fontSize: 15.sp,
+          fontWeight: FontWeight.w500,
+        ),
+
+        content: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Divider(color: grayColor2,),
+
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () async {
+                  Get.back();
+                  _reportSome(post_id, 'post');
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "신고",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Barun",
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+
+              Divider(color: grayColor2,),
+            ]
+        ),
+
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              "취소",
+              style: TextStyle(
+                color: grayColor1,
+                fontFamily: "Barun",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ]
+    );
+  }
+
+  Widget _reportButton(inSomeId) {
+    return InkWell(
+      onTap: () {
+        _reportSome(inSomeId, 'comment');
         print("Report Button");
       },
       child: Container(
@@ -1156,7 +1094,259 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
+  void _reportSome(inSomeId, inReportType) {
+    Get.defaultDialog(
+        backgroundColor: Colors.white.withOpacity(0.8),
+        barrierDismissible: false,
 
+        title: "",
+        titleStyle: TextStyle(
+          fontFamily: "Barun",
+          fontSize: 15.sp,
+          fontWeight: FontWeight.w500,
+        ),
+
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                Get.back();
+                String result = await _AddReport(userId, inSomeId, inReportType, "아너코드 위반 게시물");
+                if (result == "OK") {
+                  result = "신고가 완료되었습니다. :>";
+                }
+                Get.showSnackbar(
+                  GetBar(
+                    message: result,
+                    duration: Duration(seconds: 1),
+                    snackPosition: SnackPosition.TOP,
+                    maxWidth: 400.w,
+                    backgroundColor: themeColor2,
+                    borderRadius: 5,
+                    barBlur: 0,
+                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "아너코드 위반 게시물",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Barun",
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            Divider(color: grayColor2,),
+
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                Get.back();
+                String result = await _AddReport(userId, inSomeId, inReportType, "폭력적/혐오적인 게시물");
+                if (result == "OK") {
+                  result = "신고가 완료되었습니다. :>";
+                }
+                Get.showSnackbar(
+                  GetBar(
+                    message: result,
+                    duration: Duration(seconds: 1),
+                    snackPosition: SnackPosition.TOP,
+                    maxWidth: 400.w,
+                    backgroundColor: themeColor2,
+                    borderRadius: 5,
+                    barBlur: 0,
+                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "폭력적/혐오적인 게시물",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Barun",
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            Divider(color: grayColor2,),
+
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                Get.back();
+                String result = await _AddReport(userId, inSomeId, inReportType, "상업/사기/조작 관련 게시물");
+                if (result == "OK") {
+                  result = "신고가 완료되었습니다. :>";
+                }
+                Get.showSnackbar(
+                  GetBar(
+                    message: result,
+                    duration: Duration(seconds: 1),
+                    snackPosition: SnackPosition.TOP,
+                    maxWidth: 400.w,
+                    backgroundColor: themeColor2,
+                    borderRadius: 5,
+                    barBlur: 0,
+                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "상업/사기/조작 관련 게시물",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Barun",
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            Divider(color: grayColor2,),
+
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                Get.back();
+                String result = await _AddReport(userId, inSomeId, inReportType, "정치/어그로 관련 게시물");
+                if (result == "OK") {
+                  result = "신고가 완료되었습니다. :>";
+                }
+                Get.showSnackbar(
+                  GetBar(
+                    message: result,
+                    duration: Duration(seconds: 1),
+                    snackPosition: SnackPosition.TOP,
+                    maxWidth: 400.w,
+                    backgroundColor: themeColor2,
+                    borderRadius: 5,
+                    barBlur: 0,
+                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "정치/어그로 관련 게시물",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Barun",
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            Divider(color: grayColor2,),
+
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                Get.back();
+                String result = await _AddReport(userId, inSomeId, inReportType, "성적인 게시물");
+                if (result == "OK") {
+                  result = "신고가 완료되었습니다. :>";
+                }
+                Get.showSnackbar(
+                  GetBar(
+                    message: result,
+                    duration: Duration(seconds: 1),
+                    snackPosition: SnackPosition.TOP,
+                    maxWidth: 400.w,
+                    backgroundColor: themeColor2,
+                    borderRadius: 5,
+                    barBlur: 0,
+                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "성적인 게시물",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Barun",
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            Divider(color: grayColor2,),
+
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                Get.back();
+                String result = await _AddReport(userId, inSomeId, inReportType, "부적절한 게시물");
+                if (result == "OK") {
+                  result = "신고가 완료되었습니다. :>";
+                }
+                Get.showSnackbar(
+                  GetBar(
+                    message: result,
+                    duration: Duration(seconds: 1),
+                    snackPosition: SnackPosition.TOP,
+                    maxWidth: 400.w,
+                    backgroundColor: themeColor2,
+                    borderRadius: 5,
+                    barBlur: 0,
+                  ),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "부적절한 게시물",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Barun",
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            Divider(color: grayColor2,),
+
+          ],
+        ),
+
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              "취소",
+              style: TextStyle(
+                color: grayColor1,
+                fontFamily: "Barun",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ]
+    );
+  }
 
   Widget _loadingPost() {
     return Column(
