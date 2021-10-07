@@ -17,7 +17,8 @@ import 'dart:async';
 Future<User> fetchUser() async {
   // final user_id = Get.arguments[0].toString();
 
-  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?user_id=1';
+  // String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?user_id=1';
+  String userUrl = 'http://128.199.139.159:3000/user/1';
   var response = await http.get(Uri.parse(userUrl));
 
   if(response.statusCode == 200) {

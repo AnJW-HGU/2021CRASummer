@@ -29,10 +29,10 @@ class User_Comment_Post {
   var user_comment_title;
 
   User_Comment_Post(
-      this.user_comment_postId,
-      this.user_comment_subject,
-      this.user_comment_title,
-      );
+    this.user_comment_postId,
+    this.user_comment_subject,
+    this.user_comment_title,
+  );
 
 // 기존 것
 // factory User.fromJson(Map<String, dynamic> json) {
@@ -48,8 +48,8 @@ class User_Comment_Post {
 List<User_Comment_Post> UserfromJson(json) {
   List<User_Comment_Post> result = [];
   json.forEach((item) {
-    result.add(
-        User_Comment_Post(item["postId"], item['subject'], item['title']));
+    result
+        .add(User_Comment_Post(item["postId"], item['subject'], item['title']));
   });
 
   return result;
@@ -75,7 +75,7 @@ class _MyAPageState extends State<MyAPage> {
   var _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
@@ -86,7 +86,7 @@ class _MyAPageState extends State<MyAPage> {
 
     this.scrollController.value.addListener(() {
       if (this.scrollController.value.position.pixels ==
-          this.scrollController.value.position.maxScrollExtent &&
+              this.scrollController.value.position.maxScrollExtent &&
           this._hasMore.value) {
         _getUserCommentPostInfo();
       }
@@ -133,7 +133,10 @@ class _MyAPageState extends State<MyAPage> {
                   // Navigator.push(context, MaterialPageRoute(builder: (context)=> MyProfilePage()),).then((value) => setState((){}));
                 },
                 color: themeColor1,
-                icon: Icon(Icons.arrow_back_ios_new_rounded, size: 15.w,),
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 15.w,
+                ),
               ),
               title: Text(
                 "답변 수",
@@ -152,7 +155,7 @@ class _MyAPageState extends State<MyAPage> {
               child: Container(
                 child: Obx(
                   // 질문 리스트
-                      () => Padding(
+                  () => Padding(
                     padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
                     child: ListView.separated(
                       controller: scrollController.value,
@@ -160,10 +163,10 @@ class _MyAPageState extends State<MyAPage> {
                         if (index < _userCommentPostDataList.length) {
                           return Container(
                               child: _makeInfoTile(
-                                "${_userCommentPostDataList[index].user_comment_subject}",
-                                "${_userCommentPostDataList[index].user_comment_title}",
-                                "${_userCommentPostDataList[index].user_comment_postId}",)
-                          );
+                            "${_userCommentPostDataList[index].user_comment_subject}",
+                            "${_userCommentPostDataList[index].user_comment_title}",
+                            "${_userCommentPostDataList[index].user_comment_postId}",
+                          ));
                         }
                         if (_hasMore.value || _isLoading.value) {
                           return Center(
@@ -197,9 +200,9 @@ class _MyAPageState extends State<MyAPage> {
               onRefresh: () => refresh(),
             ),
           );
-        }
-    );
+        });
   }
+
   Widget _makeInfoTile(sub, title, post_id) {
     return Container(
       child: ListTile(
