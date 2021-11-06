@@ -19,6 +19,7 @@ Future<List<Info>> fetchInfo() async {
   }
 }
 
+
 // 공지사항 어디서 받아오는지 ?
 class Info{
   var kind;
@@ -34,13 +35,16 @@ class Info{
 
 List<Info> InfofromJson(json) {
   List<Info> result = [];
+
   json.forEach((item){
     result.add(
       Info(item['kind'], item['title'], item['content'])
     );
   });
+
   return result;
 }
+
 
 class InfoPage extends StatefulWidget {
   @override
@@ -49,7 +53,8 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   List<Info> _infoDataList = [];
-  var _maxInfo = 1;
+
+  int _maxInfo = 0;
 
   var scrollController = ScrollController().obs;
 
@@ -57,6 +62,27 @@ class _InfoPageState extends State<InfoPage> {
   var _hasMore = false.obs;
 
   var _refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  Future <dynamic> fetchLength() async {
+    String lengthUrl = 'http://128.199.139.159:3000/announcement/length';
+    var response = await http.get(Uri.parse(lengthUrl));
+
+    if(response.statusCode == 200) {
+      return lengthfromJson(json.decode(response.body));
+    } else {
+      throw Exception("Failed to load Length");
+    }
+  }
+
+  int lengthfromJson(json) {
+    int length = 0;
+
+    length = int.parse(json['length'].toString());
+    print(length);
+    return length;
+  }
+
+
 
   @override
   void dispose() {
@@ -79,6 +105,7 @@ class _InfoPageState extends State<InfoPage> {
   _getInfo() async {
     _isLoading.value = true;
     List<Info> _newInfoDataList = await fetchInfo();
+    _maxInfo = await fetchLength();
     await Future.delayed(Duration(seconds: 2));
 
     setState((){

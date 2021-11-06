@@ -185,7 +185,18 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                         _textButton("포인트", snapshot.data!.user_point, PointPage()),
                                         _textButton("질문", snapshot.data!.user_questionNum, MyQPage()),
                                         _textButton("답변", snapshot.data!.user_answerNum, MyAPage()),
-                                        TextButton(onPressed: (){},
+                                        TextButton(
+                                          onPressed: (){
+                                            Get.showSnackbar(
+                                              GetBar(
+                                                message: "공사 중이에요! :>",
+                                                duration: Duration(seconds: 2),
+                                                snackPosition: SnackPosition.BOTTOM,
+                                                backgroundColor: themeColor2,
+                                                barBlur: 0,
+                                              ),
+                                            );
+                                          },
                                           child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                                         ),
                                       ],
@@ -243,13 +254,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 )
                             ),
                             // 뱃지함 아래 padding 조절(뱃지함 크기 조절)
-                            Padding(padding: EdgeInsets.only(bottom: 220.0)),
-                            TextButton(
-                              onPressed: () {
-                                Get.to(ManageMainPage());
-                              },
-                              child: Text("일단 버튼"),
-                            ),
+                            // Padding(padding: EdgeInsets.only(bottom: 220.0)),
+                            // TextButton(
+                            //   onPressed: () {
+                            //     Get.to(ManageMainPage());
+                            //   },
+                            //   child: Text("일단 버튼"),
+                            // ),
                           ]
                       );
                     }else if(snapshot.hasError) {
