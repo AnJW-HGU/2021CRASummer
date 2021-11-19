@@ -17,6 +17,7 @@ final grayColor1 = HexColor("5C5C5C"); // 767676도 이거 쓰면 됨.
 final grayColor2 = HexColor("ADADAD");
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
       MyApp()
   );

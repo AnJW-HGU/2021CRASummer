@@ -1,34 +1,49 @@
 {
   "project_info": {
-    "project_number": "896273889572",
-    "project_id": "study-together-notification",
-    "storage_bucket": "study-together-notification.appspot.com"
+    "project_number": "839842999745",
+    "project_id": "login-ab986",
+    "storage_bucket": "login-ab986.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:896273889572:android:d1e81e2d247377a331dbb1",
+        "mobilesdk_app_id": "1:839842999745:android:2ab0122f8f189cc0061340",
         "android_client_info": {
           "package_name": "com.cra.studytogether.studytogether"
         }
       },
       "oauth_client": [
         {
-          "client_id": "896273889572-0s6gure3icr08ptfevie9i9e01qk6kul.apps.googleusercontent.com",
+          "client_id": "839842999745-pt90dc5q63l2mlo7hi4dvvjbgul5t8a9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cra.studytogether.studytogether",
+            "certificate_hash": "2d2c0508529dbc53474576711279b9b53b1929be"
+          }
+        },
+        {
+          "client_id": "839842999745-beuona75di00357junurfdpm113dgjbu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA07-t9r7suDuzDr8MZ1jS7Qcoik_X7_sw"
+          "current_key": "AIzaSyCl-hfu7nGgY-anI5Nhtx0TyYiI0d9sPUU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "896273889572-0s6gure3icr08ptfevie9i9e01qk6kul.apps.googleusercontent.com",
+              "client_id": "839842999745-beuona75di00357junurfdpm113dgjbu.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "839842999745-21a2q483naip9srh05jglp23r68gp7fi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cra.studytogether.studytogether"
+              }
             }
           ]
         }

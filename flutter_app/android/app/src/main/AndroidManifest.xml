@@ -3,6 +3,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
     <application
+        android:hardwareAccelerated="true"
         android:label="studytogether"
         android:icon="@mipmap/ic_launcher">
         android:usesCleartextTraffic="true">

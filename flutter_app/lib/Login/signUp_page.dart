@@ -108,17 +108,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
-                    fetch().then((String value) => {
-                      html_data = value,
-                      isloading = false,
-                      print("확인용: " + html_data),
-                      print("확인용: " + isloading.toString()),
-                    });
-                    if (isloading == false) {
-                      _launchURL(context);
-                    };
+                    // fetch().then((String value) => {
+                    //   html_data = value,
+                    //   isloading = false,
+                    //   print("확인용: " + html_data),
+                    //   print("확인용: " + isloading.toString()),
+                    // });
+                    // if (isloading == false) {
+                    //   _launchURL(context);
+                    // };
 
-                    //Get.to(SetNicknamePage(), arguments: "22000000",); //user_id
+                    Get.to(SetNicknamePage(), arguments: "22000000",); //user_id
                   },
                   //버튼 안에 text
                   label: Text("      구글로 회원가입        ", style: TextStyle(
@@ -142,43 +142,43 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
 
-  void _launchURL(BuildContext context) async {
-    print('open _launchURL');
-    try {
-      await launch(
-        html_data,
-        customTabsOption: CustomTabsOption(
-          toolbarColor: Theme.of(context).primaryColor,
-          enableDefaultShare: true,
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-          /*animation: CustomTabsAnimation.slideIn(),
-          // or user defined animation.
-          animation: const CustomTabsAnimation(
-            startEnter: 'slide_up',
-            startExit: 'android:anim/fade_out',
-            endEnter: 'android:anim/fade_in',
-            endExit: 'slide_down',
-          ),*/
-          extraCustomTabs: const <String>[
-            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
-            'org.mozilla.firefox',
-            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
-            'com.microsoft.emmx',
-          ],
-        ),
-        safariVCOption: SafariViewControllerOption(
-          preferredBarTintColor: Theme.of(context).primaryColor,
-          preferredControlTintColor: Colors.white,
-          barCollapsingEnabled: true,
-          entersReaderIfAvailable: false,
-          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
-        ),
-      );
-    } catch (e) {
-      // An exception is thrown if browser app is not installed on Android device.
-      debugPrint(e.toString());
-    }
-  }
+  // void _launchURL(BuildContext context) async {
+  //   print('open _launchURL');
+  //   try {
+  //     await launch(
+  //       html_data,
+  //       customTabsOption: CustomTabsOption(
+  //         toolbarColor: Theme.of(context).primaryColor,
+  //         enableDefaultShare: true,
+  //         enableUrlBarHiding: true,
+  //         showPageTitle: true,
+  //         /*animation: CustomTabsAnimation.slideIn(),
+  //         // or user defined animation.
+  //         animation: const CustomTabsAnimation(
+  //           startEnter: 'slide_up',
+  //           startExit: 'android:anim/fade_out',
+  //           endEnter: 'android:anim/fade_in',
+  //           endExit: 'slide_down',
+  //         ),*/
+  //         extraCustomTabs: const <String>[
+  //           // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+  //           'org.mozilla.firefox',
+  //           // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+  //           'com.microsoft.emmx',
+  //         ],
+  //       ),
+  //       safariVCOption: SafariViewControllerOption(
+  //         preferredBarTintColor: Theme.of(context).primaryColor,
+  //         preferredControlTintColor: Colors.white,
+  //         barCollapsingEnabled: true,
+  //         entersReaderIfAvailable: false,
+  //         dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     // An exception is thrown if browser app is not installed on Android device.
+  //     debugPrint(e.toString());
+  //   }
+  // }
 
 }

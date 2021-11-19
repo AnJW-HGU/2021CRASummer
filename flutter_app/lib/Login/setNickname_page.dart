@@ -143,16 +143,6 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Column(
-                      //   children: [
-                      //     Text('  닉네임을 설정해주세요:)',style: TextStyle(
-                      //       fontSize: 16.sp,
-                      //       fontWeight: FontWeight.w500,
-                      //       color: themeColor2,
-                      //       fontFamily: "Barun",
-                      //     ),),
-                      //   ],
-                      // ),
                       SizedBox(height: 10,),
 
                       //닉네임 받기
@@ -161,7 +151,6 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         controller: _nickName,
                         textInputAction: TextInputAction.go,
                         onSubmitted: (value) async {
-
 
                           //한글자 이상 입력했다면
                           if(_nickName.text.length >= 1) {
@@ -204,7 +193,7 @@ class _SetNicknamePageState extends State<SetNicknamePage> {
                         textAlign: TextAlign.center,
                         //닉네임 문자 제한
                         maxLength: 8,
-                        //inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|가-힣|ㆍ|ᆢ]'))],
                         cursorHeight: 20,
                         decoration: InputDecoration(
                           errorText: _isSame ? '닉네임이 중복되었습니다.' : '닉네임을 설정해주세요:)',
