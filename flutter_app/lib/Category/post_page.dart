@@ -185,7 +185,7 @@ _AddRecommend(inCommentId, inUserId) async {
   String url = "http://128.199.139.159:3000/status/recommend";
   Recommend _addRecommend = Recommend(inCommentId, inUserId);
 
-  return (await apiRequest(url, _addRecommend));
+  return (await _recommendRequest(url, _addRecommend));
 }
 
 _recommendRequest(url, _addRecommend) async {
@@ -226,7 +226,7 @@ _AddReport(inUserId, inSomeId, inType, inContent) async {
   String url = "http://128.199.139.159:3000/status/report";
   Report _addReport = Report(inUserId, inSomeId, inType, inContent);
 
-  return (await apiRequest(url, _addReport));
+  return (await _reportRequest(url, _addReport));
 }
 
 _reportRequest(url, _addReport) async {
@@ -549,7 +549,8 @@ class _PostPageState extends State<PostPage> {
                                               right: 0,
                                               bottom: 0),
                                           child: Text(
-                                            snapshot.data!.post_writtenDate,
+                                            snapshot.data!.post_writtenDate
+                                                .substring(0, 10),
                                             style: TextStyle(
                                               color: grayColor1,
                                               fontFamily: "barun",
@@ -664,8 +665,7 @@ class _PostPageState extends State<PostPage> {
                                                     // 채택
                                                     if (_commentDataList[i]
                                                             .comment_adoptedStatus ==
-                                                        true)
-                                                      IconButton(
+                                                        true) IconButton(
                                                         onPressed: () {},
                                                         tooltip:
                                                             "Adopted Button",
@@ -708,7 +708,7 @@ class _PostPageState extends State<PostPage> {
                                                           EdgeInsets.all(0),
                                                       child: Text(
                                                         _commentDataList[i]
-                                                            .comment_writtenDate,
+                                                            .comment_writtenDate.substring(0, 10),
                                                         style: TextStyle(
                                                           color: grayColor1,
                                                           fontFamily: "Barun",
