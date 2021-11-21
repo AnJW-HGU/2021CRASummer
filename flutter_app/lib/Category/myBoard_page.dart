@@ -109,6 +109,10 @@ class MyBoardPage extends StatefulWidget {
 }
 
 class _MyBoardPageState extends State<MyBoardPage> {
+
+  // refresh에 관해서
+  final _refreshMyBoard = false;
+
   // 선호 과목리스트
   List<PreferredSubject> _preferredSubjectDataList = <PreferredSubject>[].obs;
   late Future<List<PreferredSubject>> _preferredSubjects;
@@ -126,6 +130,9 @@ class _MyBoardPageState extends State<MyBoardPage> {
   var _maxPosts = 20; // 게시글 총 개수
   var _isPostsLoading = false.obs;
   var _hasMorePosts = false.obs;
+
+  SearchSubs choicePreferredSub = SearchSubs(null, null, null);
+  var _isPreferSubsLoading = true;
 
   @override
   void initState() {
@@ -282,8 +289,13 @@ class _MyBoardPageState extends State<MyBoardPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                  Get.to(SubSearchPage());
+                                onTap: () async{
+                                  choicePreferredSub = await Get.to(() => SubSearchPage());
+                                  if (choicePreferredSub.searchSubs_subject != null) {
+                                    setState(() {
+                                      _isPreferSubsLoading = true;
+                                    });
+                                  }
                                 },
                                 child: Container(
                                   width: 60.w,
@@ -309,24 +321,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
 
                               Padding(padding: EdgeInsets.only(right: 5.w),),
 
-                              FutureBuilder<List<PreferredSubject>> (
-                                future: _preferredSubjects,
-                                builder: (context, snapshot) {
-                                  if (snapshot.data != null) {
-                                    return Row(
-                                      children: [
-                                        for (int i=0; i<snapshot.data!.length; i++) _makeSub(snapshot.data![i].preferred_subject),
-                                      ],
-                                    );
-                                  }
-                                  else if (snapshot.hasError) {
-                                    return Text("${snapshot.error}");
-                                  }
-
-                                  return Center();
-                                },
-                              ),
-
+                              // _makePreferredSubs(context),
                             ],
                           ),
                         )
@@ -425,9 +420,36 @@ class _MyBoardPageState extends State<MyBoardPage> {
     );
   }
 
+  Future<Widget> _makePreferredSubs(context) async {
+    if (_isPreferSubsLoading == true) {
+      _isPreferSubsLoading = false;
+      return FutureBuilder<List<PreferredSubject>> (
+        future: _preferredSubjects,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            return Row(
+              children: [
+                for (int i=0; i<snapshot.data!.length; i++) _makeSub(snapshot.data![i].preferred_subject),
+              ],
+            );
+          }
+          else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+
+          return Center();
+        },
+      );
+    }
+    else {
+      return Center();
+    }
+  }
+
   Widget _makeSub(inSubTitle) {
     return GestureDetector(
       onTap: () {
+        // 과목 삭제 눌렀을 때
         Get.defaultDialog(
           barrierDismissible: false,
           title: "",
@@ -531,6 +553,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
     );
   }
 
+  // 게시판에 게시글 띄우기
   Widget _makePost() {
     return Container(
       child: Obx(()
@@ -576,6 +599,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
     );
   }
 
+  // 게시판의 게시글 틀
   Widget _makePostTile(inSub, inTitle, inContent, inCount, inDate, inAdopted) {
     return Container(
       child: Column(

@@ -32,6 +32,8 @@ List<Posts> PostsfromJson (json) {
 Future<List<Posts>> fetchPosts() async {
   final boardTitle = Get.arguments; // 카테고리 페이지로부터 타이틀 받음
   var postsUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/posts?major="+boardTitle;
+  // var postsUrl = "http://128.199.139.159:3000/post/?category="+boardTitle;
+  // var postsUrl = "http://128.199.139.159:3000/post/?category=GLS";
   var response = await http.get(Uri.parse(postsUrl));
 
   if (response.statusCode == 200) {
