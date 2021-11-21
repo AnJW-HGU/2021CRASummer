@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:studytogether/Category/category_page.dart';
@@ -20,6 +21,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var isloading = true;
+  var html_data = "";
+
   // var token;
   //
   // getToken() async{
@@ -40,9 +44,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  fetch() async{
-  var res = await http.get(Uri.parse('http://128.199.139.159:3000/login'));
-  return jsonDecode(res.body);
+  //백으로 요청 보내기
+  Future<String> fetch() async{
+    var res = await http.get(Uri.parse('http://128.199.139.159:3000/auth'));
+    print(res.body);
+    return await res.body.toString();
   }
 
   Widget _loginPageBody() {
@@ -98,10 +104,22 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //버튼이 눌리면 동작
                   onPressed: () {
+                    fetch().then((String value) => {
+                      html_data = value,
+                      isloading = false,
+                      print("확인용: " + html_data),
+                      print("확인용: " + isloading.toString()),
+                    });
+                    if (isloading == false) {
+                      _launchURL(context);
+                    };
+
+
+
                     // Firebase.initializeApp();
                     // getToken();
                     // print('token: ${token}');
-                    Get.offAll(() => SplashPage());
+                    //Get.offAll(() => SplashPage());
                     /*var isLogined = fetch();
                     if(isLogined == true){
                       Get.offAll(() => CategoryPage());
@@ -180,4 +198,44 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  void _launchURL(BuildContext context) async {
+    print('open _launchURL');
+    try {
+      await launch(
+        html_data,
+        customTabsOption: CustomTabsOption(
+          toolbarColor: Theme.of(context).primaryColor,
+          enableDefaultShare: true,
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+          /*animation: CustomTabsAnimation.slideIn(),
+          // or user defined animation.
+          animation: const CustomTabsAnimation(
+            startEnter: 'slide_up',
+            startExit: 'android:anim/fade_out',
+            endEnter: 'android:anim/fade_in',
+            endExit: 'slide_down',
+          ),*/
+          extraCustomTabs: const <String>[
+            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+            'org.mozilla.firefox',
+            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+            'com.microsoft.emmx',
+          ],
+        ),
+        safariVCOption: SafariViewControllerOption(
+          preferredBarTintColor: Theme.of(context).primaryColor,
+          preferredControlTintColor: Colors.white,
+          barCollapsingEnabled: true,
+          entersReaderIfAvailable: false,
+          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+        ),
+      );
+    } catch (e) {
+      // An exception is thrown if browser app is not installed on Android device.
+      debugPrint(e.toString());
+    }
+  }
+
 }
