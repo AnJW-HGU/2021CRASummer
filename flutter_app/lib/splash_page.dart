@@ -110,7 +110,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         context,
         MaterialPageRoute(
             builder: (context) =>
-            _isLoggedIn ? CategoryPage() : LoginPage()
+            _isLoggedIn ? CategoryPage() : CategoryPage()
         ));
   }
 
