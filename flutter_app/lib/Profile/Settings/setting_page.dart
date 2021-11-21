@@ -17,7 +17,8 @@ import 'dart:convert';
 import 'dart:async';
 
 Future<User> fetchUser() async {
-  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?post_id=1';
+  // String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?post_id=1';
+  String userUrl = 'http://128.199.139.159:3000/user/1';
   var response = await http.get(Uri.parse(userUrl));
 
   if(response.statusCode == 200) {
@@ -102,7 +103,7 @@ class _SettingPageState extends State<SettingPage> {
                           _listTile("공지사항", InfoPage()),
                           _listTile("문의하기", AskPage()),
                           _listTile_appVersion("앱 버전"),
-                          _listTile("개발자 페이지", SponPage()),
+                          _listTile_sponPage("개발자 페이지", SponPage()),
                           Padding(padding: EdgeInsets.all(2.0)),
                           _listTile("이용약관", UseRulePage()),
                           _listTile("개인정보 처리방침", PrivacyRulePage()),
@@ -130,6 +131,30 @@ class _SettingPageState extends State<SettingPage> {
         Get.off(() => EditNicknamePage(), arguments: _nickName);
       },
       trailing: Text(_nickName, style: TextStyle(fontFamily: "Barun", color: grayColor1,),),
+    );
+  }
+
+  // 테마색상 리스트
+  Widget _listTile_themeColor(context){
+    return ListTile(
+      tileColor: Colors.white,
+      contentPadding: EdgeInsets.only(left:30.w, right:30.w),
+      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
+      trailing: Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 18.w
+      ),
+      onTap: () {
+        Get.showSnackbar(
+          GetBar(
+            message: "공사 중이에요! :>",
+            duration: Duration(seconds: 2),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: themeColor2,
+            barBlur: 0,
+          ),
+        );
+      },
     );
   }
 
@@ -164,24 +189,8 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  // 다음페이지로 넘어가는 리스트
-  Widget _listTile(context, Next){
-    return ListTile(
-      contentPadding: EdgeInsets.only(left:30.w, right:30.w),
-      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
-      tileColor: Colors.white,
-      onTap: () {
-        Get.to(Next);
-      },
-      trailing: Icon(
-          Icons.arrow_forward_ios_rounded,
-          size: 18.w
-      ),
-    );
-  }
-
-  // 테마색상 리스트
-  Widget _listTile_themeColor(context){
+  // 개발자페이지
+  Widget _listTile_sponPage(context, next){
     return ListTile(
       tileColor: Colors.white,
       contentPadding: EdgeInsets.only(left:30.w, right:30.w),
@@ -203,6 +212,24 @@ class _SettingPageState extends State<SettingPage> {
       },
     );
   }
+
+  // 다음페이지로 넘어가는 리스트
+  Widget _listTile(context, Next){
+    return ListTile(
+      contentPadding: EdgeInsets.only(left:30.w, right:30.w),
+      title: Text(context, style: TextStyle(color: grayColor1, fontFamily: "Barun", fontSize:14.sp, letterSpacing: 1),),
+      tileColor: Colors.white,
+      onTap: () {
+        Get.to(Next);
+      },
+      trailing: Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 18.w
+      ),
+    );
+  }
+
+
 
   // 넘어가는 페이지가 없는 리스트
   Widget _listTile_noPage(context){

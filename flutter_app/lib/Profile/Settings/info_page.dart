@@ -8,32 +8,43 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
-Future<User> fetchUser() async {
-  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?post_id=1';
+Future<List<Info>> fetchInfo() async {
+  String userUrl = 'http://128.199.139.159:3000/announcement';
   var response = await http.get(Uri.parse(userUrl));
 
   if(response.statusCode == 200) {
-    return User.fromJson(json.decode(response.body));
+    return InfofromJson(json.decode(response.body));
   } else {
     throw Exception("Failed to load User");
   }
 }
 
-// 공지사항 어디서 받아오는지 ?
-class User{
-  var user_nickname;
 
-  User({
-    this.user_nickname,
+// 공지사항 어디서 받아오는지 ?
+class Info{
+  var kind;
+  var title;
+  var content;
+
+  Info(
+    this.kind,
+    this.title,
+    this.content,
+  );
+}
+
+List<Info> InfofromJson(json) {
+  List<Info> result = [];
+
+  json.forEach((item){
+    result.add(
+      Info(item['kind'], item['title'], item['content'])
+    );
   });
 
-
-  factory User.fromJson(Map<String, dynamic> json){
-    return User(
-      user_nickname: json['nickname'],
-    );
-  }
+  return result;
 }
+
 
 class InfoPage extends StatefulWidget {
   @override
@@ -41,88 +52,83 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
+  List<Info> _infoDataList = [];
 
-  final List<String> _subList = <String>[
-    "분류", "분류에오", "분 류", "분류우",
-    // "분류", "분류에오", "분 류", "분류우",
-    // "분류", "분류에오", "분 류", "분류우",
-    // "분류", "분류에오", "분 류", "분류우",
-    // "분류", "분류에오", "분 류", "분류우",
-  ].obs;
-
-  final List<String> _titleList = <String>[
-    "제목1", "제목2", "제목3", "제목4",
-    // "제목5", "제목6", "제목7", "제목8",
-    // "제목9", "제목10", "제목11", "제목12",
-    // "제목13", "제목14", "제목15", "제목16",
-    // "제목17", "제목18", "제목19", "제목20",
-  ].obs;
-
-  final List<String> _contentList = <String>[
-    "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-    // "공지 내용이요", "공지 내용이요", "공지 내용이요", "공지 내용이요",
-  ].obs;
-
-  var maxInfo = 20;
+  int _maxInfo = 0;
 
   var scrollController = ScrollController().obs;
 
-  var _subData = <String>[].obs;
-  var _titleData = <String>[].obs;
-  var _contentData = <String>[].obs;
+  var _isLoading = false.obs;
+  var _hasMore = false.obs;
 
-  var isLoading = false.obs;
-  var hasMore = false.obs;
+  var _refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  Future <dynamic> fetchLength() async {
+    String lengthUrl = 'http://128.199.139.159:3000/announcement/length';
+    var response = await http.get(Uri.parse(lengthUrl));
+
+    if(response.statusCode == 200) {
+      return lengthfromJson(json.decode(response.body));
+    } else {
+      throw Exception("Failed to load Length");
+    }
+  }
+
+  int lengthfromJson(json) {
+    int length = 0;
+
+    length = int.parse(json['length'].toString());
+    print(length);
+    return length;
+  }
+
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
+    super.initState();
     _getInfo();
 
     this.scrollController.value.addListener(() {
       if(this.scrollController.value.position.pixels ==
-          this.scrollController.value.position.maxScrollExtent && this.hasMore.value) {
+          this.scrollController.value.position.maxScrollExtent && this._hasMore.value) {
         _getInfo();
       }
     });
-    super.initState();
   }
 
   _getInfo() async {
-    isLoading.value = true;
-
+    _isLoading.value = true;
+    List<Info> _newInfoDataList = await fetchInfo();
+    _maxInfo = await fetchLength();
     await Future.delayed(Duration(seconds: 2));
 
-    int offset = _subData.length;
+    setState((){
+      _infoDataList.addAll(_newInfoDataList);
+    });
 
-    if(_subList.length<10){
-      _subData.addAll(_subList.sublist(offset));
-      _titleData.addAll(_titleList.sublist(offset));
-      _contentData.addAll(_contentList.sublist(offset));
-
-      isLoading.value = false;
-      hasMore.value = false;
-    }else {
-      _subData.addAll(_subList.sublist(offset, offset + 10));
-      _titleData.addAll(_titleList.sublist(offset, offset + 10));
-      _contentData.addAll(_contentList.sublist(offset, offset + 10));
-
-      isLoading.value = false;
-      hasMore.value = _subData.length < maxInfo;
+    _isLoading.value = false;
+    _hasMore.value = _infoDataList.length < _maxInfo;
     }
-  }
 
   reload() async {
-    isLoading.value = true;
-    _subData.clear();
-    _titleData.clear();
-    _contentData.clear();
-
+    _isLoading.value = true;
     await Future.delayed(Duration(seconds: 2));
-
+    _infoDataList.clear();
     _getInfo();
+  }
+
+  Future<Null> refresh() async {
+    _infoDataList.clear();
+    _isLoading.value = false;
+    _hasMore.value = false;
+    _getInfo();
+    await Future.delayed(Duration(seconds: 1));
   }
 
   @override
@@ -150,60 +156,58 @@ class _InfoPageState extends State<InfoPage> {
                 ),
               ),
             ),
-            body: _InfoPageBody(),
+            body: RefreshIndicator(
+              key: _refreshKey,
+              child: Container(
+                child: Obx(
+                      () => Padding(
+                    padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                    child: ListView.separated(
+                      controller: scrollController.value,
+                      itemBuilder: (BuildContext _context, index) {
+                        if (index < _infoDataList.length) {
+                          return Container(
+                            child: _makeInfoTile(
+                              "${_infoDataList[index].kind}",
+                              "${_infoDataList[index].title}",
+                              "${_infoDataList[index].content}",
+                            ));
+                        }
+                        if (_hasMore.value || _isLoading.value) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text('공지사항의 마지막 입니다'),
+                                IconButton(
+                                  onPressed: () {
+                                    reload();
+                                  },
+                                  icon: Icon(Icons.arrow_upward_rounded),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, index) => Divider(),
+                      itemCount: _infoDataList.length + 1,
+                    ),
+                  ),
+                ),
+              ),
+              onRefresh: () => refresh(),
+            ),
           );
         }
     );
   }
 
-  Widget _InfoPageBody() {
-    return Container(
-      child: Obx(
-            () => Padding(
-          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-          child: ListView.separated(
-            controller: scrollController.value,
-            itemBuilder: (_, index) {
-              print(hasMore.value);
-
-              if (index < _subData.length) {
-                var subDatum = _subData[index];
-                var titleDatum = _titleData[index];
-                var contentDatum = _contentData[index];
-
-                return Container(
-                  child: _makeInfoTile("$subDatum", "$titleDatum", "$contentDatum"),
-                );
-              }
-              if (hasMore.value || isLoading.value) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Text('공지사항의 마지막 입니다'),
-                      IconButton(
-                        onPressed: () {
-                          reload();
-                        },
-                        icon: Icon(Icons.arrow_upward_rounded),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-            separatorBuilder: (_, index) => Divider(),
-            itemCount: _subData.length + 1,
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _makeInfoTile(sub, title, content) {
     return Container(

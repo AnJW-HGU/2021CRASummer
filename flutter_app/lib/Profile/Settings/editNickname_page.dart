@@ -11,10 +11,11 @@ import 'dart:async';
 
 import 'setting_page.dart';
 
+// postman 주소 https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/put?user_id=1
 // Post 넣어야됨
 Future<User> editNickname(String nickname) async{
   final response = await http.put(
-      Uri.parse('https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/put?user_id=1'),
+      Uri.parse('http://128.199.139.159:3000/user/1/nickname'),
       headers: <String, String> {
         'Content-Type' : 'application/json',
       },
@@ -165,7 +166,7 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
                                   setState((){
                                     _user = editNickname(_newnickName.text);
                                   });
-                                  Get.back();
+                                  Get.off(() => SettingPage());
                                 }
                             ),
                           ],

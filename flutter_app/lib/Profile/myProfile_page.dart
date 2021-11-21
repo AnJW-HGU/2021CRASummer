@@ -17,7 +17,8 @@ import 'dart:async';
 Future<User> fetchUser() async {
   // final user_id = Get.arguments[0].toString();
 
-  String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?user_id=1';
+  // String userUrl = 'https://4a20d71c-75da-40dd-8040-6e97160527b9.mock.pstmn.io/serve_test?user_id=1';
+  String userUrl = 'http://128.199.139.159:3000/user/1';
   var response = await http.get(Uri.parse(userUrl));
 
   if(response.statusCode == 200) {
@@ -184,7 +185,18 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                         _textButton("포인트", snapshot.data!.user_point, PointPage()),
                                         _textButton("질문", snapshot.data!.user_questionNum, MyQPage()),
                                         _textButton("답변", snapshot.data!.user_answerNum, MyAPage()),
-                                        TextButton(onPressed: (){},
+                                        TextButton(
+                                          onPressed: (){
+                                            Get.showSnackbar(
+                                              GetBar(
+                                                message: "공사 중이에요! :>",
+                                                duration: Duration(seconds: 2),
+                                                snackPosition: SnackPosition.BOTTOM,
+                                                backgroundColor: themeColor2,
+                                                barBlur: 0,
+                                              ),
+                                            );
+                                          },
                                           child: Text("스터디", style: TextStyle(fontFamily: "Barun", fontSize: 13.sp, color: themeColor3),),
                                         ),
                                       ],
@@ -242,13 +254,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 )
                             ),
                             // 뱃지함 아래 padding 조절(뱃지함 크기 조절)
-                            Padding(padding: EdgeInsets.only(bottom: 220.0)),
-                            TextButton(
-                              onPressed: () {
-                                Get.to(ManageMainPage());
-                              },
-                              child: Text("일단 버튼"),
-                            ),
+                            // Padding(padding: EdgeInsets.only(bottom: 220.0)),
+                            // TextButton(
+                            //   onPressed: () {
+                            //     Get.to(ManageMainPage());
+                            //   },
+                            //   child: Text("일단 버튼"),
+                            // ),
                           ]
                       );
                     }else if(snapshot.hasError) {
