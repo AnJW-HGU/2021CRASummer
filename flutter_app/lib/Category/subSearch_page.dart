@@ -327,23 +327,33 @@ Widget _makeSearchSub(inSubject, inProfessor) {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  inSubject,
-                  style: TextStyle(
-                    color: themeColor1,
-                    fontFamily: "Barun",
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
+                SizedBox(
+                  width: 300.w,
+                  child: Text(
+                    inSubject,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: themeColor1,
+                      fontFamily: "Barun",
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(bottom: 5)),
-                Text(
-                  inProfessor,
-                  style: TextStyle(
-                    color: grayColor1,
-                    fontFamily: "Barun",
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
+                SizedBox(
+                  width: 300.w,
+                  child: Text(
+                    inProfessor,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: grayColor1,
+                      fontFamily: "Barun",
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],

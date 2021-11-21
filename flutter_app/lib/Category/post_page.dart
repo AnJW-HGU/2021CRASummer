@@ -88,7 +88,7 @@ apiRequest(url, _addComment) async {
 
   String reply = "작성에 실패하였습니다.";
   if (response.statusCode == 200) {
-    reply = response.body;
+    reply = "작성되었습니다.";
   }
   return reply;
 }
@@ -200,7 +200,7 @@ _recommendRequest(url, _addRecommend) async {
 
   String reply = "이미 추천한 답변입니다. :<";
   if (response.statusCode == 200) {
-    reply = response.body;
+    reply = "추천되었습니다.";
   }
   return reply;
 }
@@ -241,7 +241,7 @@ _reportRequest(url, _addReport) async {
 
   String reply = "다시 신고해주세요. :<";
   if (response.statusCode == 200) {
-    reply = response.body;
+    reply = "신고되었습니다.";
   }
   return reply;
 }

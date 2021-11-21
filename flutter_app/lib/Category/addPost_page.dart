@@ -82,7 +82,7 @@ class _AddPostPageState extends State<AddPostPage> {
     String reply = "작성에 실패하였습니다.";
     print("${response.statusCode}");
     if (response.statusCode == 200) {
-      reply = response.body;
+      reply = "작성되었습니다.";
     }
     return reply;
   }
@@ -362,83 +362,87 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   Widget _makeChoiceSub(subId, subProfessor, subSubject) {
-    return ElevatedButton.icon(
-      icon: Icon(
-        Icons.close_rounded,
-        size: 17.w,
-        color: themeColor4,
-      ),
-      label: Text(
-        subSubject + " - " + subProfessor,
-        style: TextStyle(
-            color: Colors.white,
-            fontFamily: "Barun",
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400),
-      ),
-      style: ElevatedButton.styleFrom(
-        primary: themeColor1,
-      ),
-      onPressed: () {
-        Get.defaultDialog(
-            barrierDismissible: false,
-            title: "",
-            titleStyle: TextStyle(
+    return SizedBox(
+      width: 200,
+      child: ElevatedButton.icon(
+        icon: Icon(
+          Icons.close_rounded,
+          size: 17.w,
+          color: themeColor4,
+        ),
+        label: Text(
+          subSubject + " - " + subProfessor,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: Colors.white,
               fontFamily: "Barun",
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400,
-            ),
-            content: Column(
-              children: [
-                Text(subSubject + "[" + subProfessor + "] 를(을)",
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: themeColor1,
+        ),
+        onPressed: () {
+          Get.defaultDialog(
+              barrierDismissible: false,
+              title: "",
+              titleStyle: TextStyle(
+                fontFamily: "Barun",
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w400,
+              ),
+              content: Column(
+                children: [
+                  Text(subSubject + "[" + subProfessor + "] 를(을)",
+                      style: TextStyle(
+                        fontFamily: "Barun",
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  Text("삭제하시겠습니까?",
+                      style: TextStyle(
+                        fontFamily: "Barun",
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      )),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(
+                    "아니오",
                     style: TextStyle(
+                      color: themeColor1,
                       fontFamily: "Barun",
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                    )),
-                Text("삭제하시겠습니까?",
-                    style: TextStyle(
-                      fontFamily: "Barun",
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                    )),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(
-                  "아니오",
-                  style: TextStyle(
-                    color: themeColor1,
-                    fontFamily: "Barun",
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _isSub = false;
-                  });
-                  choiceSub = SearchSubs(null, null, null);
-                  Get.back();
-                },
-                child: Text(
-                  "예",
-                  style: TextStyle(
-                    color: themeColor1,
-                    fontFamily: "Barun",
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isSub = false;
+                    });
+                    choiceSub = SearchSubs(null, null, null);
+                    Get.back();
+                  },
+                  child: Text(
+                    "예",
+                    style: TextStyle(
+                      color: themeColor1,
+                      fontFamily: "Barun",
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-              ),
-            ]);
-      },
+              ]);
+        },
+      ),
     );
   }
 
