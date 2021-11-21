@@ -16,18 +16,17 @@ import 'myBoard_page.dart';
 List<SearchSubs> SearchSubsfromJson(json) {
   List<SearchSubs> result = [];
   json.forEach((item) {
-    result.add(SearchSubs(item["id"], item["subject"], item["professor_name"]));
+    result.add(SearchSubs(item["id"], item["과목명"], item["개설정보"]));
   });
   return result;
 }
 
 Future<List<SearchSubs>> fetchSearchSubs(inSearchword) async {
-  var searchSubsUrl =
-      "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/classification/search";
   Map<String, String> queryParams = {"searchKeyword": inSearchword};
   String queryString = Uri(queryParameters: queryParams).query;
 
-  var requestUrl = searchSubsUrl + "?" + queryString;
+  var requestUrl =
+      "http://128.199.139.159:3000/classification/search" + "?" + queryString;
   var response = await http.get(Uri.parse(requestUrl));
 
   if (response.statusCode == 200) {
@@ -81,7 +80,8 @@ class _SubSearchPageState extends State<SubSearchPage> {
     super.initState();
 
     this._scroll.value.addListener(() {
-      if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
+      if (this._scroll.value.position.pixels ==
+              this._scroll.value.position.maxScrollExtent &&
           this._hasMoreSearchSubs.value) {
         _searchPosts("${_search.text}");
       }
@@ -270,9 +270,9 @@ class _SubSearchPageState extends State<SubSearchPage> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     choiceSub = SearchSubs(
-                        _searchSubsDataList[index].searchSubs_id,
-                        _searchSubsDataList[index].searchSubs_subject,
-                        _searchSubsDataList[index].searchSubs_professor,
+                      _searchSubsDataList[index].searchSubs_id,
+                      _searchSubsDataList[index].searchSubs_subject,
+                      _searchSubsDataList[index].searchSubs_professor,
                     );
                     Get.back(result: choiceSub);
                   },
@@ -280,9 +280,7 @@ class _SubSearchPageState extends State<SubSearchPage> {
                       _searchSubsDataList[index].searchSubs_subject,
                       _searchSubsDataList[index].searchSubs_professor),
                 );
-              }
-
-              else if (_hasMoreSearchSubs.value || _isSearchLoading.value) {
+              } else if (_hasMoreSearchSubs.value || _isSearchLoading.value) {
                 return Center(
                   child: Padding(
                     padding: EdgeInsets.only(top: 20.h),
@@ -318,7 +316,10 @@ Widget _makeSearchSub(inSubject, inProfessor) {
     child: Container(
 // padding: EdgeInsets.only(top: 10, bottom: 5, left: 25.w, right: 20.w,),
       child: Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 10,),
+        padding: EdgeInsets.only(
+          top: 10,
+          bottom: 10,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

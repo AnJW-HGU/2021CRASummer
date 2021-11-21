@@ -13,25 +13,28 @@ import 'package:studytogether/main.dart';
 import 'post_page.dart';
 
 // Posts 데이터 가져오기
-List<SearchPosts> SearchPostsfromJson (json) {
+List<SearchPosts> SearchPostsfromJson(json) {
   List<SearchPosts> result = [];
   json.forEach((item) {
-    result.add(SearchPosts(item["subject"], item["id"], item["user_id"],
-        item["title"], item["content"], item["comments_count"],
-        item["written_date"], item["adopted_status"]));
+    result.add(SearchPosts(
+        item["subject"],
+        item["id"],
+        item["user_id"],
+        item["title"],
+        item["content"],
+        item["comments_count"],
+        item["written_date"],
+        item["adopted_status"]));
   });
 
   return result;
 }
 
 Future<List<SearchPosts>> fetchSearchPosts(inSearchWord) async {
-  var searchPostsUrl = "https://c64ab34d-ad62-4f6e-9578-9a43e222b9bf.mock.pstmn.io/post/search?";
-  Map<String, String> queryParams = {
-    "searchKeyword" : inSearchWord
-  };
+  Map<String, String> queryParams = {"searchKeyword": inSearchWord};
   String queryString = Uri(queryParameters: queryParams).query;
 
-  var requestUrl = searchPostsUrl+ "?" +queryString;
+  var requestUrl = "http://128.199.139.159:3000/post/search" + "?" + queryString;
   var response = await http.get(Uri.parse(requestUrl));
 
   if (response.statusCode == 200) {
@@ -42,7 +45,7 @@ Future<List<SearchPosts>> fetchSearchPosts(inSearchWord) async {
 }
 
 // Posts 데이터 형식
-class SearchPosts{
+class SearchPosts {
   var searchPosts_subject;
   var searchPosts_id;
   var searchPosts_userId;
@@ -53,15 +56,15 @@ class SearchPosts{
   var searchPosts_adoptedStatus;
 
   SearchPosts(
-      this.searchPosts_subject,
-      this.searchPosts_id,
-      this.searchPosts_userId,
-      this.searchPosts_title,
-      this.searchPosts_content,
-      this.searchPosts_commentsC,
-      this.searchPosts_writtenDate,
-      this.searchPosts_adoptedStatus,
-      );
+    this.searchPosts_subject,
+    this.searchPosts_id,
+    this.searchPosts_userId,
+    this.searchPosts_title,
+    this.searchPosts_content,
+    this.searchPosts_commentsC,
+    this.searchPosts_writtenDate,
+    this.searchPosts_adoptedStatus,
+  );
 }
 
 //////////////////////////////////////////////////////////////////
@@ -94,7 +97,8 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
 
     this._scroll.value.addListener(() {
-      if (this._scroll.value.position.pixels == this._scroll.value.position.maxScrollExtent &&
+      if (this._scroll.value.position.pixels ==
+              this._scroll.value.position.maxScrollExtent &&
           this._hasMoreSearchPosts.value) {
         _searchPosts("${_search.text}");
       }
@@ -103,7 +107,8 @@ class _SearchPageState extends State<SearchPage> {
 
   _searchPosts(inSearchWord) async {
     _isSearchLoading.value = true;
-    List<SearchPosts> _newSearchPostDataList = await fetchSearchPosts(inSearchWord);
+    List<SearchPosts> _newSearchPostDataList =
+        await fetchSearchPosts(inSearchWord);
     setState(() {
       _searchPostsDataList.addAll(_newSearchPostDataList);
     });
@@ -123,11 +128,8 @@ class _SearchPageState extends State<SearchPage> {
     return ScreenUtilInit(
       designSize: Size(411.4, 683.4),
       builder: () {
-
-
         return Scaffold(
           backgroundColor: Colors.white,
-
           appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0.0,
@@ -145,8 +147,7 @@ class _SearchPageState extends State<SearchPage> {
                     });
                     print("${_search.text}");
                     _searchPosts("${_search.text}");
-                  }
-                  else {
+                  } else {
                     setState(() {
                       _isNotSubmitted = true;
                     });
@@ -159,14 +160,12 @@ class _SearchPageState extends State<SearchPage> {
                       borderSide: new BorderSide(
                         color: themeColor1,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(15))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
                   focusedBorder: OutlineInputBorder(
                       borderSide: new BorderSide(
                         color: themeColor1,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(15))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
 
                   // prefixIcon: Icon(Icons.search_rounded, color: themeColor1,),
                   suffixIcon: IconButton(
@@ -179,7 +178,10 @@ class _SearchPageState extends State<SearchPage> {
                       });
                     },
                     padding: EdgeInsets.all(0.0),
-                    icon: Icon(Icons.clear, color: themeColor1,),
+                    icon: Icon(
+                      Icons.clear,
+                      color: themeColor1,
+                    ),
                   ),
 
                   hintText: "검색할 내용을 입력해주세요.",
@@ -210,9 +212,12 @@ class _SearchPageState extends State<SearchPage> {
                 FocusScope.of(context).unfocus();
               },
               child: Container(
-                padding: EdgeInsets.only(bottom: 10.h, left: 15.w, right: 15.w,),
-                child: _isNotSubmitted ? _notSubmittedPage()
-                : _searchPost(),
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 15.w,
+                  right: 15.w,
+                ),
+                child: _isNotSubmitted ? _notSubmittedPage() : _searchPost(),
               ),
             ),
           ),
@@ -247,55 +252,60 @@ class _SearchPageState extends State<SearchPage> {
   Widget _searchPost() {
     return Center(
       child: Container(
-        child: Obx(()
-        => ListView.separated(
-              controller: _scroll.value,
-              itemCount: _searchPostsDataList.length + 1,
-              itemBuilder: (_, index) {
-                if (index < _searchPostsDataList.length) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Get.to(PostPage(),
-                          arguments: [_searchPostsDataList[index].searchPosts_id,
-                            _searchPostsDataList[index].searchPosts_userId]);
-                    },
-                    child: _makeSearchPost(_searchPostsDataList[index].searchPosts_subject, _searchPostsDataList[index].searchPosts_title,
-                        _searchPostsDataList[index].searchPosts_content, _searchPostsDataList[index].searchPosts_commentsC,
-                        _searchPostsDataList[index].searchPosts_writtenDate, _searchPostsDataList[index].searchPosts_adoptedStatus),
-                  );
-                }
-
-                else if (_hasMoreSearchPosts.value || _isSearchLoading.value) {
-                  return Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 20.h),
-                        child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-
-                return Container(
-                  child: IconButton(
-                    onPressed: () {
-                      _isSearchLoading.value = true;
-                      _searchPostsDataList.clear();
-                      _searchPosts("${_search.text}");
-                    },
-                    icon: Icon(Icons.arrow_upward_rounded),
+        child: Obx(
+          () => ListView.separated(
+            controller: _scroll.value,
+            itemCount: _searchPostsDataList.length + 1,
+            itemBuilder: (_, index) {
+              if (index < _searchPostsDataList.length) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Get.to(PostPage(), arguments: [
+                      _searchPostsDataList[index].searchPosts_id,
+                      _searchPostsDataList[index].searchPosts_userId
+                    ]);
+                  },
+                  child: _makeSearchPost(
+                      _searchPostsDataList[index].searchPosts_subject,
+                      _searchPostsDataList[index].searchPosts_title,
+                      _searchPostsDataList[index].searchPosts_content,
+                      _searchPostsDataList[index].searchPosts_commentsC,
+                      _searchPostsDataList[index].searchPosts_writtenDate,
+                      _searchPostsDataList[index].searchPosts_adoptedStatus),
+                );
+              } else if (_hasMoreSearchPosts.value || _isSearchLoading.value) {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20.h),
+                    child: CircularProgressIndicator(),
                   ),
                 );
-              },
-              separatorBuilder: (_, index) => Divider(),
+              }
+
+              return Container(
+                child: IconButton(
+                  onPressed: () {
+                    _isSearchLoading.value = true;
+                    _searchPostsDataList.clear();
+                    _searchPosts("${_search.text}");
+                  },
+                  icon: Icon(Icons.arrow_upward_rounded),
+                ),
+              );
+            },
+            separatorBuilder: (_, index) => Divider(),
           ),
         ),
       ),
     );
   }
 
-  Widget _makeSearchPost(inSub, inTitle, inContent, inCount, inDate, inAdopted) {
+  Widget _makeSearchPost(
+      inSub, inTitle, inContent, inCount, inDate, inAdopted) {
     return Container(
-      padding: EdgeInsets.only(top: 10.0.h, bottom: 10.0.h, left: 5.w, right: 5.w),
+      padding:
+          EdgeInsets.only(top: 10.0.h, bottom: 10.0.h, left: 5.w, right: 5.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
@@ -317,17 +327,16 @@ class _SearchPageState extends State<SearchPage> {
               // 채택여부
               Padding(
                 padding: EdgeInsets.only(right: 5.w),
-                child: inAdopted ?
-                Icon(
-                  Icons.check_rounded,
-                  size: 19.sp,
-                  color: themeColor1,
-                ) :
-                null,
+                child: inAdopted
+                    ? Icon(
+                        Icons.check_rounded,
+                        size: 19.sp,
+                        color: themeColor1,
+                      )
+                    : null,
               ),
             ],
           ),
-
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
             inTitle,
@@ -337,7 +346,6 @@ class _SearchPageState extends State<SearchPage> {
               fontWeight: FontWeight.w500,
             ),
           ),
-
           Padding(padding: EdgeInsets.only(bottom: 5)),
           Text(
             inContent,
@@ -349,9 +357,7 @@ class _SearchPageState extends State<SearchPage> {
               fontWeight: FontWeight.w300,
             ),
           ),
-
           Padding(padding: EdgeInsets.only(bottom: 5)),
-
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -368,13 +374,12 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
               ),
-
               Row(
                 children: [
                   Padding(
-
                     //comment 아이콘
-                    padding: EdgeInsets.only(left:0, right:3.w, top:0, bottom:0),
+                    padding:
+                        EdgeInsets.only(left: 0, right: 3.w, top: 0, bottom: 0),
                     child: Icon(
                       Icons.comment_outlined,
                       size: 15.sp,
@@ -384,7 +389,7 @@ class _SearchPageState extends State<SearchPage> {
 
                   //comment 수
                   Padding(
-                    padding:EdgeInsets.all(0),
+                    padding: EdgeInsets.all(0),
                     child: Text(
                       inCount.toString(),
                       textAlign: TextAlign.center,

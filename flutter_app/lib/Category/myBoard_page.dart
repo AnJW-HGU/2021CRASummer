@@ -131,6 +131,9 @@ class _MyBoardPageState extends State<MyBoardPage> {
   var _isPostsLoading = false.obs;
   var _hasMorePosts = false.obs;
 
+  SearchSubs choicePreferredSub = SearchSubs(null, null, null);
+  var _isPreferSubsLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -286,8 +289,13 @@ class _MyBoardPageState extends State<MyBoardPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                  Get.to(SubSearchPage());
+                                onTap: () async{
+                                  choicePreferredSub = await Get.to(() => SubSearchPage());
+                                  if (choicePreferredSub.searchSubs_subject != null) {
+                                    setState(() {
+                                      _isPreferSubsLoading = true;
+                                    });
+                                  }
                                 },
                                 child: Container(
                                   width: 60.w,
@@ -313,24 +321,7 @@ class _MyBoardPageState extends State<MyBoardPage> {
 
                               Padding(padding: EdgeInsets.only(right: 5.w),),
 
-                              FutureBuilder<List<PreferredSubject>> (
-                                future: _preferredSubjects,
-                                builder: (context, snapshot) {
-                                  if (snapshot.data != null) {
-                                    return Row(
-                                      children: [
-                                        for (int i=0; i<snapshot.data!.length; i++) _makeSub(snapshot.data![i].preferred_subject),
-                                      ],
-                                    );
-                                  }
-                                  else if (snapshot.hasError) {
-                                    return Text("${snapshot.error}");
-                                  }
-
-                                  return Center();
-                                },
-                              ),
-
+                              // _makePreferredSubs(context),
                             ],
                           ),
                         )
@@ -427,6 +418,32 @@ class _MyBoardPageState extends State<MyBoardPage> {
           );
         }
     );
+  }
+
+  Future<Widget> _makePreferredSubs(context) async {
+    if (_isPreferSubsLoading == true) {
+      _isPreferSubsLoading = false;
+      return FutureBuilder<List<PreferredSubject>> (
+        future: _preferredSubjects,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            return Row(
+              children: [
+                for (int i=0; i<snapshot.data!.length; i++) _makeSub(snapshot.data![i].preferred_subject),
+              ],
+            );
+          }
+          else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+
+          return Center();
+        },
+      );
+    }
+    else {
+      return Center();
+    }
   }
 
   Widget _makeSub(inSubTitle) {
